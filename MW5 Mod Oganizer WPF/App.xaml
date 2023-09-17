@@ -1,0 +1,21 @@
+﻿<Application x:Class="MW5_Mod_Organizer_WPF.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes/Button/ButtonMenuTheme.xaml"/>
+                <ResourceDictionary Source="Themes/Button/ButtonStandaloneTheme.xaml"/>
+                <ResourceDictionary Source="Themes/TextBox/TextBoxTheme.xaml"/>
+                <ResourceDictionary Source="Themes/TextBox/TextBoxGameVersionTheme.xaml"/>
+                <ResourceDictionary Source="Themes/Button/ButtonToolbarTheme.xaml"/>
+                <ResourceDictionary Source="Themes/DataGrid/DataGridRowTheme.xaml"/>
+                <ResourceDictionary Source="Themes/DataGrid/DataGridTheme.xaml"/>
+                <ResourceDictionary Source="Themes/DataGrid/DataGridCellTheme.xaml"/>
+                <ResourceDictionary Source="Themes/DataGrid/DataGridColumnHeaderTheme.xaml"/>
+                <ResourceDictionary Source="Themes/Button/ButtonConflictWindowSliderTheme.xaml"/>
+                <ResourceDictionary Source="Themes/UI/DeploymentReminder.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

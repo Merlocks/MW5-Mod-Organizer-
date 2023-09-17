@@ -1,0 +1,29 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style x:Key="DeploymentReminder"
+           TargetType="{x:Type ContentControl}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border Height="30"
+                            Background="DeepSkyBlue">
+                        <TextBlock Text="You have made changes to your load order. Deployment is necessary to save your changes."
+                                   Foreground="White"
+                                   FontWeight="SemiBold"
+                                   VerticalAlignment="Center"
+                                   Margin="10 0 0 0"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding DeploymentNecessary, UpdateSourceTrigger=PropertyChanged}" Value="true">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding DeploymentNecessary, UpdateSourceTrigger=PropertyChanged}" Value="false">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
