@@ -13,6 +13,9 @@
                                    FontWeight="SemiBold"
                                    VerticalAlignment="Center"
                                    Margin="10 0 0 0"/>
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" Color="#FFD8D8D8" ShadowDepth="5" Direction="270" Opacity="0.3"/>
+                        </Border.Effect>
                     </Border>
                     <ControlTemplate.Triggers>
                         <DataTrigger Binding="{Binding DeploymentNecessary, UpdateSourceTrigger=PropertyChanged}" Value="true">

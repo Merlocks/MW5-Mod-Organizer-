@@ -7,30 +7,36 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Grid VerticalAlignment="Stretch"
+                        <Border CornerRadius="0" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <Grid VerticalAlignment="Stretch"
                               HorizontalAlignment="Stretch"
                               Background="{TemplateBinding Background}">
 
-                            <TextBlock Text="{TemplateBinding Property=Content}" 
+                                <TextBlock Text="{TemplateBinding Property=Content}" 
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Left"
-                                       Margin="50, 0, 0, 0"/>
-                        </Grid>
+                                       Margin="25, 0, 0, 0"/>
+                            </Grid>
+                        </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#FFBFBCD4"/>
-            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="#69717d"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
         </Style.Setters>
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#FF9591AD"/>
-                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Background" Value="#FFF5F5F5"/>
+                <Setter Property="BorderBrush" Value="#FFC8C8C8"/>
+                <Setter Property="BorderThickness" Value="1"/>
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="#FF59547B"/>
+                <Setter Property="Background" Value="#FFE0E0E0"/>
+                <Setter Property="Foreground" Value="#FF4F545B"/>
+                <Setter Property="BorderBrush" Value="#FF323538"/>
             </Trigger>
         </Style.Triggers>
     </Style>

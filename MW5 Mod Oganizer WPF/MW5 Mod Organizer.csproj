@@ -40,10 +40,19 @@
 
 	<ItemGroup>
 	  <None Remove="favicon.ico" />
+	  <None Remove="Images\favicon.ico" />
+	  <None Remove="Images\logo.png" />
+	  <None Remove="Images\logo2.png" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Content Include="favicon.ico" />
+	  <Content Include="Images\favicon.ico">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Images\logo2.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
 
   <ItemGroup>
@@ -62,7 +71,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Images\" />
     <Folder Include="Views\" />
   </ItemGroup>
 
@@ -72,6 +80,9 @@
 
   <ItemGroup>
     <Resource Include="favicon.ico" />
+    <Content Include="Images\logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

@@ -1,12 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MW5_Mod_Oganizer_WPF.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MW5_Mod_Organizer_WPF.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="Path" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="GameVersion" Type="System.String" Scope="User">
-      <Value Profile="(Default)">1.1.338</Value>
+      <Value Profile="(Default)">1.1.351</Value>
     </Setting>
     <Setting Name="SecondaryPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
