@@ -128,7 +128,8 @@
                         FontSize="14" 
                         FontWeight="Normal" 
                         Style="{StaticResource StandaloneButtonTheme}"
-                        Click="ButtonOpenSecondaryFolder_Click" Cursor="Hand"/>
+                        Click="ButtonOpenSecondaryFolder_Click" 
+                        Cursor="Hand"/>
             </StackPanel>
         </StackPanel>
 
@@ -242,6 +243,16 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
+                </Button>
+                <!--Deploy-->
+                <Button Content="Deploy"
+                        Click="ButtonDeploy_Click"
+                        Command="{Binding DeployCommand}"
+                        Margin="10 0 0 0"
+                        Width="75"
+                        Height="25"
+                        Style="{DynamicResource StandaloneButtonTheme}"
+                        Cursor="Hand">
                 </Button>
             </StackPanel>
         </StackPanel>

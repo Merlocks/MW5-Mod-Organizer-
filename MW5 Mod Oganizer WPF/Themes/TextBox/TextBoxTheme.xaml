@@ -7,8 +7,8 @@
                 <ControlTemplate TargetType="{x:Type TextBox}">
                     <Grid>
                         <Border Background="White"
-                                Width="{Binding Width}"
-                                Height="25">
+                                Width="{Binding Width}"  
+                                Height="25">  
                             <Grid>
                                 <Rectangle StrokeThickness="1"/>
                                 <TextBox Margin="10, 0, 0, 0"

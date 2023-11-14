@@ -18,7 +18,7 @@ namespace MW5_Mod_Organizer_WPF
     /// Interaction logic for MainWindow.xaml
     /// </summary>
 
-    /// <changelog>
+    /// <changelog> 
     /// 
     /// </changelog>
 
