@@ -63,6 +63,9 @@
                     Content="Export loadorder"
                     Click="ButtonExport_Click"
                     Style="{StaticResource ToolbarMenuButtonTheme}"/>
+            <Button x:Name="ButtonProfiles"
+                    Content="Profiles"
+                    Style="{DynamicResource ToolbarMenuButtonTheme}"/>
         </StackPanel>
 
         <!--Logo-->
@@ -313,7 +316,7 @@
                           Style="{StaticResource ButtonConflictWindowSlider}"/>
             <Border x:Name="BorderConflictWindow"
                     Background="#FFF9F9F9"
-                    Visibility="Visible">
+                    Visibility="Collapsed">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="300"/>
