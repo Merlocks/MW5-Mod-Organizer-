@@ -12,13 +12,13 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 {
     public class MainViewModel : ViewModelBase, IDropTarget
     {
-        public IEnumerable<ModViewModel>? Mods => ModService.GetInstance().ModVMCollection;
+        public IEnumerable<ModViewModel> Mods => ModService.GetInstance().ModVMCollection;
 
-        public IEnumerable<ModViewModel>? Overwrites => ModService.GetInstance().Overwrites;
+        public IEnumerable<ModViewModel> Overwrites => ModService.GetInstance().Overwrites;
 
-        public IEnumerable<ModViewModel>? OverwrittenBy => ModService.GetInstance().OverwrittenBy;
+        public IEnumerable<ModViewModel> OverwrittenBy => ModService.GetInstance().OverwrittenBy;
 
-        public IEnumerable<string>? Conflicts => ModService.GetInstance().Conflicts;
+        public IEnumerable<string> Conflicts => ModService.GetInstance().Conflicts;
 
         private bool deploymentNecessary;
 
