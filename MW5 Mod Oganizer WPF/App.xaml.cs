@@ -18,6 +18,8 @@ namespace MW5_Mod_Organizer_WPF
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            ModService modService = ModService.GetInstance();
+            
             MainWindow = new MainWindow()
             {
                 DataContext = new MainViewModel()

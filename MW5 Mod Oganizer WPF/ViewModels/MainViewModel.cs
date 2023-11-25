@@ -12,13 +12,13 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 {
     public class MainViewModel : ViewModelBase, IDropTarget
     {
-        public IEnumerable<ModViewModel> Mods => ModService.ModVMCollection;
+        public IEnumerable<ModViewModel>? Mods => ModService.GetInstance().ModVMCollection;
 
-        public IEnumerable<ModViewModel> Overwrites => ModService.Overwrites;
+        public IEnumerable<ModViewModel>? Overwrites => ModService.GetInstance().Overwrites;
 
-        public IEnumerable<ModViewModel> OverwrittenBy => ModService.OverwrittenBy;
+        public IEnumerable<ModViewModel>? OverwrittenBy => ModService.GetInstance().OverwrittenBy;
 
-        public IEnumerable<string> Conflicts => ModService.Conflicts;
+        public IEnumerable<string>? Conflicts => ModService.GetInstance().Conflicts;
 
         private bool deploymentNecessary;
 
@@ -84,9 +84,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             DefaultDropHandler defaultDropHandler = new DefaultDropHandler();
             defaultDropHandler.Drop(dropInfo);
 
-            foreach (var mod in ModService.ModVMCollection)
+            foreach (var mod in ModService.GetInstance().ModVMCollection)
             {
-                mod.LoadOrder = ModService.ModVMCollection.IndexOf(mod) + 1;
+                mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod) + 1;
             }
 
             DeploymentNecessary = true;

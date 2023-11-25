@@ -9,19 +9,42 @@ using System.Linq;
 
 namespace MW5_Mod_Organizer_WPF.Services
 {
-    public static class ModService
+    public sealed class ModService
     {
-        private static List<Mod> ModList { get; set; } = new List<Mod>();
+        private static ModService? instance;
+        private static readonly object padlock = new object();
+        private List<Mod> ModList { get; set; }
 
-        public static ObservableCollection<ModViewModel> ModVMCollection { get; set; } = new ObservableCollection<ModViewModel>();
+        public ObservableCollection<ModViewModel> ModVMCollection { get; set; }
 
-        public static ObservableCollection<ModViewModel> Overwrites { get; set; } = new ObservableCollection<ModViewModel>();
+        public ObservableCollection<ModViewModel> Overwrites { get; set; }
 
-        public static ObservableCollection<ModViewModel> OverwrittenBy { get; set; } = new ObservableCollection<ModViewModel>();
+        public ObservableCollection<ModViewModel> OverwrittenBy { get; set; }
 
-        public static ObservableCollection<string> Conflicts { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<string> Conflicts { get; set; }
 
-        public static void GetMods(bool reset)
+        private ModService()
+        {
+            ModList = new List<Mod>();
+            ModVMCollection = new ObservableCollection<ModViewModel>();
+            Overwrites = new ObservableCollection<ModViewModel>();
+            OverwrittenBy = new ObservableCollection<ModViewModel>();
+            Conflicts = new ObservableCollection<string>();
+        }
+
+        public static ModService GetInstance()
+        {
+            lock (padlock)
+            {
+                if (instance == null)
+                {
+                    instance = new ModService();
+                }
+                return instance;
+            }
+        }
+
+        public void GetMods(bool reset)
         {
             try
             {
@@ -79,7 +102,7 @@ namespace MW5_Mod_Organizer_WPF.Services
             }
         }
 
-        private static void AddToTempList(string[] directory, bool reset)
+        private void AddToTempList(string[] directory, bool reset)
         {
             foreach (var path in directory)
             {
@@ -106,24 +129,24 @@ namespace MW5_Mod_Organizer_WPF.Services
             }
         }
 
-        public static void ClearTemporaryModList()
+        public void ClearTemporaryModList()
         {
             ModList.Clear();
         }
 
-        public static void ClearModCollection()
+        public void ClearModCollection()
         {
             ModVMCollection.Clear();
         }
 
-        public static void ClearConflictWindow()
+        public void ClearConflictWindow()
         {
             Overwrites.Clear();
             OverwrittenBy.Clear();
             Conflicts.Clear();
         }
 
-        public static void CheckForConflicts(ModViewModel ModVM)
+        public void CheckForConflicts(ModViewModel ModVM)
         {
             ClearConflictWindow();
 
@@ -153,7 +176,7 @@ namespace MW5_Mod_Organizer_WPF.Services
             }
         }
 
-        public static void GenerateManifest(ModViewModel ModVM)
+        public void GenerateManifest(ModViewModel ModVM)
         {
             Conflicts.Clear();
 

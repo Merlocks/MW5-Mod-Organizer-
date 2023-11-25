@@ -65,7 +65,7 @@ namespace MW5_Mod_Organizer_WPF
                 {
                     string content = "";
 
-                    foreach (var modVM in ModService.ModVMCollection)
+                    foreach (var modVM in ModService.GetInstance().ModVMCollection)
                     {
                         content += $"{modVM.LoadOrder} - {modVM.IsEnabled} - {modVM.DisplayName} - {modVM.Author}\n";
                     }
@@ -182,7 +182,7 @@ namespace MW5_Mod_Organizer_WPF
                     Properties.Settings.Default.GameVersion = TextBoxGameVersion.Text;
                     Properties.Settings.Default.Save();
 
-                    foreach (var modVM in ModService.ModVMCollection)
+                    foreach (var modVM in ModService.GetInstance().ModVMCollection)
                     {
                         modVM.GameVersion = Properties.Settings.Default.GameVersion;
 
@@ -199,7 +199,7 @@ namespace MW5_Mod_Organizer_WPF
                     ModStatus = new Dictionary<string, Status>()
                 };
 
-                foreach (var modVM in ModService.ModVMCollection)
+                foreach (var modVM in ModService.GetInstance().ModVMCollection)
                 {
                     if (modVM.IsEnabled && modVM.FolderName != null)
                     {
@@ -234,9 +234,9 @@ namespace MW5_Mod_Organizer_WPF
                 TextBoxFileExplorer.Text = Properties.Settings.Default.Path;
                 TextBoxSecondaryFileExplorer.Text = Properties.Settings.Default.SecondaryPath;
 
-                ModService.ClearTemporaryModList();
-                ModService.ClearModCollection();
-                ModService.ClearConflictWindow();
+                ModService.GetInstance().ClearTemporaryModList();
+                ModService.GetInstance().ClearModCollection();
+                ModService.GetInstance().ClearConflictWindow();
             } catch (Exception ex)
             {
                 LoggerService.AddLog("ButtonOpenFolderException", ex.Message);
@@ -265,7 +265,7 @@ namespace MW5_Mod_Organizer_WPF
 
                 if (result == System.Windows.Forms.DialogResult.OK)
                 {
-                    foreach (var modVM in ModService.ModVMCollection)
+                    foreach (var modVM in ModService.GetInstance().ModVMCollection)
                     {
                         modVM._mod.ModOrganizerOriginalLoadOrder = modVM.LoadOrder;
                         modVM._mod.ModOrganizerOriginalIsEnabled = modVM.IsEnabled;
@@ -281,7 +281,7 @@ namespace MW5_Mod_Organizer_WPF
                         ModStatus = new Dictionary<string, Status>()
                     };
 
-                    foreach (var modVM in ModService.ModVMCollection)
+                    foreach (var modVM in ModService.GetInstance().ModVMCollection)
                     {
                         if (modVM.IsEnabled && modVM.FolderName != null)
                         {
@@ -343,7 +343,7 @@ namespace MW5_Mod_Organizer_WPF
 
                 if (selectedOverwrite != null)
                 {
-                    ModService.GenerateManifest(selectedOverwrite);
+                    ModService.GetInstance().GenerateManifest(selectedOverwrite);
                 }
             }
         }
@@ -357,7 +357,7 @@ namespace MW5_Mod_Organizer_WPF
 
                 if (selectedOverwrittenBy != null)
                 {
-                    ModService.GenerateManifest(selectedOverwrittenBy);
+                    ModService.GetInstance().GenerateManifest(selectedOverwrittenBy);
                 }
             }
         }
@@ -370,7 +370,7 @@ namespace MW5_Mod_Organizer_WPF
 
             if (selectedMod != null)
             {
-                ModService.CheckForConflicts(selectedMod);
+                ModService.GetInstance().CheckForConflicts(selectedMod);
             }
         }
 
@@ -380,7 +380,7 @@ namespace MW5_Mod_Organizer_WPF
 
             if (selectedMod != null)
             {
-                ModService.CheckForConflicts(selectedMod);
+                ModService.GetInstance().CheckForConflicts(selectedMod);
             }
         }
 
@@ -398,19 +398,19 @@ namespace MW5_Mod_Organizer_WPF
             foreach (var item in items.OrderBy(m => m.LoadOrder))
             {
                 int index = ModList.Items.IndexOf(item);
-                ModService.ModVMCollection.Move(index, targetIndex);
+                ModService.GetInstance().ModVMCollection.Move(index, targetIndex);
                 targetIndex++;
             }
 
             //Update loadorder
-            foreach (var mod in ModService.ModVMCollection)
+            foreach (var mod in ModService.GetInstance().ModVMCollection)
             {
-                mod.LoadOrder = ModService.ModVMCollection.IndexOf(mod) + 1;
+                mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod) + 1;
             }
 
             if (selectedMod != null)
             {
-                ModService.CheckForConflicts(selectedMod);
+                ModService.GetInstance().CheckForConflicts(selectedMod);
             }
         }
 
@@ -426,19 +426,19 @@ namespace MW5_Mod_Organizer_WPF
             foreach (var item in items.OrderBy(m => m.LoadOrder))
             {
                 int index = ModList.Items.IndexOf(item);
-                ModService.ModVMCollection.Move(index, ModService.ModVMCollection.Count - 1);
+                ModService.GetInstance().ModVMCollection.Move(index, ModService.GetInstance().ModVMCollection.Count - 1);
             }
 
             //Update loadorder
 
-            foreach (var mod in ModService.ModVMCollection)
+            foreach (var mod in ModService.GetInstance().ModVMCollection)
             {
-                mod.LoadOrder = ModService.ModVMCollection.IndexOf(mod) + 1;
+                mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod) + 1;
             }
 
             if (selectedMod != null)
             {
-                ModService.CheckForConflicts(selectedMod);
+                ModService.GetInstance().CheckForConflicts(selectedMod);
             }
         }
         #endregion
@@ -447,14 +447,14 @@ namespace MW5_Mod_Organizer_WPF
         private void UpdateModGridView(bool reset = false)
         {
             //Retrieve mods
-            ModService.GetMods(reset);
+            ModService.GetInstance().GetMods(reset);
 
             //Gerenalize loadorder by index
-            foreach (var mod in ModService.ModVMCollection) 
+            foreach (var mod in ModService.GetInstance().ModVMCollection) 
             {
                 if (mod.LoadOrder != null)
                 {
-                    mod.LoadOrder = ModService.ModVMCollection.IndexOf(mod) + 1; 
+                    mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod) + 1; 
                 }
             }
         }
