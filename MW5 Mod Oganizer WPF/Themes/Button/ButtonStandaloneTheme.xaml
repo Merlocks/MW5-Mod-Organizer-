@@ -7,10 +7,10 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="0" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <Border CornerRadius="0" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"      BorderThickness="{TemplateBinding BorderThickness}">
                             <Grid VerticalAlignment="Stretch"
-                              HorizontalAlignment="Stretch"
-                              Background="Transparent">
+                                  HorizontalAlignment="Stretch"
+                                  Background="Transparent">
 
                                 <TextBlock Text="{TemplateBinding Property=Content}" 
                                        VerticalAlignment="Center"
@@ -26,6 +26,7 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Cursor" Value="Hand"/>
         </Style.Setters>
 
         <Style.Triggers>

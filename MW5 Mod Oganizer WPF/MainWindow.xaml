@@ -188,7 +188,6 @@
             <ContentControl Style="{StaticResource DeploymentReminder}"/>
             <StackPanel Margin="10, 10, 0, 0"
                         Orientation="Horizontal">
-                <!--Game version TextBox-->
                 <TextBox x:Name="TextBoxGameVersion"
                      Height="25"
                      VerticalContentAlignment="Center"
@@ -196,7 +195,6 @@
                      VerticalAlignment="Center"
                      IsReadOnly="False"
                      Style="{StaticResource TextBoxGameVersionTheme}"/>
-                <!--Move Up-->
                 <Button Command="{Binding MoveUpCommand}">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
@@ -220,7 +218,6 @@
                         </TextBlock.Style>
                     </TextBlock>
                 </Button>
-                <!--Move down-->
                 <Button Command="{Binding MoveDownCommand}">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
@@ -244,16 +241,27 @@
                         </TextBlock.Style>
                     </TextBlock>
                 </Button>
-                <!--Deploy-->
                 <Button Content="Deploy"
+                        Height="25"
+                        Width="75"
+                        Margin="10 0 0 0"
                         Click="ButtonDeploy_Click"
                         Command="{Binding DeployCommand}"
-                        Margin="10 0 0 0"
-                        Width="75"
+                        Style="{DynamicResource StandaloneButtonTheme}"/>
+                <Button Content="Undo"
                         Height="25"
-                        Style="{DynamicResource StandaloneButtonTheme}"
-                        Cursor="Hand">
-                </Button>
+                        Width="75"
+                        Margin="10 0 0 0"
+                        Click="ButtonUndo_Click"
+                        Command="{Binding UndoCommand}"
+                        Style="{DynamicResource StandaloneButtonTheme}"/>
+                <Button Content="Clear"
+                        Height="25"
+                        Width="75"
+                        Margin="10 0 0 0"
+                        Click="ButtonClearPath_Click"
+                        Command="{Binding ClearCommand}"
+                        Style="{DynamicResource StandaloneButtonTheme}"/>
             </StackPanel>
         </StackPanel>
 
