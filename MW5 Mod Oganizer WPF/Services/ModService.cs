@@ -198,12 +198,6 @@ namespace MW5_Mod_Organizer_WPF.Services
             {
                 foreach (string str in ModVM.Manifest)
                 {
-                    //if (MainWindow.selectedMod != null && MainWindow.selectedMod.Manifest != null && MainWindow.selectedMod.Manifest.Contains(str))
-                    //{
-                    //    Conflicts.Add(str);
-                    //    Console.WriteLine($"Conflict: {str} generated");
-                    //}
-
                     ModViewModel? modViewModel = null; 
 
                     if (_mainViewModel?.SelectedItems != null && _mainViewModel.SelectedItems.Count == 1)

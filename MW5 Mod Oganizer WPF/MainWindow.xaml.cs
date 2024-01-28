@@ -66,10 +66,7 @@ namespace MW5_Mod_Organizer_WPF
                 foreach (var item in ModList.SelectedItems)
                 {
                     ModViewModel? mod = item as ModViewModel;
-                    Console.WriteLine($"Selected mod: {mod.DisplayName}");
                 }
-
-                Console.WriteLine("");
             }
         }
 
