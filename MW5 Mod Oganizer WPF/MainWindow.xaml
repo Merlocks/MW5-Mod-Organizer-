@@ -51,12 +51,18 @@
             <StackPanel Margin="10, 10, 0, 0"
                         Orientation="Horizontal">
                 <TextBox x:Name="TextBoxGameVersion"
-                     Height="25"
-                     VerticalContentAlignment="Center"
-                     HorizontalAlignment="Left"
-                     VerticalAlignment="Center"
-                     IsReadOnly="False"
-                     Style="{StaticResource TextBoxGameVersionTheme}"/>
+                         Height="25"
+                         VerticalContentAlignment="Center"
+                         HorizontalAlignment="Left"
+                         VerticalAlignment="Center"
+                         IsReadOnly="False"
+                         Style="{StaticResource TextBoxGameVersionTheme}">
+                    <behaviors:Interaction.Triggers>
+                        <behaviors:EventTrigger EventName="TextChanged">
+                            <behaviors:InvokeCommandAction Command="{Binding GameVersionChangedCommand}"/>
+                        </behaviors:EventTrigger>
+                    </behaviors:Interaction.Triggers>
+                </TextBox>
                 <Button Command="{Binding MoveUpCommand}">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">

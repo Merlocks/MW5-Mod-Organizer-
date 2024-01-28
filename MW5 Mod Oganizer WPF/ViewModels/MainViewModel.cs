@@ -54,8 +54,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             ResetCommand = new ResetCommand(this);
             MoveUpCommand = new MoveUpCommand(this);
             MoveDownCommand = new MoveDownCommand(this);
-
-            SelectedItems = new List<ModViewModel>();
         }
 
         [RelayCommand]
@@ -83,13 +81,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public void SelectionChanged(object sender)
         {
-            Console.WriteLine("TestCommand fired." + sender);
-
-            //if (SelectedItem != null)
-            //{
-            //    ModService.GetInstance().CheckForConflicts(SelectedItem);
-            //}
-
             if (SelectedItems?.Count == 1)
             {
                 ModViewModel? mod = SelectedItems[0] as ModViewModel;
@@ -110,6 +101,12 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     }
                 }
             }
+        }
+
+        [RelayCommand]
+        public void GameVersionChanged(object sender)
+        {
+            DeploymentNecessary = true;
         }
 
         #region DragDrop
