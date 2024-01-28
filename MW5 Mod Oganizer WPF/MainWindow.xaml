@@ -111,21 +111,18 @@
                 </Button>
                 <Button Content="Deploy"
                         Height="25"
-                        Width="75"
                         Margin="10 0 0 0"
                         Click="ButtonDeploy_Click"
                         Command="{Binding DeployCommand}"
                         Style="{DynamicResource StandaloneButtonTheme}"/>
                 <Button Content="Undo"
                         Height="25"
-                        Width="75"
                         Margin="10 0 0 0"
                         Click="ButtonUndo_Click"
                         Command="{Binding UndoCommand}"
                         Style="{DynamicResource StandaloneButtonTheme}"/>
                 <Button Content="Clear"
                         Height="25"
-                        Width="75"
                         Margin="10 0 0 0"
                         Click="ButtonClearPath_Click"
                         Command="{Binding ClearCommand}"
@@ -245,7 +242,6 @@
                          IsReadOnly="True"
                          Style="{StaticResource TextBoxTheme}"/>
                 <Button x:Name="ButtonOpenFolder" Content="Open folder"
-                        Width="100"
                         Height="25"
                         VerticalAlignment="Center"
                         Margin="10, 0, 0, 0" 
@@ -267,7 +263,6 @@
                          Style="{StaticResource TextBoxTheme}"/>
                 <Button x:Name="ButtonOpenSecondaryFolder" 
                         Content="Open secondary folder"
-                        Width="175"
                         Height="25"
                         VerticalAlignment="Center"
                         Margin="10, 0, 0, 0" 
