@@ -25,9 +25,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         private bool deploymentNecessary;
 
         [ObservableProperty]
-        private ModViewModel? selectedItem;
-
-        [ObservableProperty]
         private IList? selectedItems;
 
 
@@ -56,6 +53,10 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             MoveDownCommand = new MoveDownCommand(this);
         }
 
+        /// <summary>
+        /// Collection of all Commands used within this ViewModel
+        /// </summary>
+        #region Commands
         [RelayCommand]
         public void ResetToDefault()
         {
@@ -76,7 +77,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                             if (index != (int)mod.LoadOrder! - 1)
                             {
                                 ModService.GetInstance().MoveModAndUpdate(index, (int)mod.LoadOrder! - 1);
-                                Console.WriteLine($"\nMoved mod: {mod.DisplayName} from index: {index} to {ModService.GetInstance().ModVMCollection.IndexOf(mod)}");
                             }
                         }
                     }
@@ -120,7 +120,12 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         {
             DeploymentNecessary = true;
         }
+        #endregion
 
+        /// <summary>
+        /// Logic for DragDrop library.
+        /// Controls Drag and Drop behavior for DataGrid.
+        /// </summary>
         #region DragDrop
         public void DragOver(IDropInfo dropInfo)
         {
