@@ -1,4 +1,5 @@
-﻿using MW5_Mod_Organizer_WPF.Facades;
+﻿using Microsoft.Extensions.DependencyInjection;
+using MW5_Mod_Organizer_WPF.Facades;
 using MW5_Mod_Organizer_WPF.Models;
 using MW5_Mod_Organizer_WPF.ViewModels;
 using System;
@@ -13,6 +14,7 @@ namespace MW5_Mod_Organizer_WPF.Services
     {
         private static ModService? instance;
         private static readonly object padlock = new object();
+        private readonly MainViewModel? _mainViewModel;
         private List<Mod> ModList { get; set; }
 
         public ObservableCollection<ModViewModel> ModVMCollection { get; set; }
@@ -30,6 +32,7 @@ namespace MW5_Mod_Organizer_WPF.Services
             Overwrites = new ObservableCollection<ModViewModel>();
             OverwrittenBy = new ObservableCollection<ModViewModel>();
             Conflicts = new ObservableCollection<string>();
+            _mainViewModel = App.Current.Services.GetService<MainViewModel>();
         }
 
         public static ModService GetInstance()
@@ -195,7 +198,20 @@ namespace MW5_Mod_Organizer_WPF.Services
             {
                 foreach (string str in ModVM.Manifest)
                 {
-                    if (MainWindow.selectedMod != null && MainWindow.selectedMod.Manifest != null && MainWindow.selectedMod.Manifest.Contains(str))
+                    //if (MainWindow.selectedMod != null && MainWindow.selectedMod.Manifest != null && MainWindow.selectedMod.Manifest.Contains(str))
+                    //{
+                    //    Conflicts.Add(str);
+                    //    Console.WriteLine($"Conflict: {str} generated");
+                    //}
+
+                    ModViewModel? modViewModel = null; 
+
+                    if (_mainViewModel?.SelectedItems != null && _mainViewModel.SelectedItems.Count == 1)
+                    {
+                        modViewModel = _mainViewModel.SelectedItems?[0] as ModViewModel;
+                    }
+
+                    if (modViewModel != null && modViewModel.Manifest != null && modViewModel.Manifest.Contains(str))
                     {
                         Conflicts.Add(str);
                     }

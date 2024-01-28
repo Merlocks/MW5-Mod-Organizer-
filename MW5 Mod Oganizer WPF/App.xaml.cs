@@ -55,7 +55,7 @@ namespace MW5_Mod_Organizer_WPF
             services.AddTransient<JsonConverterFacade>();
 
             // ViewModels
-            services.AddTransient<MainViewModel>();
+            services.AddSingleton<MainViewModel>();
             services.AddTransient<ModViewModel>();
 
             return services.BuildServiceProvider();

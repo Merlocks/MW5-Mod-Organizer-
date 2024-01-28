@@ -105,7 +105,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             {
                 ModService.GetInstance().ClearConflictWindow();
 
-                foreach(var item in Mods)
+                foreach (var item in Mods)
                 {
                     if (item != null)
                     {
