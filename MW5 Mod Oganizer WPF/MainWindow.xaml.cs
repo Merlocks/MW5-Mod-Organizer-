@@ -294,16 +294,6 @@ namespace MW5_Mod_Organizer_WPF
             }
         }
 
-        private void ModList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            selectedMod = ModList.SelectedItem as ModViewModel;
-
-            if (selectedMod != null)
-            {
-                ModService.GetInstance().CheckForConflicts(selectedMod);
-            }
-        }
-
         private void ArrowUp_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var items = new List<ModViewModel>();

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+        xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:MW5_Mod_Organizer_WPF.ViewModels"
         mc:Ignorable="d" FontSize="14"
         Title="MW5 Mod Organizer" Height="720" Width="1345" Background="#FFF5F5F5" WindowStartupLocation="CenterOwner">
@@ -154,8 +155,12 @@
                       dd:DragDrop.SelectDroppedItems="True" 
                       dd:DragDrop.DropHandler="{Binding}" 
                       dd:DragDrop.DropTargetAdornerBrush="#FF696390"
-                      SelectionChanged="ModList_SelectionChanged"
                       SelectedItem="{Binding ModViewModel}">
+                <behaviors:Interaction.Triggers>
+                    <behaviors:EventTrigger EventName="SelectionChanged">
+                        <behaviors:InvokeCommandAction Command="{Binding SelectionChangedCommand}" PassEventArgsToCommand="True"/>
+                    </behaviors:EventTrigger>
+                </behaviors:Interaction.Triggers>
                 <DataGrid.Columns>
                     <DataGridTemplateColumn MinWidth="50">
                         <DataGridTemplateColumn.CellTemplate>

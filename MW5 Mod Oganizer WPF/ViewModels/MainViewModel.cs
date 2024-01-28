@@ -2,6 +2,7 @@
 using GongSolutions.Wpf.DragDrop;
 using MW5_Mod_Organizer_WPF.Commands;
 using MW5_Mod_Organizer_WPF.Services;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -99,6 +100,17 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 ModViewModel.LoadOrder = ModViewModel.OriginalLoadOrder;
                 ModService.GetInstance().MoveModAndUpdate(index, (int)ModViewModel.LoadOrder - 1);
                 DeploymentNecessary = true;
+            }
+        }
+
+        [RelayCommand]
+        public void SelectionChanged(object sender)
+        {
+            Console.WriteLine("TestCommand fired." + sender);
+
+            if (ModViewModel != null)
+            {
+                ModService.GetInstance().CheckForConflicts(ModViewModel);
             }
         }
 
