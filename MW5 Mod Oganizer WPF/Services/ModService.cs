@@ -61,7 +61,7 @@ namespace MW5_Mod_Organizer_WPF.Services
                     if (primarySubdirectories != null)
                     {
                         //Add primary mods to temporary list
-                        AddToTempList(primarySubdirectories, reset);
+                        AddToTempList(primarySubdirectories);
 
                         //Sort temporary list
                         List<Mod> sortedModList = ModList.OrderBy(m => m.LoadOrder).ToList();
@@ -81,10 +81,10 @@ namespace MW5_Mod_Organizer_WPF.Services
                     if (primarySubdirectories != null && secondarySubdirectories != null)
                     {
                         //Add primary mods to temporary list
-                        AddToTempList(primarySubdirectories, reset);
+                        AddToTempList(primarySubdirectories);
 
                         //Add secondary mods to temporary list
-                        AddToTempList(secondarySubdirectories, reset);
+                        AddToTempList(secondarySubdirectories);
 
                         //Sort temporary list
                         List<Mod> sortedModList = ModList.OrderBy(m => m.LoadOrder).ToList();
@@ -102,7 +102,19 @@ namespace MW5_Mod_Organizer_WPF.Services
             }
         }
 
-        private void AddToTempList(string[] directory, bool reset)
+        public void MoveModAndUpdate(int oldIndex, int newIndex)
+        {
+            ClearConflictWindow();
+            
+            ModVMCollection.Move(oldIndex, newIndex);
+
+            foreach (var mod in ModVMCollection)
+            {
+                mod.LoadOrder = ModVMCollection.IndexOf(mod) + 1;
+            }
+        }
+
+        private void AddToTempList(string[] directory)
         {
             foreach (var path in directory)
             {
@@ -113,15 +125,14 @@ namespace MW5_Mod_Organizer_WPF.Services
                     mod.Path = path;
                     mod.FolderName = Path.GetFileName(path);
 
-                    if (reset && mod.ModOrganizerOriginalLoadOrder != null && mod.ModOrganizerOriginalIsEnabled != null)
-                    {
-                        mod.LoadOrder = mod.ModOrganizerOriginalLoadOrder;
-                        mod.IsEnabled = (bool)mod.ModOrganizerOriginalIsEnabled;
-                    }
-
                     if (mod.LoadOrder == null)
                     {
                         mod.LoadOrder = 0;
+                    }
+
+                    if (mod.OriginalLoadOrder == null)
+                    {
+                        mod.OriginalLoadOrder = mod.LoadOrder;
                     }
 
                     ModList.Add(mod);

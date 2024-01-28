@@ -35,6 +35,37 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
         }
 
+        private ModViewModel _modViewModel;
+
+        public ModViewModel ModViewModel
+        {
+            get 
+            { 
+                return _modViewModel; 
+            }
+            set
+            {
+                _modViewModel = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private IList selectedMods;
+
+        public IList SelectedMods
+        {
+            get 
+            { 
+                return selectedMods;
+            }
+            set 
+            { 
+                selectedMods = value; 
+                OnPropertyChanged();
+            }
+        }
+
+
         public ICommand DeployCommand { get; }
 
         public ICommand UndoCommand { get; }
@@ -49,6 +80,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
         public ICommand MoveDownCommand { get; }
 
+        public ICommand ResetToDefaultCommand { get; }
+
         public MainViewModel()
         {
             DeployCommand = new DeployCommand(this);
@@ -58,6 +91,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             ResetCommand = new ResetCommand(this);
             MoveUpCommand = new MoveUpCommand(this);
             MoveDownCommand = new MoveDownCommand(this);
+            ResetToDefaultCommand = new ResetToDefaultCommand(this);
         }
 
         #region DragDrop

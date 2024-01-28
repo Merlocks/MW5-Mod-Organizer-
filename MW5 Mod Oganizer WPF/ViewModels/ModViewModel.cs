@@ -59,6 +59,19 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
         }
 
+        public decimal? OriginalLoadOrder
+        {
+            get
+            {
+                return _mod.OriginalLoadOrder;
+            }
+            set
+            {
+                _mod.OriginalLoadOrder = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string[]? Manifest => _mod.Manifest;
 
         public string? Path => _mod.Path;

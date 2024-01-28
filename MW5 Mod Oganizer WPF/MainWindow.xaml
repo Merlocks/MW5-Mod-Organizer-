@@ -123,6 +123,11 @@
                         Click="ButtonClearPath_Click"
                         Command="{Binding ClearCommand}"
                         Style="{DynamicResource StandaloneButtonTheme}"/>
+                <Button Content="Reset to default load order"
+                        Height="25"
+                        Margin="10 0 0 0"
+                        Command="{Binding ResetToDefaultCommand}"
+                        Style="{DynamicResource StandaloneButtonTheme}"/>
             </StackPanel>
         </StackPanel>
 
@@ -149,7 +154,8 @@
                       dd:DragDrop.SelectDroppedItems="True" 
                       dd:DragDrop.DropHandler="{Binding}" 
                       dd:DragDrop.DropTargetAdornerBrush="#FF696390"
-                      SelectionChanged="ModList_SelectionChanged">
+                      SelectionChanged="ModList_SelectionChanged"
+                      SelectedItem="{Binding ModViewModel}">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn MinWidth="50">
                         <DataGridTemplateColumn.CellTemplate>
@@ -164,7 +170,7 @@
                     <DataGridTextColumn Header="Loadorder" 
                                         IsReadOnly="True" 
                                         MinWidth="100" 
-                                        Binding="{Binding LoadOrder}" 
+                                        Binding="{Binding LoadOrder, UpdateSourceTrigger=PropertyChanged}" 
                                         CanUserSort="False"/>
                     <DataGridTextColumn Header="Mod" 
                                         IsReadOnly="True" 
