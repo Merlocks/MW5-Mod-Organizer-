@@ -63,9 +63,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             {
                 if (SelectedItems != null && SelectedItems.Count != 0)
                 {
-                    Console.WriteLine("");
-                    Console.WriteLine($"Mods in SelectedItems: ");
-
                     foreach (var item in SelectedItems)
                     {
                         ModViewModel? mod = item as ModViewModel;
@@ -75,9 +72,12 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                             int index = ModService.GetInstance().ModVMCollection.IndexOf(mod);
 
                             mod.LoadOrder = mod.OriginalLoadOrder;
-                            ModService.GetInstance().MoveModAndUpdate(index, (int)mod.LoadOrder! - 1);
 
-                            Console.WriteLine(mod.DisplayName);
+                            if (index != (int)mod.LoadOrder! - 1)
+                            {
+                                ModService.GetInstance().MoveModAndUpdate(index, (int)mod.LoadOrder! - 1);
+                                Console.WriteLine($"\nMoved mod: {mod.DisplayName} from index: {index} to {ModService.GetInstance().ModVMCollection.IndexOf(mod)}");
+                            }
                         }
                     }
 

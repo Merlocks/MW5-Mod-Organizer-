@@ -16,11 +16,12 @@ namespace MW5_Mod_Organizer_WPF
     /// </summary>
 
     /// <changelog> 
-    /// 
+    /// Updated layout
+    /// Added Reset To Default button
     /// </changelog>
 
     /// <TODO>
-    /// Find a way to bind selectedmods to MainViewModel so ResetToDefaultCommand can work with multi selection.
+    /// 
     /// </TODO>
     public partial class MainWindow : Window
     {
