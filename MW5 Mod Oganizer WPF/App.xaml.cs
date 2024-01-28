@@ -22,9 +22,8 @@ namespace MW5_Mod_Organizer_WPF
         /// </summary>
         public IServiceProvider Services { get; private set; }
 
-        public App(bool contentLoaded)
+        public App()
         {
-            _contentLoaded = contentLoaded;
             Services = ConfigureServices();
 
             this.InitializeComponent();
@@ -33,12 +32,8 @@ namespace MW5_Mod_Organizer_WPF
         protected override void OnStartup(StartupEventArgs e)
         {
             ModService.GetInstance();
-            
-            MainWindow = new MainWindow()
-            {
-                DataContext = new MainViewModel()
-            };
 
+            MainWindow = new MainWindow();
             MainWindow.Show();
             
             base.OnStartup(e);

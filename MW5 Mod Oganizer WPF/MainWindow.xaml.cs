@@ -6,11 +6,8 @@ using System.Windows.Forms;
 using MW5_Mod_Organizer_WPF.Facades;
 using System.Collections.Generic;
 using MW5_Mod_Organizer_WPF.ViewModels;
-using GongSolutions.Wpf.DragDrop.Utilities;
-using System.Collections.ObjectModel;
-using System.Collections;
-using System.Reflection;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MW5_Mod_Organizer_WPF
 {
@@ -34,7 +31,8 @@ namespace MW5_Mod_Organizer_WPF
         public MainWindow()
         {
 
-            InitializeComponent();
+            this.InitializeComponent();
+            this.DataContext = App.Current.Services.GetService<MainViewModel>();
 
             if (!string.IsNullOrEmpty(Properties.Settings.Default.Path))
             {
