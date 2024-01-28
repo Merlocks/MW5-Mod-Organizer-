@@ -1,16 +1,15 @@
-﻿using GongSolutions.Wpf.DragDrop;
+﻿using CommunityToolkit.Mvvm.Input;
+using GongSolutions.Wpf.DragDrop;
 using MW5_Mod_Organizer_WPF.Commands;
 using MW5_Mod_Organizer_WPF.Services;
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
 {
-    public class MainViewModel : ViewModelBase, IDropTarget
+    public partial class MainViewModel : ViewModelBase, IDropTarget
     {
         public IEnumerable<ModViewModel> Mods => ModService.GetInstance().ModVMCollection;
 
@@ -80,8 +79,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
         public ICommand MoveDownCommand { get; }
 
-        public ICommand ResetToDefaultCommand { get; }
-
         public MainViewModel()
         {
             DeployCommand = new DeployCommand(this);
@@ -91,7 +88,18 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             ResetCommand = new ResetCommand(this);
             MoveUpCommand = new MoveUpCommand(this);
             MoveDownCommand = new MoveDownCommand(this);
-            ResetToDefaultCommand = new ResetToDefaultCommand(this);
+        }
+
+        [RelayCommand]
+        public void ResetToDefault()
+        {
+            if (ModViewModel != null)
+            {
+                int index = ModService.GetInstance().ModVMCollection.IndexOf(ModViewModel);
+                ModViewModel.LoadOrder = ModViewModel.OriginalLoadOrder;
+                ModService.GetInstance().MoveModAndUpdate(index, (int)ModViewModel.LoadOrder - 1);
+                DeploymentNecessary = true;
+            }
         }
 
         #region DragDrop
