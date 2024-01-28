@@ -27,12 +27,14 @@ namespace MW5_Mod_Organizer_WPF
         public static ModViewModel? selectedMod = null;
         public static ModViewModel? selectedOverwrite = null;
         public static ModViewModel? selectedOverwrittenBy = null;
+        private readonly MainViewModel? _mainViewModel;
 
         public MainWindow()
         {
 
             this.InitializeComponent();
-            this.DataContext = App.Current.Services.GetService<MainViewModel>();
+            _mainViewModel = App.Current.Services.GetService<MainViewModel>();
+            this.DataContext = _mainViewModel;
 
             if (!string.IsNullOrEmpty(Properties.Settings.Default.Path))
             {
@@ -50,6 +52,14 @@ namespace MW5_Mod_Organizer_WPF
             }
 
             UpdateModGridView();
+        }
+
+        private void SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (ModList.SelectedItems.Count != 0 && ModList.SelectedItems != null)
+            {
+                _mainViewModel!.SelectedItems = ModList.SelectedItems;
+            }
         }
 
         #region toolbar buttons

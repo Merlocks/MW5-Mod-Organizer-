@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using GongSolutions.Wpf.DragDrop;
 using MW5_Mod_Organizer_WPF.Commands;
 using MW5_Mod_Organizer_WPF.Services;
@@ -10,7 +11,7 @@ using System.Windows.Input;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
 {
-    public partial class MainViewModel : ViewModelBase, IDropTarget
+    public partial class MainViewModel : ObservableObject, IDropTarget
     {
         public IEnumerable<ModViewModel> Mods => ModService.GetInstance().ModVMCollection;
 
@@ -20,50 +21,14 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
         public IEnumerable<string> Conflicts => ModService.GetInstance().Conflicts;
 
+        [ObservableProperty]
         private bool deploymentNecessary;
 
-        public bool DeploymentNecessary
-        {
-            get 
-            { 
-                return deploymentNecessary; 
-            }
-            set 
-            { 
-                deploymentNecessary = value;
-                OnPropertyChanged();
-            }
-        }
+        [ObservableProperty]
+        private ModViewModel? selectedItem;
 
-        private ModViewModel _modViewModel;
-
-        public ModViewModel ModViewModel
-        {
-            get 
-            { 
-                return _modViewModel; 
-            }
-            set
-            {
-                _modViewModel = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private IList selectedMods;
-
-        public IList SelectedMods
-        {
-            get 
-            { 
-                return selectedMods;
-            }
-            set 
-            { 
-                selectedMods = value; 
-                OnPropertyChanged();
-            }
-        }
+        [ObservableProperty]
+        private IList? selectedItems;
 
 
         public ICommand DeployCommand { get; }
@@ -89,16 +54,28 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             ResetCommand = new ResetCommand(this);
             MoveUpCommand = new MoveUpCommand(this);
             MoveDownCommand = new MoveDownCommand(this);
+
+            SelectedItems = new List<ModViewModel>();
         }
 
         [RelayCommand]
         public void ResetToDefault()
         {
-            if (ModViewModel != null)
+            if (SelectedItems != null && SelectedItems.Count != 0)
             {
-                int index = ModService.GetInstance().ModVMCollection.IndexOf(ModViewModel);
-                ModViewModel.LoadOrder = ModViewModel.OriginalLoadOrder;
-                ModService.GetInstance().MoveModAndUpdate(index, (int)ModViewModel.LoadOrder - 1);
+                foreach (var item in SelectedItems)
+                {
+                    ModViewModel? mod = item as ModViewModel;
+
+                    if (mod != null)
+                    {
+                        int index = ModService.GetInstance().ModVMCollection.IndexOf(mod);
+
+                        mod.LoadOrder = mod.OriginalLoadOrder;
+                        ModService.GetInstance().MoveModAndUpdate(index, (int)mod.LoadOrder! - 1);
+                    }
+                }
+
                 DeploymentNecessary = true;
             }
         }
@@ -108,9 +85,30 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         {
             Console.WriteLine("TestCommand fired." + sender);
 
-            if (ModViewModel != null)
+            //if (SelectedItem != null)
+            //{
+            //    ModService.GetInstance().CheckForConflicts(SelectedItem);
+            //}
+
+            if (SelectedItems?.Count == 1)
             {
-                ModService.GetInstance().CheckForConflicts(ModViewModel);
+                ModViewModel? mod = SelectedItems[0] as ModViewModel;
+
+                if (mod != null)
+                {
+                    ModService.GetInstance().CheckForConflicts(mod);
+                }
+            } else if (SelectedItems?.Count > 1)
+            {
+                ModService.GetInstance().ClearConflictWindow();
+
+                foreach(var item in Mods)
+                {
+                    if (item != null)
+                    {
+                        item.ModViewModelStatus = Models.ModViewModelConflictStatus.None;
+                    }
+                }
             }
         }
 

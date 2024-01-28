@@ -155,7 +155,8 @@
                       dd:DragDrop.SelectDroppedItems="True" 
                       dd:DragDrop.DropHandler="{Binding}" 
                       dd:DragDrop.DropTargetAdornerBrush="#FF696390"
-                      SelectedItem="{Binding ModViewModel}">
+                      SelectedItem="{Binding SelectedItem}"
+                      SelectionChanged="SelectionChanged">
                 <behaviors:Interaction.Triggers>
                     <behaviors:EventTrigger EventName="SelectionChanged">
                         <behaviors:InvokeCommandAction Command="{Binding SelectionChangedCommand}" PassEventArgsToCommand="True"/>
