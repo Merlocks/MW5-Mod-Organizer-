@@ -59,22 +59,34 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public void ResetToDefault()
         {
-            if (SelectedItems != null && SelectedItems.Count != 0)
+            try
             {
-                foreach (var item in SelectedItems)
+                if (SelectedItems != null && SelectedItems.Count != 0)
                 {
-                    ModViewModel? mod = item as ModViewModel;
+                    Console.WriteLine("");
+                    Console.WriteLine($"Mods in SelectedItems: ");
 
-                    if (mod != null)
+                    foreach (var item in SelectedItems)
                     {
-                        int index = ModService.GetInstance().ModVMCollection.IndexOf(mod);
+                        ModViewModel? mod = item as ModViewModel;
 
-                        mod.LoadOrder = mod.OriginalLoadOrder;
-                        ModService.GetInstance().MoveModAndUpdate(index, (int)mod.LoadOrder! - 1);
+                        if (mod != null)
+                        {
+                            int index = ModService.GetInstance().ModVMCollection.IndexOf(mod);
+
+                            mod.LoadOrder = mod.OriginalLoadOrder;
+                            ModService.GetInstance().MoveModAndUpdate(index, (int)mod.LoadOrder! - 1);
+
+                            Console.WriteLine(mod.DisplayName);
+                        }
                     }
-                }
 
-                DeploymentNecessary = true;
+                    DeploymentNecessary = true;
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine($"Exception at ResetToDefault()");
             }
         }
 

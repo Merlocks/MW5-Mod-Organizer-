@@ -59,6 +59,16 @@ namespace MW5_Mod_Organizer_WPF
             if (ModList.SelectedItems.Count != 0 && ModList.SelectedItems != null)
             {
                 _mainViewModel!.SelectedItems = ModList.SelectedItems;
+
+                Console.WriteLine("");
+
+                foreach (var item in ModList.SelectedItems)
+                {
+                    ModViewModel? mod = item as ModViewModel;
+                    Console.WriteLine($"Selected mod: {mod.DisplayName}");
+                }
+
+                Console.WriteLine("");
             }
         }
 
