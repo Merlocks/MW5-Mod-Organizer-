@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using GongSolutions.Wpf.DragDrop;
 using MW5_Mod_Organizer_WPF.Commands;
+using MW5_Mod_Organizer_WPF.Facades;
 using MW5_Mod_Organizer_WPF.Models;
 using MW5_Mod_Organizer_WPF.Services;
 using System;
@@ -148,8 +149,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         {
             try
             {
-                bool areChangesMade = false;
-
                 if (SelectedItems != null && SelectedItems.Count != 0)
                 {
                     foreach (var item in SelectedItems)
@@ -158,14 +157,23 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                         if (mod != null)
                         {
+                            string? path = mod.Path;
+                            ModViewModel? modBackup = new ModViewModel(JsonConverterFacade.ReadBackup(mod.Path!)!);
+
                             int index = ModService.GetInstance().ModVMCollection.IndexOf(mod);
 
-                            mod.LoadOrder = mod.OriginalLoadOrder;
+                            mod.IsEnabled = modBackup.IsEnabled;
+                            mod._mod = modBackup._mod;
+                            //mod._mod.Path = path;
+
+                            if (mod.LoadOrder < 1)
+                            {
+                                mod.LoadOrder = 1;
+                            }
 
                             if (index != (int)mod.LoadOrder! - 1)
                             {
                                 ModService.GetInstance().MoveModAndUpdate(index, (int)mod.LoadOrder! - 1);
-                                areChangesMade = true;
                             }
                         }
                     }
@@ -175,10 +183,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         ModService.GetInstance().CheckForConflicts((ModViewModel)SelectedItems[0]!);
                     }
 
-                    if (areChangesMade)
-                    {
-                        DeploymentNecessary = true; 
-                    }
+                    DeploymentNecessary = true;
                 }
             }
             catch (Exception)

@@ -1,6 +1,7 @@
 ﻿using MW5_Mod_Organizer_WPF.Models;
 using MW5_Mod_Organizer_WPF.Services;
 using System;
+using System.IO;
 using System.Text.Json.Serialization;
 
 namespace MW5_Mod_Organizer_WPF.Facades
@@ -15,6 +16,8 @@ namespace MW5_Mod_Organizer_WPF.Facades
                 if (jsonString != null) 
                 {
                     Mod? mod = JsonHandlerService.JsonStringToMod(jsonString);
+                    mod.Path = path;
+                    mod.FolderName = Path.GetFileName(path);
 
                     return mod;
                 } else
@@ -60,6 +63,31 @@ namespace MW5_Mod_Organizer_WPF.Facades
             catch (Exception ex)
             {
                 LoggerService.AddLog("ModToJsonException", ex.Message);
+                throw;
+            }
+        }
+
+        public static Mod? ReadBackup(string path)
+        {
+            try
+            {
+                string? jsonString = FileHandlerService.ReadFile(path, @"\backup.json");
+                if (jsonString != null)
+                {
+                    Mod? mod = JsonHandlerService.JsonStringToMod(jsonString);
+                    mod.Path = path;
+                    mod.FolderName = Path.GetFileName(path);
+
+                    return mod;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggerService.AddLog("JsonToModException", ex.Message);
                 throw;
             }
         }

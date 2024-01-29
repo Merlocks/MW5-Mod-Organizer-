@@ -130,8 +130,8 @@ namespace MW5_Mod_Organizer_WPF.Services
                         JsonConverterFacade.Createbackup(path, mod); 
                     }
                     
-                    mod.Path = path;
-                    mod.FolderName = Path.GetFileName(path);
+                    //mod.Path = path;
+                    //mod.FolderName = Path.GetFileName(path);
 
                     if (mod.LoadOrder == null)
                     {
