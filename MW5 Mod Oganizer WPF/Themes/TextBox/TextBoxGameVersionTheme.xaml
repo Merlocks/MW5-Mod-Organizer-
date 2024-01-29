@@ -5,7 +5,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
-                    <Border Background="White"
+                    <Border Background="#f7f5f2"
                             Width="90"
                             Height="25">
                         <Grid>

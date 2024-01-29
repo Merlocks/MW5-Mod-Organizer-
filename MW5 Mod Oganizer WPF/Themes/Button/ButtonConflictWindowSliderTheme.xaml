@@ -4,8 +4,8 @@
            TargetType="{x:Type ToggleButton}">
         <Setter Property="Content" Value="+"/>
         <Setter Property="Width" Value="25"/>
-        <Setter Property="Background" Value="#FFF9F9F9"/>
-        <Setter Property="Foreground" Value="#69717d"/>
+        <Setter Property="Background" Value="#E0D7D7"/>
+        <Setter Property="Foreground" Value="#484D54"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="FontSize" Value="20"/>
@@ -20,14 +20,12 @@
                         <ContentPresenter HorizontalAlignment="Center" 
                                           VerticalAlignment="Center"/>
                         <Border.Effect>
-                            <DropShadowEffect BlurRadius="10" Color="#FFD8D8D8" ShadowDepth="6" Direction="270" Opacity="0.3"/>
+                            <DropShadowEffect BlurRadius="10" Color="Black" ShadowDepth="6" Direction="270" Opacity="0.1"/>
                         </Border.Effect>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#FFF5F5F5"/>
-                            <Setter Property="BorderBrush" Value="#FFC8C8C8"/>
-                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter Property="Foreground" Value="#F7F5F2"/>
                             <Setter Property="Cursor" Value="Hand"/>
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">

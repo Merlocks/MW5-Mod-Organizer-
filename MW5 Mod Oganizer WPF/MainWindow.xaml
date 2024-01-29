@@ -7,7 +7,8 @@
         xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:MW5_Mod_Organizer_WPF.ViewModels"
         mc:Ignorable="d" FontSize="14"
-        Title="MW5 Mod Organizer" Height="720" Width="1345" Background="#FFF5F5F5" WindowStartupLocation="CenterOwner">
+        Title="MW5 Mod Organizer" Height="720" Width="1345" Background="#D1C9C9" WindowStartupLocation="CenterOwner"
+        UseLayoutRounding="True">
     <Window.Resources>
         <DataTemplate x:Key="DataGridItemTemplate1">
             <Grid/>
@@ -26,21 +27,6 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
-        <!--Toolbar menu-->
-        <StackPanel Grid.Row="0" 
-                    Grid.Column="0" 
-                    Grid.ColumnSpan="3" 
-                    Orientation="Horizontal"
-                    Background="#FFF9F9F9">
-            <Button x:Name="ButtonExport" 
-                    Content="Export loadorder"
-                    Click="ButtonExport_Click"
-                    Style="{StaticResource ToolbarMenuButtonTheme}"/>
-            <Button x:Name="ButtonProfiles"
-                    Content="Profiles"
-                    Style="{DynamicResource ToolbarMenuButtonTheme}"/>
-        </StackPanel>
 
         <!--Taskbar-->
         <StackPanel Orientation="Vertical"
@@ -76,10 +62,10 @@
                                MouseLeftButtonDown="ArrowUp_MouseLeftButtonDown">
                         <TextBlock.Style>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="Foreground" Value="#69717d"/>
+                                <Setter Property="Foreground" Value="#484D54"/>
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Foreground" Value="White"/>
+                                        <Setter Property="Foreground" Value="#F7F5F2"/>
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -99,10 +85,10 @@
                                MouseLeftButtonDown="ArrowDown_MouseLeftButtonDown">
                         <TextBlock.Style>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="Foreground" Value="#69717d"/>
+                                <Setter Property="Foreground" Value="#484D54"/>
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Foreground" Value="White"/>
+                                        <Setter Property="Foreground" Value="#F7F5F2"/>
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -139,7 +125,7 @@
         <Border Grid.Column="0"
                 Grid.ColumnSpan="2"
                 Grid.Row="3" 
-                Background="White" 
+                Background="#f7f5f2" 
                 BorderThickness="0" 
                 Margin="10">
             <DataGrid x:Name="ModList" 
@@ -205,10 +191,18 @@
         <Border Grid.Column="0"
                 Grid.ColumnSpan="3"
                 Grid.Row="1"
-                Background="#FFF9F9F9">
+                Background="#E0D7D7">
             <Border.Effect>
-                <DropShadowEffect BlurRadius="10" Color="#FFD8D8D8" ShadowDepth="5" Direction="270" Opacity="0.3"/>
+                <DropShadowEffect BlurRadius="10" Color="Black" ShadowDepth="5" Direction="270" Opacity="0.1"/>
             </Border.Effect>
+        </Border>
+        <Border Grid.Column="0"
+                Grid.ColumnSpan="3"
+                Grid.Row="1"
+                Background="#E0D7D7">
+            <!--<Border.Effect>
+                <DropShadowEffect BlurRadius="10" Color="Black" ShadowDepth="5" Direction="270" Opacity="0.3"/>
+            </Border.Effect>-->
         </Border>
 
         <!--Logo-->
@@ -283,7 +277,7 @@
                           Click="ToggleButtonConflictWindow_Click"
                           Style="{StaticResource ButtonConflictWindowSlider}"/>
             <Border x:Name="BorderConflictWindow"
-                    Background="#FFF9F9F9"
+                    Background="#E0D7D7"
                     Visibility="Collapsed">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -304,12 +298,12 @@
                                Text="Conflict window"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
-                               Foreground="#69717d"
+                               Foreground="#484D54"
                                FontWeight="Normal"/>
                     <!--Overwrites window-->
                     <Border Grid.Row="2"
                             Grid.Column="0"
-                            Background="White"
+                            Background="#f7f5f2"
                             Margin="0 0 10 0">
                         <DataGrid x:Name="DataGridOverwrites"
                                   ItemsSource="{Binding Overwrites}"
@@ -334,7 +328,7 @@
                     <!--Overwritten window-->
                     <Border Grid.Row="4"
                             Grid.Column="0"
-                            Background="White"
+                            Background="#f7f5f2"
                             Margin="0 0 10 0">
                         <DataGrid x:Name="DataGridOverwrittenBy"
                                   ItemsSource="{Binding OverwrittenBy}"
@@ -359,7 +353,7 @@
                     <!--Manifest window-->
                     <Border Grid.Row="6"
                             Grid.Column="0"
-                            Background="White"
+                            Background="#f7f5f2"
                             Margin="0 0 10 0">
                         <DataGrid ItemsSource="{Binding Conflicts}" 
                                   Style="{DynamicResource DataGridStyle1}" 
@@ -381,6 +375,21 @@
                 </Grid>
             </Border>
 
+        </StackPanel>
+
+        <!--Toolbar menu-->
+        <StackPanel Grid.Row="0" 
+                    Grid.Column="0" 
+                    Grid.ColumnSpan="3" 
+                    Orientation="Horizontal"
+                    Background="#E0D7D7">
+            <Button x:Name="ButtonExport" 
+                    Content="Export loadorder"
+                    Click="ButtonExport_Click"
+                    Style="{StaticResource ToolbarMenuButtonTheme}"/>
+            <Button x:Name="ButtonProfiles"
+                    Content="Profiles"
+                    Style="{DynamicResource ToolbarMenuButtonTheme}"/>
         </StackPanel>
     </Grid>
 </Window>

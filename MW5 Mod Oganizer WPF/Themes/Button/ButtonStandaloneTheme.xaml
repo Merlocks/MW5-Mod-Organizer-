@@ -12,18 +12,20 @@
                                   HorizontalAlignment="Stretch"
                                   Background="Transparent">
 
-                                <TextBlock Text="{TemplateBinding Property=Content}" 
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Center"
-                                       Margin="10, 0, 10, 0"/>
+                                <TextBlock Text="{TemplateBinding Property=Content}"
+                                           FontWeight="SemiBold"
+                                           TextOptions.TextFormattingMode="Display"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"
+                                           Margin="10, 0, 10, 0"/>
                             </Grid>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#69717d"/>
-            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="#484D54"/>
+            <Setter Property="BorderThickness" Value="0 0 2 3"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="SnapsToDevicePixels" Value="True"/>
             <Setter Property="Cursor" Value="Hand"/>
@@ -31,14 +33,14 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#FFF5F5F5"/>
-                <Setter Property="BorderBrush" Value="#FFC8C8C8"/>
-                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Background" Value="#ED552F"/>
+                <Setter Property="Foreground" Value="#FFFDFA"/>
+                <Setter Property="BorderBrush" Value="#C74828"/>
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="#FFE0E0E0"/>
-                <Setter Property="Foreground" Value="#FF4F545B"/>
-                <Setter Property="BorderBrush" Value="#FF323538"/>
+                <Setter Property="Background" Value="#782B18"/>
+                <Setter Property="Foreground" Value="#FFFDFA"/>
+                <Setter Property="BorderBrush" Value="#782B18"/>
             </Trigger>
         </Style.Triggers>
     </Style>
