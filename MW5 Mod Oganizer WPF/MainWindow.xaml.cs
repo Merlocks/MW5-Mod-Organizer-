@@ -312,7 +312,7 @@ namespace MW5_Mod_Organizer_WPF
             //Retrieve mods
             ModService.GetInstance().GetMods(reset);
 
-            //Gerenalize loadorder by index
+            //Generate loadorder by index
             foreach (var mod in ModService.GetInstance().ModVMCollection) 
             {
                 if (mod.LoadOrder != null)
