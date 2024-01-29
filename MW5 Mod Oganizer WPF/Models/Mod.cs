@@ -56,11 +56,6 @@ namespace MW5_Mod_Organizer_WPF.Models
         [JsonPropertyOrder(12)]
         public bool IsEnabled { get; set; }
 
-        [JsonPropertyName("originalLoadOrder")]
-        [JsonPropertyOrder(13)]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public decimal? OriginalLoadOrder { get; set; }
-
         [JsonIgnore]
         public string? Path { get; set; }
 

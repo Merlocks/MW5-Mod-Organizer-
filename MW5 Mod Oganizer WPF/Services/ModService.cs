@@ -138,11 +138,6 @@ namespace MW5_Mod_Organizer_WPF.Services
                         mod.LoadOrder = 0;
                     }
 
-                    if (mod.OriginalLoadOrder == null)
-                    {
-                        mod.OriginalLoadOrder = mod.LoadOrder;
-                    }
-
                     ModList.Add(mod);
                 } 
             }
