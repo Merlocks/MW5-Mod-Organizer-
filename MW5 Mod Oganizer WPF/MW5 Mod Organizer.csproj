@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>MW5_Mod_Organizer_WPF</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
@@ -43,15 +43,16 @@
 	  <None Remove="Images\favicon.ico" />
 	  <None Remove="Images\logo.png" />
 	  <None Remove="Images\logo2.png" />
+	  <None Remove="logo2.png" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Content Include="Images\favicon.ico">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Content>
-	  <Content Include="Images\logo2.png">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
+	  <EmbeddedResource Include="Images\logo2.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </EmbeddedResource>
 	</ItemGroup>
 
   <ItemGroup>
@@ -82,12 +83,13 @@
 
   <ItemGroup>
     <Content Include="Images\logo.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="favicon.ico" />
+    <Resource Include="logo2.png" />
   </ItemGroup>
 
 </Project>

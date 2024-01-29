@@ -212,7 +212,7 @@
                        FontSize="22"
                        Margin="20, 0, 0, 0"
                        Visibility="Hidden"/>
-            <Image Source="Images/logo2.png"
+            <Image Source="/logo2.png"
                    Height="40"
                    RenderOptions.BitmapScalingMode="Fant"/>
         </Grid>
