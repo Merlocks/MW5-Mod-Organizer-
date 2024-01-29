@@ -147,6 +147,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         {
             try
             {
+                bool areChangesMade = false;
+
                 if (SelectedItems != null && SelectedItems.Count != 0)
                 {
                     foreach (var item in SelectedItems)
@@ -162,11 +164,20 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                             if (index != (int)mod.LoadOrder! - 1)
                             {
                                 ModService.GetInstance().MoveModAndUpdate(index, (int)mod.LoadOrder! - 1);
+                                areChangesMade = true;
                             }
                         }
                     }
 
-                    DeploymentNecessary = true;
+                    if (SelectedItems.Count == 1)
+                    {
+                        ModService.GetInstance().CheckForConflicts((ModViewModel)SelectedItems[0]!);
+                    }
+
+                    if (areChangesMade)
+                    {
+                        DeploymentNecessary = true; 
+                    }
                 }
             }
             catch (Exception)
