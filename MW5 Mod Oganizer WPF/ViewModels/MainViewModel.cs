@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using GongSolutions.Wpf.DragDrop;
 using MW5_Mod_Organizer_WPF.Commands;
+using MW5_Mod_Organizer_WPF.Models;
 using MW5_Mod_Organizer_WPF.Services;
 using System;
 using System.Collections;
@@ -40,8 +41,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
         public ICommand MoveUpCommand { get; }
 
-        public ICommand MoveDownCommand { get; }
-
         public MainViewModel()
         {
             DeployCommand = new DeployCommand(this);
@@ -50,13 +49,57 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             ToggleCheckBoxCommand = new ToggleCheckBoxCommand(this);
             ResetCommand = new ResetCommand(this);
             MoveUpCommand = new MoveUpCommand(this);
-            MoveDownCommand = new MoveDownCommand(this);
         }
 
         /// <summary>
         /// Collection of all Commands used within this ViewModel
         /// </summary>
         #region Commands
+        [RelayCommand]
+        public void ArrowDown()
+        {
+            bool areChangesMade = false;
+            
+            if (SelectedItems != null && SelectedItems.Count > 0)
+            {
+                var items = new List<ModViewModel>();
+
+                foreach (var item in SelectedItems)
+                {
+                    items.Add((ModViewModel)item);
+                }
+
+                foreach (var item in items.OrderBy(m => m.LoadOrder))
+                {
+                    int oldIndex = ModService.GetInstance().ModVMCollection.IndexOf(item);
+                    int newIndex = ModService.GetInstance().ModVMCollection.Count - 1;
+                    
+                    if (oldIndex != newIndex)
+                    {
+                        ModService.GetInstance().ModVMCollection.Move(oldIndex, newIndex);
+                        areChangesMade = true;
+                    }
+                }
+
+                //Update loadorder
+
+                foreach (var mod in ModService.GetInstance().ModVMCollection)
+                {
+                    mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod) + 1;
+                }
+
+                if (SelectedItems.Count == 1)
+                {
+                    ModService.GetInstance().CheckForConflicts((ModViewModel)SelectedItems[0]!);
+                }
+
+                if (areChangesMade)
+                {
+                    DeploymentNecessary = true;
+                }
+            }
+        }
+
         [RelayCommand]
         public void ResetToDefault()
         {

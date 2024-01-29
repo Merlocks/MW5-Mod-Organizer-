@@ -72,7 +72,7 @@
                         </TextBlock.Style>
                     </TextBlock>
                 </Button>
-                <Button Command="{Binding MoveDownCommand}">
+                <Button Command="{Binding ArrowDownCommand}">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <ContentPresenter/>
@@ -81,8 +81,7 @@
                     <TextBlock Text="&#x1F81F;"
                                FontSize="25"
                                Margin="20 0 0 0"
-                               Cursor="Hand"
-                               MouseLeftButtonDown="ArrowDown_MouseLeftButtonDown">
+                               Cursor="Hand">
                         <TextBlock.Style>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="Foreground" Value="#484D54"/>
