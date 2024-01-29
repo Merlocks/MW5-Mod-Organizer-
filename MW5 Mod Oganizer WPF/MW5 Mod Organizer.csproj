@@ -19,7 +19,7 @@
 		<Company />
 		<Authors>Maxim Agemans</Authors>
 		<AnalysisLevel>latest</AnalysisLevel>
-		<ApplicationIcon>favicon.ico</ApplicationIcon>
+		<ApplicationIcon>Images\favicon.ico</ApplicationIcon>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -39,14 +39,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="favicon.ico" />
 	  <None Remove="Images\favicon.ico" />
 	  <None Remove="Images\logo.png" />
 	  <None Remove="Images\logo2.png" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Include="favicon.ico" />
 	  <Content Include="Images\favicon.ico">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
@@ -82,7 +80,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="favicon.ico" />
     <Content Include="Images\logo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

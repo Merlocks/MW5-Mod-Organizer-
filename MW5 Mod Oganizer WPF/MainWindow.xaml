@@ -387,7 +387,8 @@
                     Style="{StaticResource ToolbarMenuButtonTheme}"/>
             <Button x:Name="ButtonProfiles"
                     Content="Profiles"
-                    Style="{DynamicResource ToolbarMenuButtonTheme}"/>
+                    Style="{DynamicResource ToolbarMenuButtonTheme}"
+                    Visibility="Hidden"/>
         </StackPanel>
     </Grid>
 </Window>
