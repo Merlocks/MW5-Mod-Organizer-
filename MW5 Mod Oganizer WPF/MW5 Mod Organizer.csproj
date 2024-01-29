@@ -39,6 +39,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="favicon.ico" />
 	  <None Remove="Images\favicon.ico" />
 	  <None Remove="Images\logo.png" />
 	  <None Remove="Images\logo2.png" />
@@ -83,6 +84,10 @@
     <Content Include="Images\logo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="favicon.ico" />
   </ItemGroup>
 
 </Project>
