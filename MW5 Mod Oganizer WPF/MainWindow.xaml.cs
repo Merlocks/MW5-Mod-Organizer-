@@ -44,6 +44,7 @@ namespace MW5_Mod_Organizer_WPF
             if (!string.IsNullOrEmpty(Properties.Settings.Default.Path))
             {
                 TextBoxFileExplorer.Text = Properties.Settings.Default.Path;
+                TextBoxGameVersion.IsReadOnly = false;
             }
 
             if (!string.IsNullOrEmpty(Properties.Settings.Default.SecondaryPath))
@@ -108,6 +109,7 @@ namespace MW5_Mod_Organizer_WPF
                         Properties.Settings.Default.Path = dialog.SelectedPath;
                         Properties.Settings.Default.Save();
                         TextBoxFileExplorer.Text = Properties.Settings.Default.Path;
+                        TextBoxGameVersion.IsReadOnly = false;
 
                         UpdateModGridView();
                     }
@@ -246,6 +248,8 @@ namespace MW5_Mod_Organizer_WPF
 
                 TextBoxFileExplorer.Text = Properties.Settings.Default.Path;
                 TextBoxSecondaryFileExplorer.Text = Properties.Settings.Default.SecondaryPath;
+
+                TextBoxGameVersion.IsReadOnly = true;
 
                 ModService.GetInstance().ClearTemporaryModList();
                 ModService.GetInstance().ClearModCollection();

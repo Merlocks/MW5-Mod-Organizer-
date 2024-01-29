@@ -41,7 +41,7 @@
                          VerticalContentAlignment="Center"
                          HorizontalAlignment="Left"
                          VerticalAlignment="Center"
-                         IsReadOnly="False"
+                         IsReadOnly="True"
                          Style="{StaticResource TextBoxGameVersionTheme}">
                     <behaviors:Interaction.Triggers>
                         <behaviors:EventTrigger EventName="TextChanged">
