@@ -39,8 +39,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
         public ICommand ToggleCheckBoxCommand { get; }
 
-        public ICommand MoveUpCommand { get; }
-
         public MainViewModel()
         {
             DeployCommand = new DeployCommand(this);
@@ -48,7 +46,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             ClearCommand = new ClearCommand(this);
             ToggleCheckBoxCommand = new ToggleCheckBoxCommand(this);
             ResetCommand = new ResetCommand(this);
-            MoveUpCommand = new MoveUpCommand(this);
         }
 
         /// <summary>
@@ -82,7 +79,52 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 }
 
                 //Update loadorder
+                foreach (var mod in ModService.GetInstance().ModVMCollection)
+                {
+                    mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod) + 1;
+                }
 
+                if (SelectedItems.Count == 1)
+                {
+                    ModService.GetInstance().CheckForConflicts((ModViewModel)SelectedItems[0]!);
+                }
+
+                if (areChangesMade)
+                {
+                    DeploymentNecessary = true;
+                }
+            }
+        }
+
+        [RelayCommand]
+        public void ArrowUp()
+        {
+            var items = new List<ModViewModel>();
+            bool areChangesMade = false;
+
+            if (SelectedItems != null && SelectedItems.Count > 0)
+            {
+                foreach (var item in SelectedItems)
+                {
+                    items.Add((ModViewModel)item);
+                }
+
+                int newIndex = 0;
+
+                foreach (var item in items.OrderBy(m => m.LoadOrder))
+                {
+                    int oldIndex = ModService.GetInstance().ModVMCollection.IndexOf(item);
+
+                    if (oldIndex != newIndex)
+                    {
+                        ModService.GetInstance().ModVMCollection.Move(oldIndex, newIndex);
+                        areChangesMade = true;
+                    }
+
+                    newIndex++;
+                }
+
+                //Update loadorder
                 foreach (var mod in ModService.GetInstance().ModVMCollection)
                 {
                     mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod) + 1;

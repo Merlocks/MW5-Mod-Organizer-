@@ -304,36 +304,6 @@ namespace MW5_Mod_Organizer_WPF
                 ModService.GetInstance().CheckForConflicts(selectedMod);
             }
         }
-
-        private void ArrowUp_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            var items = new List<ModViewModel>();
-
-            foreach (var item in ModList.SelectedItems)
-            {
-                items.Add((ModViewModel)item);
-            }
-
-            int targetIndex = 0;
-
-            foreach (var item in items.OrderBy(m => m.LoadOrder))
-            {
-                int index = ModList.Items.IndexOf(item);
-                ModService.GetInstance().ModVMCollection.Move(index, targetIndex);
-                targetIndex++;
-            }
-
-            //Update loadorder
-            foreach (var mod in ModService.GetInstance().ModVMCollection)
-            {
-                mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod) + 1;
-            }
-
-            if (selectedMod != null)
-            {
-                ModService.GetInstance().CheckForConflicts(selectedMod);
-            }
-        }
         #endregion
 
         #region functions
