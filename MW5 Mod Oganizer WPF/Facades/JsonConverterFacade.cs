@@ -46,6 +46,24 @@ namespace MW5_Mod_Organizer_WPF.Facades
             }
         }
 
+        public static void Createbackup(string path, Mod mod)
+        {
+            try
+            {
+                string? jsonString = JsonHandlerService.ModToJsonString(mod);
+                if (jsonString != null)
+                {
+                    FileHandlerService.WriteFile(path, @"\backup.json", jsonString);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                LoggerService.AddLog("ModToJsonException", ex.Message);
+                throw;
+            }
+        }
+
         public static void ModListToJson(string path, ModList modList)
         {
             try
