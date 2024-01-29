@@ -164,7 +164,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                             mod.IsEnabled = modBackup.IsEnabled;
                             mod._mod = modBackup._mod;
-                            //mod._mod.Path = path;
 
                             if (mod.LoadOrder < 1)
                             {
