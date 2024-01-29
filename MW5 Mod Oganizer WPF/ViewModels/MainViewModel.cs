@@ -8,11 +8,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
 {
-    public partial class MainViewModel : ObservableObject, IDropTarget
+    public partial class MainViewModel : ObservableObject, GongSolutions.Wpf.DragDrop.IDropTarget
     {
         public IEnumerable<ModViewModel> Mods => ModService.GetInstance().ModVMCollection;
 
@@ -51,7 +52,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         /// <summary>
         /// Collection of all Commands used within this ViewModel
         /// </summary>
-        #region Commands
+        #region *--- Commands ---*
         [RelayCommand]
         public void ArrowDown()
         {
@@ -219,10 +220,10 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         #endregion
 
         /// <summary>
-        /// Logic for DragDrop library.
-        /// Controls Drag and Drop behavior for DataGrid.
+        /// Logic for DragDrop library
+        /// Controls Drag and Drop behavior for DataGrid
         /// </summary>
-        #region DragDrop
+        #region *--- DragDrop ---*
         public void DragOver(IDropInfo dropInfo)
         {
             DefaultDropHandler defaultDropHandler = new DefaultDropHandler();
