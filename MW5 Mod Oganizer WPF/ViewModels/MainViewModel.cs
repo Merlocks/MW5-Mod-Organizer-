@@ -216,10 +216,21 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanExecuteGameVersionChanged))]
         public void GameVersionChanged(object sender)
         {
             DeploymentNecessary = true;
+        }
+
+        private bool CanExecuteGameVersionChanged()
+        {
+            if (!string.IsNullOrEmpty(Properties.Settings.Default.Path))
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
         }
         #endregion
 

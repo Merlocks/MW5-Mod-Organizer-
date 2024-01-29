@@ -17,7 +17,11 @@ namespace MW5_Mod_Organizer_WPF
 
     /// <changelog> 
     /// Updated layout
-    /// Added Reset To Default button
+    /// Mod configurations will now be backed up upon first loading.
+    /// Added Reset to Defaults button to revert mod configuration to backed up configuration
+    /// Added version number column when exporting loadorder.txt
+    /// Improved notification when changes are made to trigger on more actions
+    /// Removed Set Recovery button and Reset button (Will be replaced with Profiles later on)
     /// </changelog>
 
     /// <TODO>
