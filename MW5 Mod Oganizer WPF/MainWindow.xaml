@@ -91,13 +91,11 @@
                 <Button Content="Deploy"
                         Height="25"
                         Margin="10 0 0 0"
-                        Click="ButtonDeploy_Click"
                         Command="{Binding DeployCommand}"
                         Style="{DynamicResource StandaloneButtonTheme}"/>
                 <Button Content="Undo"
                         Height="25"
                         Margin="10 0 0 0"
-                        Click="ButtonUndo_Click"
                         Command="{Binding UndoCommand}"
                         Style="{DynamicResource StandaloneButtonTheme}"/>
                 <Button Content="Clear"

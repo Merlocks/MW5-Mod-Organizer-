@@ -62,20 +62,11 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [ObservableProperty]
         private IList? selectedItems;
 
-        public ICommand DeployCommand { get; }
-
-        public ICommand UndoCommand { get; }
-        
-        public ICommand ResetCommand { get; }
-
         public ICommand ToggleCheckBoxCommand { get; }
 
         public MainViewModel()
         {
-            DeployCommand = new DeployCommand(this);
-            UndoCommand = new UndoCommand(this);
             ToggleCheckBoxCommand = new ToggleCheckBoxCommand(this);
-            ResetCommand = new ResetCommand(this);
             GameVersion = Properties.Settings.Default.GameVersion;
             PrimaryFolderPath = Properties.Settings.Default.Path;
             SecondaryFolderPath = Properties.Settings.Default.SecondaryPath;
@@ -173,6 +164,77 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     DeploymentNecessary = true;
                 }
             }
+        }
+
+        [RelayCommand]
+        public void Deploy()
+        {
+            if (string.IsNullOrEmpty(PrimaryFolderPath))
+            {
+                string message = "You need to open a mod folder before you can do that.";
+                string caption = "Reminder";
+                MessageBoxButtons buttons = MessageBoxButtons.OKCancel;
+                MessageBoxIcon icon = MessageBoxIcon.Error;
+
+                MessageBox.Show(message, caption, buttons, icon);
+            }
+            else
+            {
+                //Save mod(s).json
+                if (!string.IsNullOrEmpty(GameVersion))
+                {
+                    foreach (var modVM in ModService.GetInstance().ModVMCollection)
+                    {
+                        modVM.GameVersion = GameVersion;
+
+                        if (modVM.Path != null)
+                        {
+                            JsonConverterFacade.ModToJson(modVM.Path, modVM._mod);
+                        }
+                    }
+                }
+
+                //Save modlist.json
+                ModList modList = new ModList
+                {
+                    ModStatus = new Dictionary<string, Status>()
+                };
+
+                foreach (var modVM in ModService.GetInstance().ModVMCollection)
+                {
+                    if (modVM.IsEnabled && modVM.FolderName != null)
+                    {
+                        modList.ModStatus.Add(modVM.FolderName, new Status { IsEnabled = modVM.IsEnabled });
+                    }
+                }
+
+                JsonConverterFacade.ModListToJson(PrimaryFolderPath, modList);
+
+                DeploymentNecessary = false;
+
+                string message = "Succesfully deployed your load order.";
+                string caption = "Info";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                MessageBoxIcon icon = MessageBoxIcon.Information;
+
+                MessageBox.Show(message, caption, buttons, icon);
+            }
+        }
+
+        [RelayCommand]
+        public void Undo()
+        {
+            ModService.GetInstance().GetMods(false);
+
+            foreach (var mod in ModService.GetInstance().ModVMCollection)
+            {
+                if (mod.LoadOrder != null)
+                {
+                    mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod) + 1;
+                }
+            }
+
+            DeploymentNecessary = false;
         }
 
         [RelayCommand]

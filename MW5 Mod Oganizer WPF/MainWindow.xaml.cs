@@ -176,68 +176,6 @@ namespace MW5_Mod_Organizer_WPF
         }
         #endregion
 
-        #region menu buttons
-        private void ButtonDeploy_Click(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrEmpty(Properties.Settings.Default.Path))
-            {
-                string message = "You need to open a mod folder before you can do that.";
-                string caption = "Reminder";
-                MessageBoxButtons buttons = MessageBoxButtons.OKCancel;
-                MessageBoxIcon icon = MessageBoxIcon.Error;
-
-                System.Windows.Forms.MessageBox.Show(message, caption, buttons, icon);
-            }
-            else
-            {
-                //Save mod(s).json
-                if (!string.IsNullOrEmpty(TextBoxGameVersion.Text))
-                {
-                    Properties.Settings.Default.GameVersion = TextBoxGameVersion.Text;
-                    Properties.Settings.Default.Save();
-
-                    foreach (var modVM in ModService.GetInstance().ModVMCollection)
-                    {
-                        modVM.GameVersion = Properties.Settings.Default.GameVersion;
-
-                        if (modVM.Path != null)
-                        {
-                            JsonConverterFacade.ModToJson(modVM.Path, modVM._mod);
-                        }
-                    }
-                }
-
-                //Save modlist.json
-                ModList modList = new ModList
-                {
-                    ModStatus = new Dictionary<string, Status>()
-                };
-
-                foreach (var modVM in ModService.GetInstance().ModVMCollection)
-                {
-                    if (modVM.IsEnabled && modVM.FolderName != null)
-                    {
-                        modList.ModStatus.Add(modVM.FolderName, new Status { IsEnabled = modVM.IsEnabled });
-                    }
-                }
-
-                JsonConverterFacade.ModListToJson(Properties.Settings.Default.Path, modList);
-
-                string message = "Succesfully deployed your load order.";
-                string caption = "Info";
-                MessageBoxButtons buttons = MessageBoxButtons.OK;
-                MessageBoxIcon icon = MessageBoxIcon.Information;
-
-                System.Windows.Forms.MessageBox.Show(message, caption, buttons, icon);
-            }
-        }
-
-        private void ButtonUndo_Click(object sender, RoutedEventArgs e)
-        {
-            UpdateModGridView();
-        }
-        #endregion
-
         #region conflict window
         private void ToggleButtonConflictWindow_Click(object sender, RoutedEventArgs e)
         {
