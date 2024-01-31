@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using CommunityToolkit.Mvvm.ComponentModel;
 using MW5_Mod_Organizer_WPF.Models;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
@@ -30,9 +31,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
         partial void OnIsEnabledChanging(bool value)
         {
+            Console.WriteLine("IsEnabled changed to" + value);
             _mod.IsEnabled = value;
         }
-
 
         [ObservableProperty]
         private string? gameVersion;

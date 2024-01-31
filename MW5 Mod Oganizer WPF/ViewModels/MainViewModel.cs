@@ -269,13 +269,19 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         if (mod != null)
                         {
                             string? path = mod.Path;
-                            ModViewModel? modBackup = new ModViewModel(JsonConverterFacade.ReadBackup(mod.Path!)!);
+                            ModViewModel? backup = new ModViewModel(JsonConverterFacade.ReadBackup(mod.Path!)!);
 
                             int index = ModService.GetInstance().ModVMCollection.IndexOf(mod);
 
-                            mod.IsEnabled = modBackup.IsEnabled;
-                            mod._mod = modBackup._mod;
+                            // First assign new values to needed properties 
+                            // Otherwise ObservableProperty will not be fired and View won't update
+                            mod.IsEnabled = backup.IsEnabled;
+                            mod.LoadOrder = backup.LoadOrder;
+                            mod.ModViewModelStatus = backup.ModViewModelStatus;
 
+                            // Then overwrite mod instance with backup
+                            mod = backup;
+                            
                             if (mod.LoadOrder < 1)
                             {
                                 mod.LoadOrder = 1;
