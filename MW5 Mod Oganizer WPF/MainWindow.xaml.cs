@@ -1,12 +1,8 @@
-﻿using MW5_Mod_Organizer_WPF.Models;
-using MW5_Mod_Organizer_WPF.Services;
+﻿using MW5_Mod_Organizer_WPF.Services;
 using System;
 using System.Windows;
 using System.Windows.Forms;
-using MW5_Mod_Organizer_WPF.Facades;
-using System.Collections.Generic;
 using MW5_Mod_Organizer_WPF.ViewModels;
-using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows.Controls.Primitives;
 
@@ -18,9 +14,10 @@ namespace MW5_Mod_Organizer_WPF
 
     /// <changelog> 
     /// Updated layout
-    /// Mod configurations will now be backed up upon first loading.
+    /// Mod configurations will now be backed up upon first loading
     /// Added Reset to Defaults button to revert mod configuration to backed up configuration
     /// Added version number column when exporting loadorder.txt
+    /// Conflict Window can now be resized in width
     /// Improved notification when changes are made to trigger on more actions
     /// Removed Set Recovery button and Reset button (Will be replaced with Profiles later on)
     /// </changelog>
