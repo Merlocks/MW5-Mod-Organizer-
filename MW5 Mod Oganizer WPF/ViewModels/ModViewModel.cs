@@ -53,6 +53,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [ObservableProperty]
         private ModViewModelConflictStatus modViewModelStatus;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ModViewModel(Mod mod)
         {
             _mod = mod;
