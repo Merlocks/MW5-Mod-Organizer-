@@ -134,11 +134,10 @@
                       dd:DragDrop.SelectDroppedItems="True" 
                       dd:DragDrop.DropHandler="{Binding}" 
                       dd:DragDrop.DropTargetAdornerBrush="#FFED552F"
-                      SelectedItem="{Binding SelectedItem}"
-                      SelectionChanged="SelectionChanged">
+                      SelectionChanged="ModsOverviewSelectionChanged">
                 <behaviors:Interaction.Triggers>
                     <behaviors:EventTrigger EventName="SelectionChanged">
-                        <behaviors:InvokeCommandAction Command="{Binding SelectionChangedCommand}" PassEventArgsToCommand="True"/>
+                        <behaviors:InvokeCommandAction Command="{Binding ModsOverviewSelectionChangedCommand}" PassEventArgsToCommand="True"/>
                     </behaviors:EventTrigger>
                 </behaviors:Interaction.Triggers>
                 <DataGrid.Columns>
@@ -358,14 +357,16 @@
                          Margin="10, 0, 0, 0"
                          IsReadOnly="True"
                          Style="{StaticResource TextBoxTheme}"/>
-                <Button x:Name="ButtonOpenFolder" Content="Open folder"
+                <Button x:Name="ButtonOpenFolder" 
+                        Content="Open primary folder"
                         Height="25"
                         VerticalAlignment="Center"
-                        Margin="10, 0, 0, 0" 
+                        Margin="10 0 0 0" 
                         FontSize="14" 
                         FontWeight="Normal" 
-                        Style="{StaticResource StandaloneButtonTheme}"
-                        Click="ButtonOpenFolder_Click" Cursor="Hand"/>
+                        Style="{StaticResource StandaloneButtonTheme}" 
+                        Cursor="Hand"
+                        Command="{Binding OpenPrimaryFolderPathCommand}"/>
             </StackPanel>
             <!--Secondary mod folder-->
             <StackPanel Orientation="Horizontal"
@@ -387,8 +388,8 @@
                         FontSize="14" 
                         FontWeight="Normal" 
                         Style="{StaticResource StandaloneButtonTheme}"
-                        Click="ButtonOpenSecondaryFolder_Click" 
-                        Cursor="Hand"/>
+                        Cursor="Hand"
+                        Command="{Binding OpenSecondaryFolderPathCommand}"/>
             </StackPanel>
         </StackPanel>
 

@@ -42,7 +42,7 @@ namespace MW5_Mod_Organizer_WPF
             UpdateModGridView();
         }
 
-        private void SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void ModsOverviewSelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (ModList.SelectedItems.Count != 0 && ModList.SelectedItems != null)
             {
@@ -83,87 +83,6 @@ namespace MW5_Mod_Organizer_WPF
             catch (Exception ex)
             {
                 LoggerService.AddLog("ButtonExportException", ex.Message);
-            }
-        }
-        #endregion
-
-        #region folder buttons
-        private void ButtonOpenFolder_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var dialog = new FolderBrowserDialog();
-                DialogResult result = dialog.ShowDialog();
-                if (result == System.Windows.Forms.DialogResult.OK)
-                {
-                    if (dialog.SelectedPath != Properties.Settings.Default.SecondaryPath)
-                    {
-                        Properties.Settings.Default.Path = dialog.SelectedPath;
-                        Properties.Settings.Default.Save();
-                        TextBoxFileExplorer.Text = Properties.Settings.Default.Path;
-
-                        UpdateModGridView();
-                    }
-                    else if (dialog.SelectedPath == Properties.Settings.Default.SecondaryPath)
-                    {
-                        string message = "Primary path can not be the same as secondary path.";
-                        string caption = "Reminder";
-                        MessageBoxButtons buttons = MessageBoxButtons.OKCancel;
-                        MessageBoxIcon icon = MessageBoxIcon.Error;
-
-                        System.Windows.Forms.MessageBox.Show(message, caption, buttons, icon);
-                    } 
-                }
-            }
-            catch (Exception ex)
-            {
-                LoggerService.AddLog("ButtonOpenFolderException", ex.Message);
-                TextBoxFileExplorer.Text = "Error trying to retrieve folder. Please try again.";
-            }
-        }
-
-        private void ButtonOpenSecondaryFolder_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (!string.IsNullOrEmpty(Properties.Settings.Default.Path) && Properties.Settings.Default.Path != Properties.Settings.Default.SecondaryPath)
-                {
-                    var dialog = new FolderBrowserDialog();
-                    DialogResult result = dialog.ShowDialog();
-                    if (result == System.Windows.Forms.DialogResult.OK)
-                    {
-                        if (dialog.SelectedPath != Properties.Settings.Default.Path)
-                        {
-                            Properties.Settings.Default.SecondaryPath = dialog.SelectedPath;
-                            Properties.Settings.Default.Save();
-                            TextBoxSecondaryFileExplorer.Text = Properties.Settings.Default.SecondaryPath;
-
-                            UpdateModGridView();
-                        }
-                        else if (dialog.SelectedPath == Properties.Settings.Default.Path)
-                        {
-                            string message = "Secondary path can not be the same as primary path.";
-                            string caption = "Reminder";
-                            MessageBoxButtons buttons = MessageBoxButtons.OKCancel;
-                            MessageBoxIcon icon = MessageBoxIcon.Error;
-
-                            System.Windows.Forms.MessageBox.Show(message, caption, buttons, icon);
-                        } 
-                    }
-                } else
-                {
-                    string message = "You need to open a primary mod folder first.";
-                    string caption = "Reminder";
-                    MessageBoxButtons buttons = MessageBoxButtons.OKCancel;
-                    MessageBoxIcon icon = MessageBoxIcon.Error;
-
-                    System.Windows.Forms.MessageBox.Show(message, caption, buttons, icon);
-                }
-            }
-            catch (Exception ex)
-            {
-                LoggerService.AddLog("ButtonSecondaryOpenFolderException", ex.Message);
-                TextBoxFileExplorer.Text = "Error trying to retrieve secondary folder. Please try again.";
             }
         }
         #endregion

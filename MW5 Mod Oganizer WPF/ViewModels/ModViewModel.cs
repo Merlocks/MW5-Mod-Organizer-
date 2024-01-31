@@ -31,7 +31,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
         partial void OnIsEnabledChanging(bool value)
         {
-            Console.WriteLine("IsEnabled changed to" + value);
             _mod.IsEnabled = value;
         }
 

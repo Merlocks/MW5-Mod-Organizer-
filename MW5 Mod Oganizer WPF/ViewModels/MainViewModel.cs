@@ -82,6 +82,88 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         /// </summary>
         #region *--- Commands ---*
         [RelayCommand]
+        public void OpenPrimaryFolderPath()
+        {
+            var dialog = new FolderBrowserDialog();
+            DialogResult result = dialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                if (dialog.SelectedPath != SecondaryFolderPath)
+                {
+                    PrimaryFolderPath = dialog.SelectedPath;
+
+                    //Retrieve mods
+                    ModService.GetInstance().GetMods(false);
+
+                    //Generate loadorder by index
+                    foreach (var mod in ModService.GetInstance().ModVMCollection)
+                    {
+                        if (mod.LoadOrder != null)
+                        {
+                            mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod) + 1;
+                        }
+                    }
+                }
+                else if (dialog.SelectedPath == SecondaryFolderPath)
+                {
+                    string message = "Primary folder path can not be the same as secondary folder path.";
+                    string caption = "Reminder";
+                    MessageBoxButtons buttons = MessageBoxButtons.OK;
+                    MessageBoxIcon icon = MessageBoxIcon.Error;
+
+                    MessageBox.Show(message, caption, buttons, icon);
+                }
+            }
+        }
+
+        [RelayCommand]
+        public void OpenSecondaryFolderPath()
+        {
+            if (!string.IsNullOrEmpty(PrimaryFolderPath) && PrimaryFolderPath != SecondaryFolderPath)
+            {
+                var dialog = new FolderBrowserDialog();
+                DialogResult result = dialog.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    if (dialog.SelectedPath != PrimaryFolderPath)
+                    {
+                        SecondaryFolderPath = dialog.SelectedPath;
+
+                        //Retrieve mods
+                        ModService.GetInstance().GetMods(false);
+
+                        //Generate loadorder by index
+                        foreach (var mod in ModService.GetInstance().ModVMCollection)
+                        {
+                            if (mod.LoadOrder != null)
+                            {
+                                mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod) + 1;
+                            }
+                        }
+                    }
+                    else if (dialog.SelectedPath == PrimaryFolderPath)
+                    {
+                        string message = "Secondary folder path can not be the same as primary folder path.";
+                        string caption = "Reminder";
+                        MessageBoxButtons buttons = MessageBoxButtons.OK;
+                        MessageBoxIcon icon = MessageBoxIcon.Error;
+
+                        MessageBox.Show(message, caption, buttons, icon);
+                    }
+                }
+            }
+            else
+            {
+                string message = "You need to open a primary mod folder first.";
+                string caption = "Reminder";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                MessageBoxIcon icon = MessageBoxIcon.Error;
+
+                MessageBox.Show(message, caption, buttons, icon);
+            }
+        }
+
+        [RelayCommand]
         public void ArrowDown()
         {
             bool areChangesMade = false;
@@ -309,7 +391,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         [RelayCommand]
-        public void SelectionChanged(object sender)
+        public void ModsOverviewSelectionChanged(object sender)
         {
             if (SelectedItems?.Count == 1)
             {
