@@ -44,11 +44,6 @@
                          VerticalAlignment="Center"
                          IsReadOnly="False"
                          Style="{StaticResource TextBoxGameVersionTheme}">
-                    <behaviors:Interaction.Triggers>
-                        <behaviors:EventTrigger EventName="TextChanged">
-                            <behaviors:InvokeCommandAction Command="{Binding GameVersionChangedCommand}"/>
-                        </behaviors:EventTrigger>
-                    </behaviors:Interaction.Triggers>
                 </TextBox>
                 <Button Command="{Binding ArrowUpCommand}">
                     <Button.Template>

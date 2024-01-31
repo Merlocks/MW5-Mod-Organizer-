@@ -49,6 +49,11 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         {
             Properties.Settings.Default.GameVersion = value;
             Properties.Settings.Default.Save();
+
+            if (!string.IsNullOrEmpty(PrimaryFolderPath))
+            {
+                DeploymentNecessary = true;
+            }
         }
 
         [ObservableProperty]
@@ -253,23 +258,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         item.ModViewModelStatus = Models.ModViewModelConflictStatus.None;
                     }
                 }
-            }
-        }
-
-        [RelayCommand(CanExecute = nameof(CanExecuteGameVersionChanged))]
-        public void GameVersionChanged(object sender)
-        {
-            DeploymentNecessary = true;
-        }
-
-        private bool CanExecuteGameVersionChanged()
-        {
-            if (!string.IsNullOrEmpty(Properties.Settings.Default.Path))
-            {
-                return true;
-            } else
-            {
-                return false;
             }
         }
         #endregion
