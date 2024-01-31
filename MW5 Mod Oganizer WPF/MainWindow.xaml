@@ -133,7 +133,7 @@
                       dd:DragDrop.IsDropTarget="True" 
                       dd:DragDrop.SelectDroppedItems="True" 
                       dd:DragDrop.DropHandler="{Binding}" 
-                      dd:DragDrop.DropTargetAdornerBrush="#FF696390"
+                      dd:DragDrop.DropTargetAdornerBrush="#FFED552F"
                       SelectedItem="{Binding SelectedItem}"
                       SelectionChanged="SelectionChanged">
                 <behaviors:Interaction.Triggers>
