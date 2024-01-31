@@ -146,8 +146,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <CheckBox x:Name="CheckBoxIsEnabled"
-                                          IsChecked="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged}" 
-                                          Click="CheckBoxIsEnabled_Clicked"
+                                          IsChecked="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged}"
                                           Command="{Binding DataContext.ToggleCheckBoxCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

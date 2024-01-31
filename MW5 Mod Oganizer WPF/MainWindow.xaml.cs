@@ -217,18 +217,6 @@ namespace MW5_Mod_Organizer_WPF
         }
         #endregion
 
-        #region datagrid functionality
-        private void CheckBoxIsEnabled_Clicked(object sender, RoutedEventArgs e)
-        {
-            ModViewModel? selectedMod = ModList.SelectedItem as ModViewModel;
-
-            if (selectedMod != null)
-            {
-                ModService.GetInstance().CheckForConflicts(selectedMod);
-            }
-        }
-        #endregion
-
         #region functions
         private void UpdateModGridView(bool reset = false)
         {

@@ -24,6 +24,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
         public IEnumerable<string> Conflicts => ModService.GetInstance().Conflicts;
 
+        /// <summary>
+        /// Observable properties used for binding within the View
+        /// </summary>
         [ObservableProperty]
         private string? primaryFolderPath;
 
@@ -62,11 +65,11 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [ObservableProperty]
         private IList? selectedItems;
 
-        public ICommand ToggleCheckBoxCommand { get; }
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public MainViewModel()
         {
-            ToggleCheckBoxCommand = new ToggleCheckBoxCommand(this);
             GameVersion = Properties.Settings.Default.GameVersion;
             PrimaryFolderPath = Properties.Settings.Default.Path;
             SecondaryFolderPath = Properties.Settings.Default.SecondaryPath;
@@ -320,6 +323,17 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     }
                 }
             }
+        }
+
+        [RelayCommand]
+        public void ToggleCheckBox()
+        {
+            if (SelectedItems != null && SelectedItems.Count == 1)
+            {
+                ModService.GetInstance().CheckForConflicts((ModViewModel)SelectedItems[0]!);
+            }
+            
+            DeploymentNecessary = true;
         }
         #endregion
 
