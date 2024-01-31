@@ -62,7 +62,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [ObservableProperty]
         private IList? selectedItems;
 
-
         public ICommand DeployCommand { get; }
 
         public ICommand UndoCommand { get; }
