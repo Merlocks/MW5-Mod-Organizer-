@@ -42,7 +42,6 @@
                          VerticalContentAlignment="Center"
                          HorizontalAlignment="Left"
                          VerticalAlignment="Center"
-                         IsReadOnly="False"
                          Style="{StaticResource TextBoxGameVersionTheme}">
                 </TextBox>
                 <Button Command="{Binding ArrowUpCommand}">

@@ -109,7 +109,6 @@ namespace MW5_Mod_Organizer_WPF
                         Properties.Settings.Default.Path = dialog.SelectedPath;
                         Properties.Settings.Default.Save();
                         TextBoxFileExplorer.Text = Properties.Settings.Default.Path;
-                        TextBoxGameVersion.IsReadOnly = false;
 
                         UpdateModGridView();
                     }
