@@ -109,7 +109,6 @@
                 <Button Content="Clear"
                         Height="25"
                         Margin="10 0 0 0"
-                        Click="ButtonClearPath_Click"
                         Command="{Binding ClearCommand}"
                         Style="{DynamicResource StandaloneButtonTheme}"/>
                 <Button Content="Reset to defaults"

@@ -30,6 +30,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         partial void OnPrimaryFolderPathChanging(string? value)
         {
             Properties.Settings.Default.Path = value;
+            Properties.Settings.Default.Save();
         }
 
         [ObservableProperty]
@@ -38,6 +39,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         partial void OnSecondaryFolderPathChanging(string? value)
         {
             Properties.Settings.Default.SecondaryPath = value;
+            Properties.Settings.Default.Save();
         }
 
         [ObservableProperty]
@@ -46,6 +48,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         partial void OnGameVersionChanging(string? value)
         {
             Properties.Settings.Default.GameVersion = value;
+            Properties.Settings.Default.Save();
         }
 
         [ObservableProperty]
@@ -171,9 +174,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public void Clear()
         {
-            Properties.Settings.Default.Path = string.Empty;
-            Properties.Settings.Default.SecondaryPath = string.Empty;
-            Properties.Settings.Default.Save();
+            PrimaryFolderPath = string.Empty;
+            SecondaryFolderPath = string.Empty;
 
             ModService.GetInstance().ClearTemporaryModList();
             ModService.GetInstance().ClearModCollection();
