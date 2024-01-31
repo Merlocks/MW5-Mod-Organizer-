@@ -24,9 +24,21 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
         public IEnumerable<string> Conflicts => ModService.GetInstance().Conflicts;
 
-        public string PrimaryFolderPath => Properties.Settings.Default.Path;
+        [ObservableProperty]
+        private string? primaryFolderPath;
 
-        public string SecondaryFolderPath => Properties.Settings.Default.SecondaryPath;
+        partial void OnPrimaryFolderPathChanging(string? value)
+        {
+            Properties.Settings.Default.Path = value;
+        }
+
+        [ObservableProperty]
+        private string? secondaryFolderPath;
+
+        partial void OnSecondaryFolderPathChanging(string? value)
+        {
+            Properties.Settings.Default.SecondaryPath = value;
+        }
 
         [ObservableProperty]
         private string? gameVersion;
@@ -34,7 +46,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         partial void OnGameVersionChanging(string? value)
         {
             Properties.Settings.Default.GameVersion = value;
-            Console.WriteLine($"Game version is changing to: {Properties.Settings.Default.GameVersion}");
         }
 
         [ObservableProperty]
@@ -59,6 +70,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             ToggleCheckBoxCommand = new ToggleCheckBoxCommand(this);
             ResetCommand = new ResetCommand(this);
             GameVersion = Properties.Settings.Default.GameVersion;
+            PrimaryFolderPath = Properties.Settings.Default.Path;
+            SecondaryFolderPath = Properties.Settings.Default.SecondaryPath;
         }
 
         /// <summary>
@@ -156,22 +169,17 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         [RelayCommand]
-        public void ClearCommand()
+        public void Clear()
         {
-            //Properties.Settings.Default.Path = string.Empty;
-            //Properties.Settings.Default.SecondaryPath = string.Empty;
-            //Properties.Settings.Default.Save();
+            Properties.Settings.Default.Path = string.Empty;
+            Properties.Settings.Default.SecondaryPath = string.Empty;
+            Properties.Settings.Default.Save();
 
-            //TextBoxFileExplorer.Text = Properties.Settings.Default.Path;
-            //TextBoxSecondaryFileExplorer.Text = Properties.Settings.Default.SecondaryPath;
+            ModService.GetInstance().ClearTemporaryModList();
+            ModService.GetInstance().ClearModCollection();
+            ModService.GetInstance().ClearConflictWindow();
 
-            //TextBoxGameVersion.IsReadOnly = true;
-
-            //ModService.GetInstance().ClearTemporaryModList();
-            //ModService.GetInstance().ClearModCollection();
-            //ModService.GetInstance().ClearConflictWindow();
-
-            //DeploymentNecessary = false;
+            DeploymentNecessary = false;
         }
 
         [RelayCommand]

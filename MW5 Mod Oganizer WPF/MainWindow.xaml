@@ -227,7 +227,7 @@
                         HorizontalAlignment="Left"
                         Margin="0 15 0 0">
                 <TextBox x:Name="TextBoxFileExplorer"
-                         Text="{Binding PrimaryFolderPath, Mode=OneWay}"
+                         Text="{Binding PrimaryFolderPath, UpdateSourceTrigger=PropertyChanged}"
                          Width="500"
                          Height="25"
                          VerticalContentAlignment="Center"
@@ -249,7 +249,7 @@
                         HorizontalAlignment="Left"
                         Margin="0 15 0 0">
                 <TextBox x:Name="TextBoxSecondaryFileExplorer"
-                         Text="{Binding SecondaryFolderPath, Mode=OneWay}"
+                         Text="{Binding SecondaryFolderPath, UpdateSourceTrigger=PropertyChanged}"
                          Width="400"
                          Height="25"
                          VerticalContentAlignment="Center"

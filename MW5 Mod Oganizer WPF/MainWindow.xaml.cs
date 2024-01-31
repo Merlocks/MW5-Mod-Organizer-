@@ -243,24 +243,24 @@ namespace MW5_Mod_Organizer_WPF
         /// </summary>
         private void ButtonClearPath_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                Properties.Settings.Default.Path = string.Empty;
-                Properties.Settings.Default.SecondaryPath = string.Empty;
-                Properties.Settings.Default.Save();
+            //try
+            //{
+            //    Properties.Settings.Default.Path = string.Empty;
+            //    Properties.Settings.Default.SecondaryPath = string.Empty;
+            //    Properties.Settings.Default.Save();
 
-                TextBoxFileExplorer.Text = Properties.Settings.Default.Path;
-                TextBoxSecondaryFileExplorer.Text = Properties.Settings.Default.SecondaryPath;
+            //    TextBoxFileExplorer.Text = Properties.Settings.Default.Path;
+            //    TextBoxSecondaryFileExplorer.Text = Properties.Settings.Default.SecondaryPath;
 
-                TextBoxGameVersion.IsReadOnly = true;
+            //    TextBoxGameVersion.IsReadOnly = true;
 
-                ModService.GetInstance().ClearTemporaryModList();
-                ModService.GetInstance().ClearModCollection();
-                ModService.GetInstance().ClearConflictWindow();
-            } catch (Exception ex)
-            {
-                LoggerService.AddLog("ButtonOpenFolderException", ex.Message);
-            }
+            //    ModService.GetInstance().ClearTemporaryModList();
+            //    ModService.GetInstance().ClearModCollection();
+            //    ModService.GetInstance().ClearConflictWindow();
+            //} catch (Exception ex)
+            //{
+            //    LoggerService.AddLog("ButtonOpenFolderException", ex.Message);
+            //}
         }
         #endregion
 
