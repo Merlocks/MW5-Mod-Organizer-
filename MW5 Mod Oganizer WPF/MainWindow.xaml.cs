@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using MW5_Mod_Organizer_WPF.ViewModels;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
+using System.Windows.Controls.Primitives;
 
 namespace MW5_Mod_Organizer_WPF
 {
@@ -49,6 +50,16 @@ namespace MW5_Mod_Organizer_WPF
             if (ModList.SelectedItems.Count != 0 && ModList.SelectedItems != null)
             {
                 _mainViewModel!.SelectedItems = ModList.SelectedItems;
+            }
+        }
+
+        private void ResizeConflictWindow(object sender, DragDeltaEventArgs e) 
+        {
+            var thumb = sender as Thumb;
+
+            if (thumb != null)
+            {
+                resizableColumn.Width = new GridLength(resizableColumn.ActualWidth - e.HorizontalChange * 0.2, GridUnitType.Pixel);
             }
         }
 

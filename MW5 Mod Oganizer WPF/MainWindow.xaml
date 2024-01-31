@@ -7,7 +7,7 @@
         xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:MW5_Mod_Organizer_WPF.ViewModels"
         mc:Ignorable="d" FontSize="14"
-        Title="MW5 Mod Organizer" Height="720" Width="1345" Background="#D1C9C9" WindowStartupLocation="CenterOwner"
+        Title="MW5 Mod Organizer" Height="720" Width="1080" Background="#D1C9C9" WindowStartupLocation="CenterOwner"
         UseLayoutRounding="True" Icon="/favicon.ico">
     <!--<Window.Resources>
         <DataTemplate x:Key="DataGridItemTemplate1">
@@ -178,92 +178,20 @@
         
         <!--Header-->
         <Border Grid.Column="0"
-                Grid.ColumnSpan="3"
+                Grid.ColumnSpan="10"
                 Grid.Row="1"
                 Background="#E0D7D7">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="10" Color="Black" ShadowDepth="5" Direction="270" Opacity="0.1"/>
             </Border.Effect>
         </Border>
-        <Border Grid.Column="0"
-                Grid.ColumnSpan="3"
-                Grid.Row="1"
-                Background="#E0D7D7">
-            <!--<Border.Effect>
-                <DropShadowEffect BlurRadius="10" Color="Black" ShadowDepth="5" Direction="270" Opacity="0.3"/>
-            </Border.Effect>-->
-        </Border>
-
-        <!--Logo-->
-        <Grid Grid.Row="1">
-            <TextBlock Text="MW5MO"
-                       VerticalAlignment="Center" 
-                       HorizontalAlignment="left"
-                       Foreground="#69717d"
-                       FontSize="22"
-                       Margin="20, 0, 0, 0"
-                       Visibility="Hidden"/>
-            <Image Source="/logo2.png"
-                   Height="40"
-                   RenderOptions.BitmapScalingMode="Fant"/>
-        </Grid>
         
-        <!--File paths-->
-        <StackPanel Orientation="Vertical"
-                    Grid.Column="1"
-                    Grid.Row="1">
-            <!--Primary mod folder-->
-            <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Left"
-                        Margin="0 15 0 0">
-                <TextBox x:Name="TextBoxFileExplorer"
-                         Text="{Binding PrimaryFolderPath, UpdateSourceTrigger=PropertyChanged}"
-                         Width="500"
-                         Height="25"
-                         VerticalContentAlignment="Center"
-                         HorizontalAlignment="Left"
-                         Margin="10, 0, 0, 0"
-                         IsReadOnly="True"
-                         Style="{StaticResource TextBoxTheme}"/>
-                <Button x:Name="ButtonOpenFolder" Content="Open folder"
-                        Height="25"
-                        VerticalAlignment="Center"
-                        Margin="10, 0, 0, 0" 
-                        FontSize="14" 
-                        FontWeight="Normal" 
-                        Style="{StaticResource StandaloneButtonTheme}"
-                        Click="ButtonOpenFolder_Click" Cursor="Hand"/>
-            </StackPanel>
-            <!--Secondary mod folder-->
-            <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Left"
-                        Margin="0 15 0 0">
-                <TextBox x:Name="TextBoxSecondaryFileExplorer"
-                         Text="{Binding SecondaryFolderPath, UpdateSourceTrigger=PropertyChanged}"
-                         Width="400"
-                         Height="25"
-                         VerticalContentAlignment="Center"
-                         Margin="10, 0, 0, 0"
-                         IsReadOnly="True"
-                         Style="{StaticResource TextBoxTheme}"/>
-                <Button x:Name="ButtonOpenSecondaryFolder" 
-                        Content="Open secondary folder"
-                        Height="25"
-                        VerticalAlignment="Center"
-                        Margin="10, 0, 0, 0" 
-                        FontSize="14" 
-                        FontWeight="Normal" 
-                        Style="{StaticResource StandaloneButtonTheme}"
-                        Click="ButtonOpenSecondaryFolder_Click" 
-                        Cursor="Hand"/>
-            </StackPanel>
-        </StackPanel>
 
         <!--Conflict window-->
         <StackPanel Orientation="Horizontal"
                     Grid.Column="2"
                     Grid.Row="2"
-                    Grid.RowSpan="4">
+                    Grid.RowSpan="2">
             <ToggleButton x:Name="ToggleButtonConflictWindow"
                           Click="ToggleButtonConflictWindow_Click"
                           Style="{StaticResource ButtonConflictWindowSlider}"/>
@@ -272,7 +200,10 @@
                     Visibility="Collapsed">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition x:Name="resizableColumn" 
+                                          Width="300"
+                                          MinWidth="200"
+                                          MaxWidth="500"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
@@ -373,9 +304,92 @@
                             </DataGrid.Columns>
                         </DataGrid>
                     </Border>
+                    
+                    <Thumb x:Name="leftThumb"
+                           Grid.Row="0"
+                           Grid.RowSpan="10"
+                           DragDelta="ResizeConflictWindow" 
+                           Width="5"
+                           HorizontalAlignment="Left" 
+                           VerticalAlignment="Stretch"
+                           Cursor="SizeWE"
+                           Opacity="0"/>
                 </Grid>
             </Border>
 
+        </StackPanel>
+
+        <Border Grid.Column="0"
+                Grid.ColumnSpan="10"
+                Grid.Row="1"
+                Background="#E0D7D7">
+        </Border>
+
+        <!--Logo-->
+        <Grid Grid.Row="1"
+              Grid.Column="0">
+            <TextBlock Text="MW5MO"
+                       VerticalAlignment="Center" 
+                       HorizontalAlignment="left"
+                       Foreground="#69717d"
+                       FontSize="22"
+                       Margin="20, 0, 0, 0"
+                       Visibility="Hidden"/>
+            <Image Source="/logo2.png"
+                   Height="40"
+                   RenderOptions.BitmapScalingMode="Fant"/>
+        </Grid>
+
+        <!--File paths-->
+        <StackPanel Orientation="Vertical"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2"
+                    Grid.Row="1">
+            <!--Primary mod folder-->
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Left"
+                        Margin="0 15 0 0">
+                <TextBox x:Name="TextBoxFileExplorer"
+                         Text="{Binding PrimaryFolderPath, UpdateSourceTrigger=PropertyChanged}"
+                         Width="500"
+                         Height="25"
+                         VerticalContentAlignment="Center"
+                         HorizontalAlignment="Left"
+                         Margin="10, 0, 0, 0"
+                         IsReadOnly="True"
+                         Style="{StaticResource TextBoxTheme}"/>
+                <Button x:Name="ButtonOpenFolder" Content="Open folder"
+                        Height="25"
+                        VerticalAlignment="Center"
+                        Margin="10, 0, 0, 0" 
+                        FontSize="14" 
+                        FontWeight="Normal" 
+                        Style="{StaticResource StandaloneButtonTheme}"
+                        Click="ButtonOpenFolder_Click" Cursor="Hand"/>
+            </StackPanel>
+            <!--Secondary mod folder-->
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Left"
+                        Margin="0 15 0 0">
+                <TextBox x:Name="TextBoxSecondaryFileExplorer"
+                         Text="{Binding SecondaryFolderPath, UpdateSourceTrigger=PropertyChanged}"
+                         Width="400"
+                         Height="25"
+                         VerticalContentAlignment="Center"
+                         Margin="10, 0, 0, 0"
+                         IsReadOnly="True"
+                         Style="{StaticResource TextBoxTheme}"/>
+                <Button x:Name="ButtonOpenSecondaryFolder" 
+                        Content="Open secondary folder"
+                        Height="25"
+                        VerticalAlignment="Center"
+                        Margin="10, 0, 0, 0" 
+                        FontSize="14" 
+                        FontWeight="Normal" 
+                        Style="{StaticResource StandaloneButtonTheme}"
+                        Click="ButtonOpenSecondaryFolder_Click" 
+                        Cursor="Hand"/>
+            </StackPanel>
         </StackPanel>
 
         <!--Toolbar menu-->
