@@ -3,54 +3,18 @@ using MW5_Mod_Organizer_WPF.Models;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
 {
-    public class ModViewModel : ObservableObject
+    public partial class ModViewModel : ObservableObject
     {
         public Mod _mod;
 
-        public bool IsEnabled
-        {
-            get
-            {
-                return _mod.IsEnabled;
-            }
-            set
-            {
-                _mod.IsEnabled = value;
-                OnPropertyChanged();
-            }
-        }
-
+        /// <summary>
+        /// Read-only properties used as Data within the View
+        /// </summary>
         public string? DisplayName => _mod.DisplayName;
 
         public string? Version => _mod.Version;
 
-        public string? GameVersion
-        {
-            get
-            {
-                return _mod.GameVersion;
-            }
-            set
-            {
-                _mod.GameVersion = value;
-            }
-        }
-
-
         public string? Author => _mod.Author;
-
-        public decimal? LoadOrder
-        {
-            get
-            {
-                return _mod.LoadOrder;
-            }
-            set
-            {
-                _mod.LoadOrder = value;
-                OnPropertyChanged();
-            }
-        }
 
         public string[]? Manifest => _mod.Manifest;
 
@@ -58,25 +22,44 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
         public string? FolderName => _mod.FolderName;
 
-        private ModViewModelConflictStatus _modViewModelStatus;
+        /// <summary>
+        /// Observable properties used for data binding within the View
+        /// </summary>
+        [ObservableProperty]
+        private bool isEnabled;
 
-        public ModViewModelConflictStatus ModViewModelStatus
+        partial void OnIsEnabledChanging(bool value)
         {
-            get 
-            { 
-                return _modViewModelStatus;
-            }
-            set 
-            { 
-                _modViewModelStatus = value;
-                OnPropertyChanged();
-            }
+            _mod.IsEnabled = value;
         }
+
+
+        [ObservableProperty]
+        private string? gameVersion;
+
+        partial void OnGameVersionChanging(string? value)
+        {
+            _mod.GameVersion = value;
+        }
+
+        [ObservableProperty]
+        private decimal? loadOrder;
+
+        partial void OnLoadOrderChanging(decimal? value)
+        {
+            _mod.LoadOrder = value;
+        }
+
+        [ObservableProperty]
+        private ModViewModelConflictStatus modViewModelStatus;
 
         public ModViewModel(Mod mod)
         {
             _mod = mod;
-            _modViewModelStatus = ModViewModelConflictStatus.None;
+            ModViewModelStatus = ModViewModelConflictStatus.None;
+            IsEnabled = _mod.IsEnabled;
+            GameVersion = _mod.GameVersion;
+            LoadOrder = _mod.LoadOrder;
         }
     }
 }
