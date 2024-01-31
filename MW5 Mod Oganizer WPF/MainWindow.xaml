@@ -9,11 +9,11 @@
         mc:Ignorable="d" FontSize="14"
         Title="MW5 Mod Organizer" Height="720" Width="1345" Background="#D1C9C9" WindowStartupLocation="CenterOwner"
         UseLayoutRounding="True" Icon="/favicon.ico">
-    <Window.Resources>
+    <!--<Window.Resources>
         <DataTemplate x:Key="DataGridItemTemplate1">
             <Grid/>
         </DataTemplate>
-    </Window.Resources>
+    </Window.Resources>-->
     <Grid>
         <!--Grid definitions-->
         <Grid.ColumnDefinitions>
