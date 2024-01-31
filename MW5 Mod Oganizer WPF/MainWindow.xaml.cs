@@ -41,16 +41,16 @@ namespace MW5_Mod_Organizer_WPF
             _mainViewModel = App.Current.Services.GetService<MainViewModel>();
             this.DataContext = _mainViewModel;
 
-            if (!string.IsNullOrEmpty(Properties.Settings.Default.Path))
-            {
-                TextBoxFileExplorer.Text = Properties.Settings.Default.Path;
-                TextBoxGameVersion.IsReadOnly = false;
-            }
+            //if (!string.IsNullOrEmpty(Properties.Settings.Default.Path))
+            //{
+            //    TextBoxFileExplorer.Text = Properties.Settings.Default.Path;
+            //    TextBoxGameVersion.IsReadOnly = false;
+            //}
 
-            if (!string.IsNullOrEmpty(Properties.Settings.Default.SecondaryPath))
-            {
-                TextBoxSecondaryFileExplorer.Text = Properties.Settings.Default.SecondaryPath;
-            }
+            //if (!string.IsNullOrEmpty(Properties.Settings.Default.SecondaryPath))
+            //{
+            //    TextBoxSecondaryFileExplorer.Text = Properties.Settings.Default.SecondaryPath;
+            //}
 
             if (!string.IsNullOrEmpty(Properties.Settings.Default.GameVersion))
             {
@@ -238,6 +238,9 @@ namespace MW5_Mod_Organizer_WPF
             UpdateModGridView();
         }
 
+        /// <summary>
+        /// TODO Move to a command
+        /// </summary>
         private void ButtonClearPath_Click(object sender, RoutedEventArgs e)
         {
             try

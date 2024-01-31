@@ -24,6 +24,10 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
         public IEnumerable<string> Conflicts => ModService.GetInstance().Conflicts;
 
+        //public string PrimaryFolderPath => Properties.Settings.Default.Path;
+
+        //public string SecondaryFolderPath => Properties.Settings.Default.SecondaryPath;
+
         [ObservableProperty]
         private bool deploymentNecessary;
 
@@ -34,8 +38,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         public ICommand DeployCommand { get; }
 
         public ICommand UndoCommand { get; }
-
-        public ICommand ClearCommand { get; }
         
         public ICommand ResetCommand { get; }
 
@@ -45,7 +47,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         {
             DeployCommand = new DeployCommand(this);
             UndoCommand = new UndoCommand(this);
-            ClearCommand = new ClearCommand(this);
             ToggleCheckBoxCommand = new ToggleCheckBoxCommand(this);
             ResetCommand = new ResetCommand(this);
         }
@@ -142,6 +143,25 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     DeploymentNecessary = true;
                 }
             }
+        }
+
+        [RelayCommand]
+        public void ClearCommand()
+        {
+            //Properties.Settings.Default.Path = string.Empty;
+            //Properties.Settings.Default.SecondaryPath = string.Empty;
+            //Properties.Settings.Default.Save();
+
+            //TextBoxFileExplorer.Text = Properties.Settings.Default.Path;
+            //TextBoxSecondaryFileExplorer.Text = Properties.Settings.Default.SecondaryPath;
+
+            //TextBoxGameVersion.IsReadOnly = true;
+
+            //ModService.GetInstance().ClearTemporaryModList();
+            //ModService.GetInstance().ClearModCollection();
+            //ModService.GetInstance().ClearConflictWindow();
+
+            //DeploymentNecessary = false;
         }
 
         [RelayCommand]

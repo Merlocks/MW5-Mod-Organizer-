@@ -226,6 +226,7 @@
                         HorizontalAlignment="Left"
                         Margin="0 15 0 0">
                 <TextBox x:Name="TextBoxFileExplorer"
+                         Text="{Binding PrimaryFolderPath, Mode=OneWay}"
                          Width="500"
                          Height="25"
                          VerticalContentAlignment="Center"
@@ -247,6 +248,7 @@
                         HorizontalAlignment="Left"
                         Margin="0 15 0 0">
                 <TextBox x:Name="TextBoxSecondaryFileExplorer"
+                         Text="{Binding SecondaryFolderPath, Mode=OneWay}"
                          Width="400"
                          Height="25"
                          VerticalContentAlignment="Center"
