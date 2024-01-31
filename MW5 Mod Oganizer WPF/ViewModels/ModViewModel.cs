@@ -1,12 +1,4 @@
-﻿using MW5_Mod_Organizer_WPF.Commands;
-using MW5_Mod_Organizer_WPF.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using MW5_Mod_Organizer_WPF.Models;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
 {
