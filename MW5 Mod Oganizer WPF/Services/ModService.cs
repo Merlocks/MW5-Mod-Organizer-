@@ -127,7 +127,7 @@ namespace MW5_Mod_Organizer_WPF.Services
                 {
                     if (!File.Exists(path + @"\backup.json"))
                     {
-                        JsonConverterFacade.Createbackup(path, mod); 
+                        JsonConverterFacade.Createbackup(path); 
                     }
                     
                     //mod.Path = path;

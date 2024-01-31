@@ -2,6 +2,7 @@
 using MW5_Mod_Organizer_WPF.Services;
 using System;
 using System.IO;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace MW5_Mod_Organizer_WPF.Facades
@@ -49,11 +50,12 @@ namespace MW5_Mod_Organizer_WPF.Facades
             }
         }
 
-        public static void Createbackup(string path, Mod mod)
+        public static void Createbackup(string path)
         {
             try
             {
-                string? jsonString = JsonHandlerService.ModToJsonString(mod);
+                string? jsonString = FileHandlerService.ReadFile(path, @"\mod.json");
+
                 if (jsonString != null)
                 {
                     FileHandlerService.WriteFile(path, @"\backup.json", jsonString);
