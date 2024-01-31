@@ -15,6 +15,10 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 {
     public partial class MainViewModel : ObservableObject, GongSolutions.Wpf.DragDrop.IDropTarget
     {
+        
+        /// <summary>
+        /// Read-only properties used as DataSource for DataGrids within the View
+        /// </summary>
         public IEnumerable<ModViewModel> Mods => ModService.GetInstance().ModVMCollection;
 
         public IEnumerable<ModViewModel> Overwrites => ModService.GetInstance().Overwrites;
@@ -24,7 +28,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         public IEnumerable<string> Conflicts => ModService.GetInstance().Conflicts;
 
         /// <summary>
-        /// Observable properties used for binding within the View
+        /// Observable properties used for data binding within the View
         /// </summary>
         [ObservableProperty]
         private string? primaryFolderPath;
@@ -75,7 +79,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         /// <summary>
-        /// Collection of all Commands used within this ViewModel
+        /// Collection of all Commands used within the View
         /// </summary>
         #region *--- Commands ---*
         [RelayCommand]

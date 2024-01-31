@@ -1,8 +1,9 @@
-﻿using MW5_Mod_Organizer_WPF.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using MW5_Mod_Organizer_WPF.Models;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
 {
-    public class ModViewModel : ViewModelBase
+    public class ModViewModel : ObservableObject
     {
         public Mod _mod;
 
