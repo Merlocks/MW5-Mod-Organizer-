@@ -52,10 +52,10 @@ namespace MW5_Mod_Organizer_WPF
             //    TextBoxSecondaryFileExplorer.Text = Properties.Settings.Default.SecondaryPath;
             //}
 
-            if (!string.IsNullOrEmpty(Properties.Settings.Default.GameVersion))
-            {
-                TextBoxGameVersion.Text = Properties.Settings.Default.GameVersion;
-            }
+            //if (!string.IsNullOrEmpty(Properties.Settings.Default.GameVersion))
+            //{
+            //    TextBoxGameVersion.Text = Properties.Settings.Default.GameVersion;
+            //}
 
             UpdateModGridView();
         }

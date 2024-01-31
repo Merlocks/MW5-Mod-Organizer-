@@ -24,9 +24,18 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
         public IEnumerable<string> Conflicts => ModService.GetInstance().Conflicts;
 
-        //public string PrimaryFolderPath => Properties.Settings.Default.Path;
+        public string PrimaryFolderPath => Properties.Settings.Default.Path;
 
-        //public string SecondaryFolderPath => Properties.Settings.Default.SecondaryPath;
+        public string SecondaryFolderPath => Properties.Settings.Default.SecondaryPath;
+
+        [ObservableProperty]
+        private string? gameVersion;
+
+        partial void OnGameVersionChanging(string? value)
+        {
+            Properties.Settings.Default.GameVersion = value;
+            Console.WriteLine($"Game version is changing to: {Properties.Settings.Default.GameVersion}");
+        }
 
         [ObservableProperty]
         private bool deploymentNecessary;
@@ -49,6 +58,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             UndoCommand = new UndoCommand(this);
             ToggleCheckBoxCommand = new ToggleCheckBoxCommand(this);
             ResetCommand = new ResetCommand(this);
+            GameVersion = Properties.Settings.Default.GameVersion;
         }
 
         /// <summary>

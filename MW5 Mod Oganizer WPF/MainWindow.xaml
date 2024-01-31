@@ -37,11 +37,12 @@
             <StackPanel Margin="10, 10, 0, 0"
                         Orientation="Horizontal">
                 <TextBox x:Name="TextBoxGameVersion"
+                         Text="{Binding GameVersion, UpdateSourceTrigger=PropertyChanged}"
                          Height="25"
                          VerticalContentAlignment="Center"
                          HorizontalAlignment="Left"
                          VerticalAlignment="Center"
-                         IsReadOnly="True"
+                         IsReadOnly="False"
                          Style="{StaticResource TextBoxGameVersionTheme}">
                     <behaviors:Interaction.Triggers>
                         <behaviors:EventTrigger EventName="TextChanged">
