@@ -401,8 +401,8 @@
                     Background="#E0D7D7">
             <Button x:Name="ButtonExport" 
                     Content="Export loadorder"
-                    Click="ButtonExport_Click"
-                    Style="{StaticResource ToolbarMenuButtonTheme}"/>
+                    Style="{StaticResource ToolbarMenuButtonTheme}"
+                    Command="{Binding ExportLoadorderCommand}"/>
             <Button x:Name="ButtonProfiles"
                     Content="Profiles"
                     Style="{DynamicResource ToolbarMenuButtonTheme}"
