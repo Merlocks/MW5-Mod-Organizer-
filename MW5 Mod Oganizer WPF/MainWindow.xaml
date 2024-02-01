@@ -399,14 +399,31 @@
                     Grid.ColumnSpan="3" 
                     Orientation="Horizontal"
                     Background="#E0D7D7">
-            <Button x:Name="ButtonExport" 
-                    Content="Export loadorder"
-                    Style="{StaticResource ToolbarMenuButtonTheme}"
-                    Command="{Binding ExportLoadorderCommand}"/>
-            <Button x:Name="ButtonProfiles"
-                    Content="Profiles"
-                    Style="{DynamicResource ToolbarMenuButtonTheme}"
-                    Visibility="Hidden"/>
+            <Menu VerticalAlignment="Center"
+                  Margin="5 0 0 0"
+                  Padding="0 5"
+                  Background="Transparent">
+                <MenuItem Header="File"
+                          FontSize="14"
+                          Style="{StaticResource MenuItemContextTheme}">
+                    <MenuItem Header="Save"
+                              FontSize="12">
+                        <MenuItem Header="As loadorder.txt" Command="{Binding ExportLoadorderCommand}"/>
+                    </MenuItem>
+                </MenuItem>
+            </Menu>
+            <Menu VerticalAlignment="Center"
+                  Padding="0 5"
+                  Background="Transparent">
+                <MenuItem Header="Help"
+                          FontSize="14"
+                          Style="{StaticResource MenuItemContextTheme}">
+                    <MenuItem Header="Open Nexus Mod Page"
+                              FontSize="12"/>
+                    <MenuItem Header="About MW5 Mod Organizer"
+                              FontSize="12"/>
+                </MenuItem>
+            </Menu>
         </StackPanel>
     </Grid>
 </Window>

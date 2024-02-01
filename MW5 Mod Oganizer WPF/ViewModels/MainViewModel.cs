@@ -84,8 +84,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public void ExportLoadorder()
         {
-            Console.WriteLine("ExportLoadorderCommand fired");
-
             var dialog = new FolderBrowserDialog();
             DialogResult result = dialog.ShowDialog();
             if (result == DialogResult.OK)
