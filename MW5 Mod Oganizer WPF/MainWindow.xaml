@@ -393,7 +393,7 @@
             </StackPanel>
         </StackPanel>
 
-        <!--Toolbar menu-->
+        <!--Toolbar menu's-->
         <StackPanel Grid.Row="0" 
                     Grid.Column="0" 
                     Grid.ColumnSpan="3" 

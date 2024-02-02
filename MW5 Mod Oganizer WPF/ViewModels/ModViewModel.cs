@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using MW5_Mod_Organizer_WPF.Models;
+using MW5_Mod_Organizer_WPF.Services;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
 {
@@ -63,6 +67,36 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             IsEnabled = _mod.IsEnabled;
             GameVersion = _mod.GameVersion;
             LoadOrder = _mod.LoadOrder;
+        }
+
+        [RelayCommand]
+        public void OpenModFolder()
+        {
+            if (this.Path != null)
+            {
+                Process.Start("explorer.exe", this.Path);
+            }
+        }
+
+        [RelayCommand]
+        public void DeleteModFolder() 
+        {
+            Console.WriteLine("DeleteModFolderCommand fired");
+
+            if (Directory.Exists(this.Path)) 
+            {
+                Directory.Delete(this.Path, true);
+                ModService.GetInstance().ModVMCollection.Remove(this);
+
+                //Generate loadorder by index
+                foreach (var mod in ModService.GetInstance().ModVMCollection)
+                {
+                    if (mod.LoadOrder != null)
+                    {
+                        mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod) + 1;
+                    }
+                }
+            }
         }
     }
 }
