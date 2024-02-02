@@ -7,6 +7,7 @@ using MW5_Mod_Organizer_WPF.Services;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -99,7 +100,13 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     $"{content}\n~ End of loadorder. ~");
             }
         }
-        
+
+        [RelayCommand]
+        public void VisitOnNexus()
+        {
+            Process.Start("explorer", @"https://www.nexusmods.com/mechwarrior5mercenaries/mods/922");
+        }
+
         [RelayCommand]
         public void OpenPrimaryFolderPath()
         {
@@ -392,6 +399,14 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                             {
                                 ModService.GetInstance().MoveModAndUpdate(index, (int)mod.LoadOrder! - 1);
                             }
+                        }
+                    }
+
+                    foreach (var mod in ModService.GetInstance().ModVMCollection)
+                    {
+                        if (mod.LoadOrder != null)
+                        {
+                            mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod) + 1;
                         }
                     }
 

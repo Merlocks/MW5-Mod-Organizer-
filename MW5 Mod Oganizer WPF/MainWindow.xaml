@@ -418,8 +418,9 @@
                 <MenuItem Header="Help"
                           FontSize="14"
                           Style="{StaticResource MenuItemContextTheme}">
-                    <MenuItem Header="Open Nexus Mod Page"
-                              FontSize="12"/>
+                    <MenuItem Header="Visit on Nexus"
+                              FontSize="12"
+                              Command="{Binding VisitOnNexusCommand}"/>
                     <MenuItem Header="About MW5 Mod Organizer"
                               FontSize="12"/>
                 </MenuItem>
