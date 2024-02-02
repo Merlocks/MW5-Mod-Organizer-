@@ -35,9 +35,9 @@
                             </SelectiveScrollingGrid>
                             <Border.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="Open in file explorer" Command="{Binding OpenModFolderCommand}"/>
-                                    <MenuItem Header="Delete" Command="{Binding DeleteModFolderCommand}"/>
-                                    <MenuItem Header="Item 3"/>
+                                    <MenuItem Header="Remove Mod.." Command="{Binding DeleteModFolderCommand}"/>
+                                    <Separator/>
+                                    <MenuItem Header="Open in Explorer" Command="{Binding OpenModFolderCommand}"/>
                                 </ContextMenu>
                             </Border.ContextMenu>
                         </Border>

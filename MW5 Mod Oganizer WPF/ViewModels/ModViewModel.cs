@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Windows.Forms;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MW5_Mod_Organizer_WPF.Models;
@@ -81,20 +82,36 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public void DeleteModFolder() 
         {
-            Console.WriteLine("DeleteModFolderCommand fired");
+            string message = $"Are you sure you want to delete {DisplayName} from your Mods folder?\n\nThis action cannot be undone.";
+            string caption = "Warning";
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            MessageBoxIcon icon = MessageBoxIcon.Warning;
 
-            if (Directory.Exists(this.Path)) 
+            DialogResult result = MessageBox.Show(message, caption, buttons, icon);
+
+            if (result == DialogResult.Yes)
             {
-                Directory.Delete(this.Path, true);
-                ModService.GetInstance().ModVMCollection.Remove(this);
-
-                //Generate loadorder by index
-                foreach (var mod in ModService.GetInstance().ModVMCollection)
+                if (Directory.Exists(this.Path))
                 {
-                    if (mod.LoadOrder != null)
+                    Directory.Delete(this.Path, true);
+                    ModService.GetInstance().ModVMCollection.Remove(this);
+
+                    //Generate loadorder by index
+                    foreach (var mod in ModService.GetInstance().ModVMCollection)
                     {
-                        mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod) + 1;
+                        if (mod.LoadOrder != null)
+                        {
+                            mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod) + 1;
+                        }
                     }
+                } else
+                {
+                    message = "Could not find the path to this Mod folder";
+                    caption = "Error";
+                    buttons = MessageBoxButtons.OK;
+                    icon = MessageBoxIcon.Error;
+
+                    MessageBox.Show(message, caption, buttons, icon);
                 }
             }
         }
