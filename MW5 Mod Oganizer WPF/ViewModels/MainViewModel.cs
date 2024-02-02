@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows;
 using System.Windows.Forms;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
@@ -64,6 +65,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
         [ObservableProperty]
         private bool deploymentNecessary;
+
+        [ObservableProperty]
+        private bool isZipDropVisible;
 
         [ObservableProperty]
         private IList? selectedItems;
@@ -137,7 +141,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     MessageBoxButtons buttons = MessageBoxButtons.OK;
                     MessageBoxIcon icon = MessageBoxIcon.Error;
 
-                    MessageBox.Show(message, caption, buttons, icon);
+                    System.Windows.Forms.MessageBox.Show(message, caption, buttons, icon);
                 }
             }
         }
@@ -174,7 +178,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         MessageBoxButtons buttons = MessageBoxButtons.OK;
                         MessageBoxIcon icon = MessageBoxIcon.Error;
 
-                        MessageBox.Show(message, caption, buttons, icon);
+                        System.Windows.Forms.MessageBox.Show(message, caption, buttons, icon);
                     }
                 }
             }
@@ -185,7 +189,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 MessageBoxButtons buttons = MessageBoxButtons.OK;
                 MessageBoxIcon icon = MessageBoxIcon.Error;
 
-                MessageBox.Show(message, caption, buttons, icon);
+                System.Windows.Forms.MessageBox.Show(message, caption, buttons, icon);
             }
         }
 
@@ -289,7 +293,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 MessageBoxButtons buttons = MessageBoxButtons.OKCancel;
                 MessageBoxIcon icon = MessageBoxIcon.Error;
 
-                MessageBox.Show(message, caption, buttons, icon);
+                System.Windows.Forms.MessageBox.Show(message, caption, buttons, icon);
             }
             else
             {
@@ -330,7 +334,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 MessageBoxButtons buttons = MessageBoxButtons.OK;
                 MessageBoxIcon icon = MessageBoxIcon.Information;
 
-                MessageBox.Show(message, caption, buttons, icon);
+                System.Windows.Forms.MessageBox.Show(message, caption, buttons, icon);
             }
         }
 
@@ -458,6 +462,27 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
             
             DeploymentNecessary = true;
+        }
+
+        [RelayCommand]
+        public void DragEnter(System.Windows.DragEventArgs e)
+        {
+            Console.WriteLine("DragEnterCommand fired");
+            if (IsZipDropVisible)
+            {
+                IsZipDropVisible = false;
+            } else
+            {
+                IsZipDropVisible= true;
+            }
+        }
+        [RelayCommand]
+        public void DragLeave(System.Windows.DragEventArgs e)
+        {
+            Console.WriteLine("DragLeaveCommand fired");
+
+
+            IsZipDropVisible = false;
         }
         #endregion
 

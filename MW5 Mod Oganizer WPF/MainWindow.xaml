@@ -6,14 +6,20 @@
         xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
         xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:MW5_Mod_Organizer_WPF.ViewModels"
-        mc:Ignorable="d" FontSize="14"
-        Title="MW5 Mod Organizer" Height="720" Width="1080" Background="#D1C9C9" WindowStartupLocation="CenterOwner"
-        UseLayoutRounding="True" Icon="/favicon.ico">
-    <!--<Window.Resources>
-        <DataTemplate x:Key="DataGridItemTemplate1">
-            <Grid/>
-        </DataTemplate>
-    </Window.Resources>-->
+        mc:Ignorable="d" 
+        FontSize="14"
+        Title="MW5 Mod Organizer" 
+        Height="720" 
+        Width="1080" 
+        Background="#D1C9C9" 
+        WindowStartupLocation="CenterOwner"
+        UseLayoutRounding="True" 
+        Icon="/favicon.ico">
+    <behaviors:Interaction.Triggers>
+        <behaviors:EventTrigger EventName="DragEnter">
+            <behaviors:InvokeCommandAction Command="{Binding DragEnterCommand}" PassEventArgsToCommand="True"/>
+        </behaviors:EventTrigger>
+    </behaviors:Interaction.Triggers>
     <Grid>
         <!--Grid definitions-->
         <Grid.ColumnDefinitions>
@@ -26,8 +32,9 @@
             <RowDefinition Height="100"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-
+        
         <!--Taskbar-->
         <StackPanel Orientation="Vertical"
                     Grid.Row="2"
@@ -190,7 +197,7 @@
         <StackPanel Orientation="Horizontal"
                     Grid.Column="2"
                     Grid.Row="2"
-                    Grid.RowSpan="2">
+                    Grid.RowSpan="3">
             <ToggleButton x:Name="ToggleButtonConflictWindow"
                           Click="ToggleButtonConflictWindow_Click"
                           Style="{StaticResource ButtonConflictWindowSlider}"/>
@@ -392,6 +399,31 @@
                         Command="{Binding OpenSecondaryFolderPathCommand}"/>
             </StackPanel>
         </StackPanel>
+        
+        <!--File drop-->
+        <Border Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Grid.Row="4"
+                Height="150">
+            <Border HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Height="100"
+                    Width="200"
+                    Background="#FFB7B7B7">
+            </Border>
+            <Border.Style>
+                <Style TargetType="{x:Type Border}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsZipDropVisible}" Value="True">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsZipDropVisible}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+        </Border>
 
         <!--Toolbar menu's-->
         <StackPanel Grid.Row="0" 
