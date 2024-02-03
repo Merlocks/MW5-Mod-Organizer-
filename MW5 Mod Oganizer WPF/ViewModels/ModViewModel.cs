@@ -58,6 +58,14 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [ObservableProperty]
         private ModViewModelConflictStatus modViewModelStatus;
 
+        [ObservableProperty]
+        private bool isSelected;
+
+        partial void OnIsSelectedChanged(bool value)
+        {
+            Console.WriteLine($"{this.DisplayName} isSelection state = {IsSelected}");
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>

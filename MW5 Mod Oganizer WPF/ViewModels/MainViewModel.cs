@@ -454,6 +454,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         ModService.GetInstance().CheckForConflicts(selectedItems[0]!);
                     }
 
+                    // Reselect all items
+                    foreach (var item in selectedItems) item.IsSelected = true;
+
                     DeploymentNecessary = true;
                 }
             }
@@ -594,6 +597,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         }
 
                         ModService.GetInstance().AddMod(modVM);
+
+                        foreach (var item in ModService.GetInstance().ModVMCollection) item.IsSelected = false; 
+                        modVM.IsSelected = true;
                     }
 
                     this.DeploymentNecessary = true;

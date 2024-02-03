@@ -25,7 +25,7 @@ namespace MW5_Mod_Organizer_WPF
     /// </changelog>
 
     /// <TODO>
-    /// In MainViewModel at ln 624, create logic so mod gets inserted on loadorder first, but displayName second.
+    /// Manipulate DataGrid Selection by using ModViewModel.IsSelected
     /// </TODO>
     public partial class MainWindow : Window
     {
@@ -46,10 +46,10 @@ namespace MW5_Mod_Organizer_WPF
 
         private void ModsOverviewSelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            //if (ModList.SelectedItems.Count != 0 && ModList.SelectedItems != null)
-            //{
-            //    _mainViewModel!.SelectedItems = ModList.SelectedItems;
-            //}
+            if (ModList.SelectedItems.Count != 0 && ModList.SelectedItems != null)
+            {
+                _mainViewModel!.SelectedItems = ModList.SelectedItems;
+            }
         }
 
         private void ResizeConflictWindow(object sender, DragDeltaEventArgs e) 

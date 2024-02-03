@@ -51,6 +51,12 @@
                 <Setter Property="Background" Value="#FFF5F5F5"/>
                 <Setter Property="BorderBrush" Value="#FFC8C8C8"/>
             </Trigger>
+            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                <Setter Property="IsSelected" Value="True"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                <Setter Property="IsSelected" Value="False"/>
+            </DataTrigger>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
                     <Condition Property="IsSelected" Value="True"/>
