@@ -58,14 +58,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [ObservableProperty]
         private ModViewModelConflictStatus modViewModelStatus;
 
-        [ObservableProperty]
-        private bool isSelected;
-
-        partial void OnIsSelectedChanged(bool value)
-        {
-            Console.WriteLine($"{this.DisplayName} isSelection state = {IsSelected}");
-        }
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -112,14 +104,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     Directory.Delete(this.Path, true);
                     ModService.GetInstance().ModVMCollection.Remove(this);
 
-                    //Generate loadorder by index
-                    foreach (var mod in ModService.GetInstance().ModVMCollection)
-                    {
-                        if (mod.LoadOrder != null)
-                        {
-                            mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);
-                        }
-                    }
+                    // Recalculate loadorder by index positions
+                    foreach (var item in ModService.GetInstance().ModVMCollection) item.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(item);
                 } else
                 {
                     message = "Could not find the path to this Mod folder";

@@ -418,9 +418,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                             string? path = item.Path;
                             ModViewModel? backup = new ModViewModel(JsonConverterFacade.ReadBackup(item.Path!)!);
 
-                            //Debugging
-                            Console.WriteLine($"{item.DisplayName} has loadorder {item.LoadOrder}, with a backup loadorder of {backup.LoadOrder}\n");
-
                             // First assign new values to needed properties 
                             // Otherwise ObservableProperty will not be fired and View won't update
                             item.IsEnabled = backup.IsEnabled;
@@ -428,31 +425,10 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                             item.ModViewModelStatus = backup.ModViewModelStatus;
                             item._mod = backup._mod;
 
-                            //Debugging
-                            Console.WriteLine($"{item.DisplayName} now has loadorder {item.LoadOrder}\n");
-
                             int targetIndex = (int)item.LoadOrder;
                             int currentIndex = ModService.GetInstance().ModVMCollection.IndexOf(item);
 
-                            //if (targetIndex != currentIndex)
-                            //{
-                            //    ModService.GetInstance().ModVMCollection.Move(currentIndex, targetIndex); 
-                            //}
                             ModService.GetInstance().MoveMod(currentIndex, targetIndex);
-
-                            //Debugging
-                            Console.WriteLine($"{item.DisplayName} was index {currentIndex}, but is now index {ModService.GetInstance().ModVMCollection.IndexOf(item)}\n");
-
-                            // Debugging
-                            foreach (var v in ModService.GetInstance().ModVMCollection)
-                            {
-                                Console.WriteLine($"{v.DisplayName} has index {ModService.GetInstance().ModVMCollection.IndexOf(v)}, has loadorder {v.LoadOrder}"); 
-                            }
-
-                            //Debugging
-                            Console.WriteLine("");
-                            Console.WriteLine("- - - - - - - - - - - - - -");
-                            Console.WriteLine("");
                         }
                     }
 
@@ -464,10 +440,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     {
                         ModService.GetInstance().CheckForConflicts(selectedItems[0]!);
                     }
-
-                    // Reselect all items
-                    SelectedItem = null;
-                    foreach (var item in selectedItems) item.IsSelected = true;
 
                     DeploymentNecessary = true;
                 }
@@ -610,7 +582,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                         ModService.GetInstance().AddMod(modVM);
 
-                        foreach (var item in ModService.GetInstance().ModVMCollection) item.IsSelected = false; 
                         SelectedItem = modVM;
                     }
 
