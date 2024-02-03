@@ -25,7 +25,7 @@ namespace MW5_Mod_Organizer_WPF
     /// </changelog>
 
     /// <TODO>
-    /// 
+    /// In MainViewModel at ln 624, create logic so mod gets inserted on loadorder first, but displayName second.
     /// </TODO>
     public partial class MainWindow : Window
     {

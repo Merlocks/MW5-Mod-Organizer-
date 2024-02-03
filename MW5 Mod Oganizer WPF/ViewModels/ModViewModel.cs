@@ -110,7 +110,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     {
                         if (mod.LoadOrder != null)
                         {
-                            mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod) + 1;
+                            mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);
                         }
                     }
                 } else
