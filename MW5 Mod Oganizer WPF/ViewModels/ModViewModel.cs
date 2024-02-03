@@ -48,9 +48,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         [ObservableProperty]
-        private decimal? loadOrder;
+        private decimal loadOrder;
 
-        partial void OnLoadOrderChanging(decimal? value)
+        partial void OnLoadOrderChanging(decimal value)
         {
             _mod.LoadOrder = value;
         }
@@ -67,7 +67,16 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             ModViewModelStatus = ModViewModelConflictStatus.None;
             IsEnabled = _mod.IsEnabled;
             GameVersion = _mod.GameVersion;
-            LoadOrder = _mod.LoadOrder;
+
+            if (_mod.LoadOrder != null)
+            {
+                LoadOrder = (decimal)_mod.LoadOrder;
+            } else
+            {
+                _mod.LoadOrder = 0;
+                LoadOrder = 0;
+            }
+            
         }
 
         [RelayCommand]

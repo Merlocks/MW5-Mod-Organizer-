@@ -2,18 +2,24 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style BasedOn="{StaticResource {x:Type Button}}"
            TargetType="{x:Type Button}"
-           x:Key="StandaloneButtonTheme">
+           x:Key="ButtonAddModTheme">
         <Style.Setters>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="0" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"      BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                        <Border CornerRadius="0" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Margin="10 0"
+                                Padding="{TemplateBinding Padding}"
+                                Height="30">
                             <Grid VerticalAlignment="Stretch"
                                   HorizontalAlignment="Stretch"
                                   Background="Transparent">
 
                                 <TextBlock Text="{TemplateBinding Property=Content}"
-                                           FontWeight="SemiBold"
+                                           FontWeight="Bold"
                                            TextOptions.TextFormattingMode="Display"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center"/>
@@ -22,11 +28,11 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#484D54"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0 0 2 3"/>
+            <Setter Property="Background" Value="#8e8e8e"/>
+            <Setter Property="Foreground" Value="#E2E0DD"/>
+            <Setter Property="BorderBrush" Value="#777777"/>
             <Setter Property="Padding" Value="10 0"/>
+            <Setter Property="BorderThickness" Value="0 0 4 5"/>
             <Setter Property="SnapsToDevicePixels" Value="True"/>
             <Setter Property="Cursor" Value="Hand"/>
         </Style.Setters>
@@ -41,7 +47,7 @@
                 <Setter Property="Background" Value="#782B18"/>
                 <Setter Property="Foreground" Value="#FFFDFA"/>
                 <Setter Property="BorderBrush" Value="#782B18"/>
-                <Setter Property="Padding" Value="10 3 10 0"/>
+                <Setter Property="Padding" Value="10 5 10 0"/>
             </Trigger>
         </Style.Triggers>
     </Style>

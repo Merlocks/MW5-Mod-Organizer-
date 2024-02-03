@@ -108,13 +108,18 @@ namespace MW5_Mod_Organizer_WPF.Services
         public void MoveModAndUpdate(int oldIndex, int newIndex)
         {
             ClearConflictWindow();
-            
-            ModVMCollection.Move(oldIndex, newIndex);
 
+            if (newIndex > ModVMCollection.Count - 1)
+            {
+                newIndex = ModVMCollection.Count - 1;
+            }
+            
             foreach (var mod in ModVMCollection)
             {
-                mod.LoadOrder = ModVMCollection.IndexOf(mod) + 1;
+                mod.LoadOrder = ModVMCollection.IndexOf(mod);
             }
+
+            ModVMCollection.Move(oldIndex, newIndex);
         }
 
         private void AddToTempList(string[] directory)
@@ -129,9 +134,6 @@ namespace MW5_Mod_Organizer_WPF.Services
                     {
                         JsonConverterFacade.Createbackup(path); 
                     }
-                    
-                    //mod.Path = path;
-                    //mod.FolderName = Path.GetFileName(path);
 
                     if (mod.LoadOrder == null)
                     {

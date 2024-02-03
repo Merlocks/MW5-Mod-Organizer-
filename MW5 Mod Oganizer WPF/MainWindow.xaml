@@ -15,11 +15,6 @@
         WindowStartupLocation="CenterOwner"
         UseLayoutRounding="True" 
         Icon="/favicon.ico">
-    <behaviors:Interaction.Triggers>
-        <behaviors:EventTrigger EventName="DragEnter">
-            <behaviors:InvokeCommandAction Command="{Binding DragEnterCommand}" PassEventArgsToCommand="True"/>
-        </behaviors:EventTrigger>
-    </behaviors:Interaction.Triggers>
     <Grid>
         <!--Grid definitions-->
         <Grid.ColumnDefinitions>
@@ -115,6 +110,25 @@
                         Margin="10 0 0 0"
                         Command="{Binding ResetToDefaultCommand}"
                         Style="{DynamicResource StandaloneButtonTheme}"/>
+                <TextBlock Text="{Binding LoadingContext, StringFormat='[Loading] {0}'}"
+                           Foreground="#484D54"
+                           FontSize="13"
+                           Margin="50 0"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsLoading}" Value="False">
+                                    <Setter Property="Visibility" Value="Hidden"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
             </StackPanel>
         </StackPanel>
 
@@ -140,11 +154,11 @@
                       dd:DragDrop.IsDropTarget="True" 
                       dd:DragDrop.SelectDroppedItems="True" 
                       dd:DragDrop.DropHandler="{Binding}" 
-                      dd:DragDrop.DropTargetAdornerBrush="#FFED552F"
+                      dd:DragDrop.DropTargetAdornerBrush="#484D54"
                       SelectionChanged="ModsOverviewSelectionChanged">
                 <behaviors:Interaction.Triggers>
                     <behaviors:EventTrigger EventName="SelectionChanged">
-                        <behaviors:InvokeCommandAction Command="{Binding ModsOverviewSelectionChangedCommand}" PassEventArgsToCommand="True"/>
+                        <behaviors:InvokeCommandAction Command="{Binding ModsOverviewSelectionChangedCommand}"/>
                     </behaviors:EventTrigger>
                 </behaviors:Interaction.Triggers>
                 <DataGrid.Columns>
@@ -401,29 +415,25 @@
         </StackPanel>
         
         <!--File drop-->
-        <Border Grid.Column="0"
-                Grid.ColumnSpan="2"
-                Grid.Row="4"
-                Height="150">
-            <Border HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Height="100"
-                    Width="200"
-                    Background="#FFB7B7B7">
-            </Border>
-            <Border.Style>
-                <Style TargetType="{x:Type Border}">
+        <ContentControl Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Grid.Row="4">
+            <ContentControl.Style>
+                <Style TargetType="{x:Type ContentControl}">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsZipDropVisible}" Value="True">
-                            <Setter Property="Visibility" Value="Visible"/>
-                        </DataTrigger>
                         <DataTrigger Binding="{Binding IsZipDropVisible}" Value="False">
-                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <Button Content="Add Mod.."
+                                            Style="{StaticResource ButtonAddModTheme}"
+                                            Command="{Binding AddModButtonCommand}"/>
+                                </Setter.Value>
+                            </Setter>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </Border.Style>
-        </Border>
+            </ContentControl.Style>
+        </ContentControl>
 
         <!--Toolbar menu's-->
         <StackPanel Grid.Row="0" 

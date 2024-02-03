@@ -5,6 +5,8 @@ using System.Windows.Forms;
 using MW5_Mod_Organizer_WPF.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace MW5_Mod_Organizer_WPF
 {
@@ -112,7 +114,7 @@ namespace MW5_Mod_Organizer_WPF
             {
                 if (mod.LoadOrder != null)
                 {
-                    mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod) + 1; 
+                    mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);
                 }
             }
         }
