@@ -125,6 +125,9 @@ namespace MW5_Mod_Organizer_WPF.Services
 
         public void MoveMod(int currentIndex, int targetIndex)
         {
+            if (targetIndex > ModVMCollection.Count) targetIndex = ModVMCollection.Count - 1;
+            if (targetIndex < 0) targetIndex = 0;
+            
             ModViewModel currentMod = ModVMCollection[currentIndex];
             ModViewModel targetMod = ModVMCollection[targetIndex];
 

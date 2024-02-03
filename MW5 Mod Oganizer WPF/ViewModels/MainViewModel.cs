@@ -94,6 +94,17 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [ObservableProperty]
         private IList? selectedItems;
 
+        [ObservableProperty]
+        private ModViewModel? selectedItem;
+
+        partial void OnSelectedItemChanged(ModViewModel? value)
+        {
+            if (value != null)
+            {
+                Console.WriteLine($"{value.DisplayName} is selected"); 
+            }
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -455,6 +466,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     }
 
                     // Reselect all items
+                    SelectedItem = null;
                     foreach (var item in selectedItems) item.IsSelected = true;
 
                     DeploymentNecessary = true;
@@ -599,7 +611,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         ModService.GetInstance().AddMod(modVM);
 
                         foreach (var item in ModService.GetInstance().ModVMCollection) item.IsSelected = false; 
-                        modVM.IsSelected = true;
+                        SelectedItem = modVM;
                     }
 
                     this.DeploymentNecessary = true;
