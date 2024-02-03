@@ -8,7 +8,7 @@
                 <ControlTemplate>
                     <Border Height="30"
                             Background="#007FA6">
-                        <TextBlock Text="You have made changes to your load order. Deployment is necessary to save your changes."
+                        <TextBlock Text="You have made changes to your loadorder. Deployment is necessary to save your changes."
                                    TextOptions.TextFormattingMode="Display"
                                    FontWeight="SemiBold"
                                    Foreground="#f7f5f2"

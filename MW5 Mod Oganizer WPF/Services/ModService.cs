@@ -105,21 +105,22 @@ namespace MW5_Mod_Organizer_WPF.Services
             }
         }
 
-        public void MoveModAndUpdate(int oldIndex, int newIndex)
+        public void AddMod(ModViewModel mod)
         {
-            ClearConflictWindow();
+            int highestIndex = ModVMCollection.Count;
 
-            if (newIndex > ModVMCollection.Count - 1)
-            {
-                newIndex = ModVMCollection.Count - 1;
-            }
-            
-            foreach (var mod in ModVMCollection)
-            {
-                mod.LoadOrder = ModVMCollection.IndexOf(mod);
-            }
+            if (mod.LoadOrder > highestIndex) mod.LoadOrder = highestIndex;
 
-            ModVMCollection.Move(oldIndex, newIndex);
+            // Create temporary list with contents of ModVMCollection + added mod
+            // Sort temporary list first by Loadorder, then by DisplayName
+            List<ModViewModel> list = new List<ModViewModel>(ModVMCollection) { mod };
+            list = list.OrderBy(m => m.LoadOrder).ThenBy(m => m.DisplayName).ToList();
+
+            // Insert mod into ModVMCollection by index calculated by temporary list
+            ModVMCollection.Insert(list.IndexOf(mod), mod);
+
+            // Recalculate loadorder by index positions
+            foreach (var item in ModVMCollection) item.LoadOrder = ModVMCollection.IndexOf(item);
         }
 
         private void AddToTempList(string[] directory)

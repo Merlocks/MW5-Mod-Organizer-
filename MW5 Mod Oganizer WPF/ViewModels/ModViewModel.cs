@@ -68,15 +68,14 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             IsEnabled = _mod.IsEnabled;
             GameVersion = _mod.GameVersion;
 
-            if (_mod.LoadOrder != null)
+            if (_mod.LoadOrder != null && _mod.LoadOrder >= 0)
             {
                 LoadOrder = (decimal)_mod.LoadOrder;
-            } else
+            } else if (_mod.LoadOrder == null || _mod.LoadOrder < 0)
             {
                 _mod.LoadOrder = 0;
                 LoadOrder = 0;
             }
-            
         }
 
         [RelayCommand]

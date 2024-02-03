@@ -597,40 +597,18 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 {
                     // This code will run on the main thread after the AddModButtonAsync function is completed
                     // Insert mod into list
-                    Mod? addedMod = JsonConverterFacade.JsonToMod(PrimaryFolderPath + @"\" + modFolderPath);
+                    Mod? mod = JsonConverterFacade.JsonToMod(PrimaryFolderPath + @"\" + modFolderPath);
 
-                    if (addedMod != null)
+                    if (mod != null)
                     {
-                        ModViewModel addedModVM = new ModViewModel(addedMod);
-
-                        int targetIndex = (int)addedModVM.LoadOrder;
-                        int highestIndex = ModService.GetInstance().ModVMCollection.Count - 1;
+                        ModViewModel modVM = new ModViewModel(mod);
 
                         if (!File.Exists(PrimaryFolderPath + @"\" + modFolderPath + @"\backup.json"))
                         {
                             JsonConverterFacade.Createbackup(PrimaryFolderPath + @"\" + modFolderPath);
                         }
 
-                        // Sort out loadorder so no issues occur 
-                        if (addedModVM.LoadOrder == null)
-                        {
-                            addedModVM.LoadOrder = 0;
-                        }
-
-                        // + 1 is needed because an extra mod is getting added to the list
-                        if (targetIndex > highestIndex) targetIndex = highestIndex + 1;
-                        if (targetIndex < 0) targetIndex = 0;
-
-                        ModService.GetInstance().ModVMCollection.Insert(targetIndex, addedModVM);
-                    }
-
-                    // Generate loadorder by targetIndex
-                    foreach (var mod in ModService.GetInstance().ModVMCollection.OrderBy(m => m.LoadOrder).ThenBy(m => m.DisplayName).ToList())
-                    {
-                        if (mod.LoadOrder != null)
-                        {
-                            mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);
-                        }
+                        ModService.GetInstance().AddMod(modVM);
                     }
 
                     this.DeploymentNecessary = true;
