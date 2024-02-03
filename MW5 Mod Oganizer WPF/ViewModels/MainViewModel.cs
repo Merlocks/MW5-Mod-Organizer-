@@ -436,11 +436,11 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                     Console.WriteLine("");
 
-                    foreach (var item in items.OrderBy(m => m.LoadOrder))
+                    foreach (var item in items.OrderByDescending(m => m.LoadOrder).ThenByDescending(m => m.DisplayName).ToList())
                     {
                         Console.WriteLine($"{item.DisplayName} has loadorder {item.LoadOrder}");
                         int oldIndex = ModService.GetInstance().ModVMCollection.IndexOf(item);
-                        int targetIndex = (int)item.LoadOrder - 1;
+                        int targetIndex = (int)item.LoadOrder;
                         int highestIndex = ModService.GetInstance().ModVMCollection.Count - 1;
 
                         if (targetIndex > highestIndex) targetIndex = highestIndex;
@@ -455,7 +455,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     Console.WriteLine("");
 
                     // Adjust loadorder based on index
-                    foreach (var mod in ModService.GetInstance().ModVMCollection)
+                    foreach (var mod in ModService.GetInstance().ModVMCollection.OrderBy(m => m.LoadOrder).ThenBy(m => m.DisplayName).ToList())
                     {
                         if (mod.LoadOrder != null)
                         {
@@ -601,7 +601,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                     if (addedMod != null)
                     {
-                        int targetIndex = (int)addedMod.LoadOrder - 1;
+                        int targetIndex = (int)addedMod.LoadOrder;
                         int highestIndex = ModService.GetInstance().ModVMCollection.Count - 1;
 
                         if (!File.Exists(PrimaryFolderPath + @"\" + modFolderPath + @"\backup.json"))
@@ -612,7 +612,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         // Sort out loadorder so no issues occur 
                         if (addedMod.LoadOrder == null)
                         {
-                            addedMod.LoadOrder = 1;
+                            addedMod.LoadOrder = 0;
                         }
 
                         if (targetIndex > highestIndex) targetIndex = highestIndex + 1;
@@ -621,7 +621,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         ModService.GetInstance().ModVMCollection.Insert(targetIndex, new ModViewModel(addedMod));
                     }
 
-                    //// Generate loadorder by targetIndex
+                    // Generate loadorder by targetIndex
                     foreach (var mod in ModService.GetInstance().ModVMCollection)
                     {
                         if (mod.LoadOrder != null)
