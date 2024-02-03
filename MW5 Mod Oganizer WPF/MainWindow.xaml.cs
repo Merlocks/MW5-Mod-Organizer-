@@ -46,10 +46,10 @@ namespace MW5_Mod_Organizer_WPF
 
         private void ModsOverviewSelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if (ModList.SelectedItems.Count != 0 && ModList.SelectedItems != null)
-            {
-                _mainViewModel!.SelectedItems = ModList.SelectedItems;
-            }
+            //if (ModList.SelectedItems.Count != 0 && ModList.SelectedItems != null)
+            //{
+            //    _mainViewModel!.SelectedItems = ModList.SelectedItems;
+            //}
         }
 
         private void ResizeConflictWindow(object sender, DragDeltaEventArgs e) 

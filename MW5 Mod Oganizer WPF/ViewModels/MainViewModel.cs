@@ -397,76 +397,61 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             {
                 if (SelectedItems != null && SelectedItems.Count != 0)
                 {
-                    List<ModViewModel> items = new List<ModViewModel>(SelectedItems.Cast<ModViewModel>());
+                    List<ModViewModel> selectedItems = new List<ModViewModel>(SelectedItems.Cast<ModViewModel>());
+                    selectedItems = selectedItems.OrderBy(m => m.LoadOrder).ThenBy(m => m.DisplayName).ToList();
 
-                    foreach (var item in items)
+                    foreach (var item in selectedItems)
                     {
-                        ModViewModel? mod = item;
-
-                        if (mod != null)
+                        if (item != null)
                         {
-                            string? path = mod.Path;
-                            ModViewModel? backup = new ModViewModel(JsonConverterFacade.ReadBackup(mod.Path!)!);
+                            string? path = item.Path;
+                            ModViewModel? backup = new ModViewModel(JsonConverterFacade.ReadBackup(item.Path!)!);
 
-
-                            int oldIndex = ModService.GetInstance().ModVMCollection.IndexOf(mod);
-                            //int targetIndex = (int)backup.LoadOrder - 1;
-                            //int highestIndex = ModService.GetInstance().ModVMCollection.Count - 1;
+                            //Debugging
+                            Console.WriteLine($"{item.DisplayName} has loadorder {item.LoadOrder}, with a backup loadorder of {backup.LoadOrder}\n");
 
                             // First assign new values to needed properties 
                             // Otherwise ObservableProperty will not be fired and View won't update
-                            mod.IsEnabled = backup.IsEnabled;
-                            Console.WriteLine($"{mod.DisplayName} had loadorder {mod.LoadOrder}");
-                            mod.LoadOrder = backup.LoadOrder;
-                            Console.WriteLine($"{mod.DisplayName} now has loadorder {mod.LoadOrder}");
-                            mod.ModViewModelStatus = backup.ModViewModelStatus;
+                            item.IsEnabled = backup.IsEnabled;
+                            item.LoadOrder = backup.LoadOrder;
+                            item.ModViewModelStatus = backup.ModViewModelStatus;
+                            item._mod = backup._mod;
 
-                            // Then overwrite mod instance with backup
-                            mod = backup;
+                            //Debugging
+                            Console.WriteLine($"{item.DisplayName} now has loadorder {item.LoadOrder}\n");
 
-                            //if (targetIndex > highestIndex) targetIndex = highestIndex;
-                            //if (targetIndex < 0) targetIndex = 0;
+                            int targetIndex = (int)item.LoadOrder;
+                            int currentIndex = ModService.GetInstance().ModVMCollection.IndexOf(item);
 
-                            //if (targetIndex != oldIndex)
+                            //if (targetIndex != currentIndex)
                             //{
-                            //    ModService.GetInstance().MoveModAndUpdate(oldIndex, targetIndex);
+                            //    ModService.GetInstance().ModVMCollection.Move(currentIndex, targetIndex); 
                             //}
+                            ModService.GetInstance().MoveMod(currentIndex, targetIndex);
+
+                            //Debugging
+                            Console.WriteLine($"{item.DisplayName} was index {currentIndex}, but is now index {ModService.GetInstance().ModVMCollection.IndexOf(item)}\n");
+
+                            // Debugging
+                            foreach (var v in ModService.GetInstance().ModVMCollection)
+                            {
+                                Console.WriteLine($"{v.DisplayName} has index {ModService.GetInstance().ModVMCollection.IndexOf(v)}, has loadorder {v.LoadOrder}"); 
+                            }
+
+                            //Debugging
+                            Console.WriteLine("");
+                            Console.WriteLine("- - - - - - - - - - - - - -");
+                            Console.WriteLine("");
                         }
                     }
 
-                    Console.WriteLine("");
-
-                    foreach (var item in items.OrderByDescending(m => m.LoadOrder).ThenByDescending(m => m.DisplayName).ToList())
-                    {
-                        Console.WriteLine($"{item.DisplayName} has loadorder {item.LoadOrder}");
-                        int oldIndex = ModService.GetInstance().ModVMCollection.IndexOf(item);
-                        int targetIndex = (int)item.LoadOrder;
-                        int highestIndex = ModService.GetInstance().ModVMCollection.Count - 1;
-
-                        if (targetIndex > highestIndex) targetIndex = highestIndex;
-                        if (targetIndex < 0) targetIndex = 0;
-
-                        if (targetIndex != oldIndex)
-                        {
-                            ModService.GetInstance().ModVMCollection.Move(oldIndex, targetIndex);
-                        }
-                    }
-
-                    Console.WriteLine("");
-
-                    // Adjust loadorder based on index
-                    foreach (var mod in ModService.GetInstance().ModVMCollection.OrderBy(m => m.LoadOrder).ThenBy(m => m.DisplayName).ToList())
-                    {
-                        if (mod.LoadOrder != null)
-                        {
-                            mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);
-                        }
-                    }
+                    // Recalculate loadorder by index positions
+                    foreach (var item in ModService.GetInstance().ModVMCollection) item.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(item);
 
                     // If only one mod is selected, check for conflicts
-                    if (items.Count == 1)
+                    if (selectedItems.Count == 1)
                     {
-                        ModService.GetInstance().CheckForConflicts(items[0]!);
+                        ModService.GetInstance().CheckForConflicts(selectedItems[0]!);
                     }
 
                     DeploymentNecessary = true;

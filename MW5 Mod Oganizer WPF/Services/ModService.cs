@@ -123,6 +123,28 @@ namespace MW5_Mod_Organizer_WPF.Services
             foreach (var item in ModVMCollection) item.LoadOrder = ModVMCollection.IndexOf(item);
         }
 
+        public void MoveMod(int currentIndex, int targetIndex)
+        {
+            ModViewModel currentMod = ModVMCollection[currentIndex];
+            ModViewModel targetMod = ModVMCollection[targetIndex];
+
+            if (targetMod != currentMod)
+            {
+                List<ModViewModel> list = new List<ModViewModel> { currentMod, targetMod };
+                list = list.OrderBy(m => m.DisplayName).ToList();
+
+                if (currentMod == list[0] && currentIndex != targetIndex)
+                {
+                    ModVMCollection.RemoveAt(currentIndex);
+                    ModVMCollection.Insert(targetIndex, currentMod);
+                } else if (currentMod == list[1] && currentIndex != targetIndex + 1) 
+                {
+                    ModVMCollection.RemoveAt(currentIndex);
+                    ModVMCollection.Insert(targetIndex + 1, currentMod);
+                }
+            }
+        }
+
         private void AddToTempList(string[] directory)
         {
             foreach (var path in directory)
