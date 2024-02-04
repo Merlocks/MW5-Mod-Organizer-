@@ -91,17 +91,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [ObservableProperty]
         private bool isLoading;
 
-        partial void OnIsLoadingChanged(bool value)
-        {
-            Console.WriteLine($"IsLoading changed to {value}");
-        }
-
-        [ObservableProperty]
-        private IList? selectedItems;
-
-        [ObservableProperty]
-        private ModViewModel? selectedItem;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -473,9 +462,11 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public void ToggleCheckBox()
         {
-            if (SelectedItems != null && SelectedItems.Count == 1)
+            List<ModViewModel> selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
+
+            if (selectedItems != null && selectedItems.Count == 1)
             {
-                ModService.GetInstance().CheckForConflicts((ModViewModel)SelectedItems[0]!);
+                ModService.GetInstance().CheckForConflicts(selectedItems[0]!);
             }
             
             DeploymentNecessary = true;
