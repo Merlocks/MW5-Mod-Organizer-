@@ -61,11 +61,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [ObservableProperty]
         private bool isSelected;
 
-        partial void OnIsSelectedChanged(bool value)
-        {
-            Console.WriteLine($"{this.DisplayName}'s IsSelected property set to {value}");
-        }
-
         /// <summary>
         /// Constructor
         /// </summary>
