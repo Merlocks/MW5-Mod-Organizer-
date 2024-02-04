@@ -576,7 +576,16 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                             JsonConverterFacade.Createbackup(PrimaryFolderPath + @"\" + modFolderPath);
                         }
 
-                        ModService.GetInstance().AddMod(modVM);
+                        var list = ModService.GetInstance().ModVMCollection.Where(m => m.Path == modVM.Path).ToList();
+
+                        if (list == null || list.Count == 0)
+                        {
+                            ModService.GetInstance().AddMod(modVM);
+                        } else if (list != null && list.Count > 0)
+                        {
+                            ModService.GetInstance().ModVMCollection.Remove(list[0]);
+                            ModService.GetInstance().AddMod(modVM);
+                        }
 
                         foreach(var item in ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected)) item.IsSelected = false;
                         modVM.IsSelected = true;
