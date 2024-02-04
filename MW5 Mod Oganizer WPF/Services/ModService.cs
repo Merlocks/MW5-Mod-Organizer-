@@ -125,7 +125,7 @@ namespace MW5_Mod_Organizer_WPF.Services
 
         public void MoveMod(int currentIndex, int targetIndex)
         {
-            if (targetIndex > ModVMCollection.Count) targetIndex = ModVMCollection.Count - 1;
+            if (targetIndex >= ModVMCollection.Count) targetIndex = ModVMCollection.Count - 1;
             if (targetIndex < 0) targetIndex = 0;
             
             ModViewModel currentMod = ModVMCollection[currentIndex];
@@ -139,11 +139,11 @@ namespace MW5_Mod_Organizer_WPF.Services
                 if (currentMod == list[0] && currentIndex != targetIndex)
                 {
                     ModVMCollection.RemoveAt(currentIndex);
-                    ModVMCollection.Insert(targetIndex, currentMod);
-                } else if (currentMod == list[1] && currentIndex != targetIndex + 1) 
+                    ModVMCollection.Insert(ModVMCollection.IndexOf(targetMod), currentMod);
+                } else if (currentMod == list[1] && currentIndex != targetIndex) 
                 {
                     ModVMCollection.RemoveAt(currentIndex);
-                    ModVMCollection.Insert(targetIndex + 1, currentMod);
+                    ModVMCollection.Insert(ModVMCollection.IndexOf(targetMod) + 1, currentMod);
                 }
             }
         }
