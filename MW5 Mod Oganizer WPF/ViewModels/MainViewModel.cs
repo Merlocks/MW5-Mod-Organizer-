@@ -97,14 +97,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [ObservableProperty]
         private ModViewModel? selectedItem;
 
-        partial void OnSelectedItemChanged(ModViewModel? value)
-        {
-            if (value != null)
-            {
-                Console.WriteLine($"{value.DisplayName} is selected"); 
-            }
-        }
-
         /// <summary>
         /// Constructor
         /// </summary>

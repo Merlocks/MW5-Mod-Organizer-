@@ -10,6 +10,7 @@
                 <ResourceDictionary Source="Themes/TextBox/TextBoxGameVersionTheme.xaml"/>
                 <ResourceDictionary Source="Themes/Button/ButtonToolbarTheme.xaml"/>
                 <ResourceDictionary Source="Themes/DataGrid/DataGridRowTheme.xaml"/>
+                <ResourceDictionary Source="Themes/DataGrid/DataGridConflictRowTheme.xaml"/>
                 <ResourceDictionary Source="Themes/DataGrid/DataGridTheme.xaml"/>
                 <ResourceDictionary Source="Themes/DataGrid/DataGridCellTheme.xaml"/>
                 <ResourceDictionary Source="Themes/DataGrid/DataGridColumnHeaderTheme.xaml"/>
