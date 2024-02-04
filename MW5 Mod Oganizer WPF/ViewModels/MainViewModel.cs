@@ -437,15 +437,17 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public void ModsOverviewSelectionChanged()
         {
-            if (SelectedItems?.Count == 1)
+            List<ModViewModel> selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
+
+            if (selectedItems?.Count == 1)
             {
-                ModViewModel? mod = SelectedItems[0] as ModViewModel;
+                ModViewModel? mod = selectedItems[0] as ModViewModel;
 
                 if (mod != null)
                 {
                     ModService.GetInstance().CheckForConflicts(mod);
                 }
-            } else if (SelectedItems?.Count > 1)
+            } else if (selectedItems?.Count > 1)
             {
                 ModService.GetInstance().ClearConflictWindow();
 
