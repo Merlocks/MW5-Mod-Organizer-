@@ -226,11 +226,12 @@ namespace MW5_Mod_Organizer_WPF.Services
             {
                 foreach (string str in ModVM.Manifest)
                 {
-                    ModViewModel? modViewModel = null; 
+                    ModViewModel? modViewModel = null;
+                    List<ModViewModel> selectedItems = ModVMCollection.Where(m => m.IsSelected).ToList();
 
-                    if (_mainViewModel?.SelectedItems != null && _mainViewModel.SelectedItems.Count == 1)
+                    if (selectedItems != null && selectedItems.Count == 1)
                     {
-                        modViewModel = _mainViewModel.SelectedItems?[0] as ModViewModel;
+                        modViewModel = selectedItems?[0];
                     }
 
                     if (modViewModel != null && modViewModel.Manifest != null && modViewModel.Manifest.Contains(str))
