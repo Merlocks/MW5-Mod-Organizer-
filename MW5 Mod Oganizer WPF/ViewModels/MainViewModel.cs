@@ -89,7 +89,12 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         [ObservableProperty]
-        private bool isLoading = false;
+        private bool isLoading;
+
+        partial void OnIsLoadingChanged(bool value)
+        {
+            Console.WriteLine($"IsLoading changed to {value}");
+        }
 
         [ObservableProperty]
         private IList? selectedItems;
@@ -222,15 +227,16 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public void ArrowDown()
         {
+            List<ModViewModel> selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
             bool areChangesMade = false;
             
-            if (SelectedItems != null && SelectedItems.Count > 0)
+            if (selectedItems != null && selectedItems.Count > 0)
             {
                 var items = new List<ModViewModel>();
 
-                foreach (var item in SelectedItems)
+                foreach (var item in selectedItems)
                 {
-                    items.Add((ModViewModel)item);
+                    items.Add(item);
                 }
 
                 foreach (var item in items.OrderBy(m => m.LoadOrder))
@@ -245,15 +251,12 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     }
                 }
 
-                //Update loadorder
-                foreach (var mod in ModService.GetInstance().ModVMCollection)
-                {
-                    mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);
-                }
+                // Recalculate loadorder by index positions
+                foreach (var item in ModService.GetInstance().ModVMCollection) item.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(item);
 
-                if (SelectedItems.Count == 1)
+                if (selectedItems.Count == 1)
                 {
-                    ModService.GetInstance().CheckForConflicts((ModViewModel)SelectedItems[0]!);
+                    ModService.GetInstance().CheckForConflicts((ModViewModel)selectedItems[0]!);
                 }
 
                 if (areChangesMade)
@@ -266,14 +269,16 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public void ArrowUp()
         {
-            var items = new List<ModViewModel>();
+            List<ModViewModel> selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
             bool areChangesMade = false;
 
-            if (SelectedItems != null && SelectedItems.Count > 0)
+            if (selectedItems != null && selectedItems.Count > 0)
             {
-                foreach (var item in SelectedItems)
+                var items = new List<ModViewModel>();
+
+                foreach (var item in selectedItems)
                 {
-                    items.Add((ModViewModel)item);
+                    items.Add(item);
                 }
 
                 int newIndex = 0;
@@ -291,15 +296,12 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     newIndex++;
                 }
 
-                //Update loadorder
-                foreach (var mod in ModService.GetInstance().ModVMCollection)
-                {
-                    mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);
-                }
+                // Recalculate loadorder by index positions
+                foreach (var item in ModService.GetInstance().ModVMCollection) item.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(item);
 
-                if (SelectedItems.Count == 1)
+                if (selectedItems.Count == 1)
                 {
-                    ModService.GetInstance().CheckForConflicts((ModViewModel)SelectedItems[0]!);
+                    ModService.GetInstance().CheckForConflicts((ModViewModel)selectedItems[0]!);
                 }
 
                 if (areChangesMade)
@@ -398,9 +400,10 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         {
             try
             {
-                if (SelectedItems != null && SelectedItems.Count != 0)
+                var selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
+                
+                if (selectedItems != null && selectedItems.Count != 0)
                 {
-                    List<ModViewModel> selectedItems = new List<ModViewModel>(SelectedItems.Cast<ModViewModel>());
                     selectedItems = selectedItems.OrderBy(m => m.LoadOrder).ThenBy(m => m.DisplayName).ToList();
 
                     foreach (var item in selectedItems)
@@ -541,6 +544,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     var archive = ArchiveFactory.Open(sourceCompressedFile);
                     foreach (var entry in archive.Entries)
                     {
+                        this.LoadingContext = $"Extracting {entry.Key}";
                         if (!entry.IsDirectory)
                         {
                             if (entry.Key.EndsWith(@"\mod.json"))
@@ -574,7 +578,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                         ModService.GetInstance().AddMod(modVM);
 
-                        SelectedItem = modVM;
+                        foreach(var item in ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected)) item.IsSelected = false;
+                        modVM.IsSelected = true;
                     }
 
                     this.DeploymentNecessary = true;
@@ -623,10 +628,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             DefaultDropHandler defaultDropHandler = new DefaultDropHandler();
             defaultDropHandler.Drop(dropInfo);
 
-            foreach (var mod in ModService.GetInstance().ModVMCollection)
-            {
-                mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);
-            }
+            // Recalculate loadorder by index positions
+            foreach (var item in ModService.GetInstance().ModVMCollection) item.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(item);
 
             DeploymentNecessary = true;
         }

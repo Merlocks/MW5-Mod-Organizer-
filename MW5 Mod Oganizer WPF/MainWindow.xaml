@@ -110,12 +110,31 @@
                         Margin="10 0 0 0"
                         Command="{Binding ResetToDefaultCommand}"
                         Style="{DynamicResource StandaloneButtonTheme}"/>
-                <TextBlock Text="{Binding LoadingContext, StringFormat='[Loading] {0}'}"
+                <TextBlock Text="[Loading]"
                            Foreground="#484D54"
                            FontSize="13"
-                           Margin="50 0"
+                           Margin="50 0 10 0"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Center">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsLoading}" Value="False">
+                                    <Setter Property="Visibility" Value="Hidden"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBlock Text="{Binding LoadingContext}"
+                           Foreground="#484D54"
+                           FontSize="11"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Margin="0 3 0 0">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Style.Triggers>
