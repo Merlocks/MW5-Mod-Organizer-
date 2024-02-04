@@ -136,6 +136,8 @@ namespace MW5_Mod_Organizer_WPF.Services
                 List<ModViewModel> list = new List<ModViewModel> { currentMod, targetMod };
                 list = list.OrderBy(m => m.DisplayName).ToList();
 
+                // If statement checks in what order the current mod should be inserted
+                // currentMod will be removed and then inserted either infront or behind targetMod depending on DisplayName
                 if (currentMod == list[0] && currentIndex != targetIndex)
                 {
                     ModVMCollection.RemoveAt(currentIndex);
