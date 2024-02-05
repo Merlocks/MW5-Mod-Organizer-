@@ -444,7 +444,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 if (mod != null)
                 {
                     mod.IsSelected = true;
-                    Console.WriteLine($"{mod.DisplayName} is selected");
                 }
             }
                
@@ -454,7 +453,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 if (mod != null)
                 {
                     mod.IsSelected = false;
-                    Console.WriteLine($"{mod.DisplayName} is no longer selected");
                 }
             }
                 
