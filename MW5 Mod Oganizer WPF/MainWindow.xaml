@@ -174,8 +174,7 @@
                       dd:DragDrop.SelectDroppedItems="True" 
                       dd:DragDrop.DropHandler="{Binding}" 
                       dd:DragDrop.DropTargetAdornerBrush="#484D54"
-                      VirtualizingPanel.VirtualizationMode="Recycling"
-                      SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}">
+                      VirtualizingPanel.VirtualizationMode="Recycling">
                 <behaviors:Interaction.Triggers>
                     <behaviors:EventTrigger EventName="SelectionChanged">
                         <behaviors:InvokeCommandAction Command="{Binding ModsOverviewSelectionChangedCommand}" PassEventArgsToCommand="True"/>
