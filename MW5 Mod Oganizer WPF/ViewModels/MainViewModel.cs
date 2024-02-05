@@ -14,6 +14,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -435,19 +436,41 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         [RelayCommand]
-        public void ModsOverviewSelectionChanged()
+        public void ModsOverviewSelectionChanged(SelectionChangedEventArgs e)
         {
+            foreach (var item in e.AddedItems)
+            {
+                ModViewModel? mod = item as ModViewModel;
+                if (mod != null)
+                {
+                    mod.IsSelected = true;
+                    Console.WriteLine($"{mod.DisplayName} is selected");
+                }
+            }
+               
+            foreach (var item in e.RemovedItems)
+            {
+                ModViewModel? mod = item as ModViewModel;
+                if (mod != null)
+                {
+                    mod.IsSelected = false;
+                    Console.WriteLine($"{mod.DisplayName} is no longer selected");
+                }
+            }
+                
+
             List<ModViewModel> selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
 
             if (selectedItems?.Count == 1)
             {
-                ModViewModel? mod = selectedItems[0] as ModViewModel;
+                ModViewModel? mod = selectedItems[0];
 
                 if (mod != null)
                 {
                     ModService.GetInstance().CheckForConflicts(mod);
                 }
-            } else if (selectedItems?.Count > 1)
+            }
+            else if (selectedItems?.Count > 1)
             {
                 ModService.GetInstance().ClearConflictWindow();
 

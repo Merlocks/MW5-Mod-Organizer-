@@ -174,10 +174,11 @@
                       dd:DragDrop.SelectDroppedItems="True" 
                       dd:DragDrop.DropHandler="{Binding}" 
                       dd:DragDrop.DropTargetAdornerBrush="#484D54"
+                      VirtualizingPanel.VirtualizationMode="Recycling"
                       SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}">
                 <behaviors:Interaction.Triggers>
                     <behaviors:EventTrigger EventName="SelectionChanged">
-                        <behaviors:InvokeCommandAction Command="{Binding ModsOverviewSelectionChangedCommand}"/>
+                        <behaviors:InvokeCommandAction Command="{Binding ModsOverviewSelectionChangedCommand}" PassEventArgsToCommand="True"/>
                     </behaviors:EventTrigger>
                 </behaviors:Interaction.Triggers>
                 <DataGrid.Columns>

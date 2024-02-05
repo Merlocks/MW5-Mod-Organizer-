@@ -207,6 +207,7 @@ namespace MW5_Mod_Organizer_WPF.Services
                         {
                             OverwrittenBy.Add(ModVM2);
                             ModVM2.ModViewModelStatus = ModViewModelConflictStatus.Overwrites;
+                            Console.WriteLine($"{ModVM.DisplayName} is overwritten by {ModVM2.DisplayName}");
                         }
 
                         //ModVM overwrites ModVM2
@@ -214,6 +215,7 @@ namespace MW5_Mod_Organizer_WPF.Services
                         {
                             Overwrites.Add(ModVM2);
                             ModVM2.ModViewModelStatus = ModViewModelConflictStatus.OverwrittenBy;
+                            Console.WriteLine($"{ModVM.DisplayName} overwrites {ModVM2.DisplayName}");
                         }
                     }
                 }

@@ -51,13 +51,13 @@
                 <Setter Property="Background" Value="#FFF5F5F5"/>
                 <Setter Property="BorderBrush" Value="#FFC8C8C8"/>
             </Trigger>
-            <MultiTrigger>
+            <!--<MultiTrigger>
                 <MultiTrigger.Conditions>
                     <Condition Property="IsSelected" Value="True"/>
                     <Condition Property="Selector.IsSelectionActive" Value="False"/>
                 </MultiTrigger.Conditions>
                 <Setter Property="Background" Value="#dfdfdf"/>
-            </MultiTrigger>
+            </MultiTrigger>-->
             <DataTrigger Binding="{Binding ModViewModelStatus}" Value="Overwrites">
                 <Setter Property="BorderBrush" Value="Red"/>
                 <Setter Property="Background" Value="#FFFFBDBD"/>
