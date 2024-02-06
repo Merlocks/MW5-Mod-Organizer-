@@ -25,7 +25,6 @@ namespace MW5_Mod_Organizer_WPF
     /// </changelog>
 
     /// <TODO>
-    /// Select the mods that were reset to defaults
     /// [BUG] gameVersion doesn't update on deployment unless changed first
     /// </TODO>
     public partial class MainWindow : Window

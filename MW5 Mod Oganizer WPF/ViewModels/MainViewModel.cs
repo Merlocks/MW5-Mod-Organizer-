@@ -419,6 +419,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                             // Otherwise ObservableProperty will not be fired and View won't update
                             item.IsEnabled = backup.IsEnabled;
                             item.LoadOrder = backup.LoadOrder;
+                            item.GameVersion = backup.GameVersion;
                             item.ModViewModelStatus = backup.ModViewModelStatus;
                             item._mod = backup._mod;
 
