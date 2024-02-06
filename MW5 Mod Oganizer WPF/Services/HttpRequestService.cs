@@ -11,7 +11,7 @@ namespace MW5_Mod_Organizer_WPF.Services
     {
         static readonly HttpClient client = new HttpClient();
 
-        public async Task Main()
+        public async Task<string> Main()
         {
             // Call asynchronous network methods in a try/catch block to handle exceptions.
             try
@@ -23,11 +23,13 @@ namespace MW5_Mod_Organizer_WPF.Services
                 // string responseBody = await client.GetStringAsync(uri);
 
                 Console.WriteLine(responseBody);
+                return responseBody;
             }
             catch (HttpRequestException e)
             {
                 Console.WriteLine("\nException Caught!");
                 Console.WriteLine("Message :{0} ", e.Message);
+                return string.Empty;
             }
         }
     }

@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -99,6 +100,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
         [ObservableProperty]
         private bool isLoading;
+
+        [ObservableProperty]
+        private bool isUpdateAvailable;
 
         /// <summary>
         /// Constructor
@@ -447,7 +451,17 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         public async Task LoadedAsync()
         {
             HttpRequestService requestService = new HttpRequestService();
-            await requestService.Main();
+            string json = await requestService.Main();
+
+            if (json != string.Empty) 
+            {
+                VersionDto? response = JsonSerializer.Deserialize<VersionDto>(json);
+
+                if (response != null && response.Version != Properties.Settings.Default.Properties["Version"].ToString())
+                {
+                    this.IsUpdateAvailable = true;
+                } else { this.IsUpdateAvailable = false; }
+            }
         }
 
         [RelayCommand]
