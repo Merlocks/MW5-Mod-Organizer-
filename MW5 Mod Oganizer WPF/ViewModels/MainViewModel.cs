@@ -456,8 +456,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             if (json != string.Empty) 
             {
                 VersionDto? response = JsonSerializer.Deserialize<VersionDto>(json);
+                string localVersion = Properties.Settings.Default.Properties["Version"].DefaultValue.ToString()!;
 
-                if (response != null && response.Version != Properties.Settings.Default.Properties["Version"].ToString())
+                if (response != null && response.Version != localVersion)
                 {
                     this.IsUpdateAvailable = true;
                 } else { this.IsUpdateAvailable = false; }
