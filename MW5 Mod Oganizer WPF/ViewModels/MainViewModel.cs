@@ -426,6 +426,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                             int currentIndex = ModService.GetInstance().ModVMCollection.IndexOf(item);
 
                             ModService.GetInstance().MoveMod(currentIndex, targetIndex);
+
+                            item.IsSelected = true;
                         }
                     }
 
