@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows.Forms;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 using MW5_Mod_Organizer_WPF.Models;
 using MW5_Mod_Organizer_WPF.Services;
 
@@ -12,6 +13,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
     public partial class ModViewModel : ObservableObject
     {
         public Mod _mod;
+        private MainViewModel? _mainViewModel;
 
         /// <summary>
         /// Read-only properties used as Data within the View
@@ -59,7 +61,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         private ModViewModelConflictStatus modViewModelStatus;
 
         [ObservableProperty]
-        private bool isSelected = false;
+        private bool isSelected;
 
         /// <summary>
         /// Constructor
@@ -67,6 +69,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         public ModViewModel(Mod mod)
         {
             _mod = mod;
+            _mainViewModel = App.Current.Services.GetService<MainViewModel>();
+
             ModViewModelStatus = ModViewModelConflictStatus.None;
             IsEnabled = _mod.IsEnabled;
             GameVersion = _mod.GameVersion;
@@ -104,11 +108,15 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             {
                 if (Directory.Exists(this.Path))
                 {
+                    _mainViewModel!.LoadingContext = $"Removing {this.DisplayName}";
+                    
                     Directory.Delete(this.Path, true);
                     ModService.GetInstance().ModVMCollection.Remove(this);
 
                     // Recalculate loadorder by index positions
                     foreach (var item in ModService.GetInstance().ModVMCollection) item.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(item);
+
+                    _mainViewModel!.LoadingContext = string.Empty;
                 } else
                 {
                     message = "Could not find the path to this Mod folder";

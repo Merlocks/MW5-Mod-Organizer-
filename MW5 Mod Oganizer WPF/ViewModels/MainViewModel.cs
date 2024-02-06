@@ -76,9 +76,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         private bool isZipDropVisible;
 
         [ObservableProperty]
-        private string loadingContext;
+        private string? loadingContext;
 
-        partial void OnLoadingContextChanged(string value)
+        partial void OnLoadingContextChanged(string? value)
         {
             if (value == string.Empty)
             {
@@ -456,7 +456,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 }
             }
                 
-
             List<ModViewModel> selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
 
             if (selectedItems?.Count == 1)
@@ -476,7 +475,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 {
                     if (item != null)
                     {
-                        item.ModViewModelStatus = Models.ModViewModelConflictStatus.None;
+                        item.ModViewModelStatus = ModViewModelConflictStatus.None;
                     }
                 }
             }
@@ -494,38 +493,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             
             DeploymentNecessary = true;
         }
-
-        //[RelayCommand]
-        //public void AddModButton()
-        //{
-        //    var dialog = new OpenFileDialog();
-        //    dialog.Title = "Open Mod Archive";
-        //    dialog.Filter = "Mod Archive (*.zip *.rar *.7z)|*.zip;*.rar;*.7z";
-        //    dialog.FilterIndex = 0;
-        //    dialog.Multiselect = false;
-        //    dialog.CheckFileExists = true;
-        //    dialog.CheckPathExists = true;
-
-        //    DialogResult dialogResult = dialog.ShowDialog();
-
-        //    if (dialogResult == DialogResult.OK)
-        //    {
-        //        string targetFolder = PrimaryFolderPath;
-        //        string sourceCompressedFile = dialog.FileName;
-
-        //        // SharpCompress library to extract and copy contents compressed files to PrimaryModFolder
-        //        // GitHub at: https://github.com/adamhathcock/sharpcompress
-        //        // Supports *.zip, *.rar and *.7z
-        //        var archive = ArchiveFactory.Open(sourceCompressedFile);
-        //        foreach (var entry in archive.Entries)
-        //        {
-        //            if (!entry.IsDirectory)
-        //            {
-        //                entry.WriteToDirectory(targetFolder, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
-        //            }
-        //        }
-        //    }
-        //}
 
         [RelayCommand(CanExecute = nameof(CanAddMod))]
         public async Task AddModButtonAsync()
@@ -578,7 +545,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 }).ContinueWith(_ =>
                 {
                     // This code will run on the main thread after the AddModButtonAsync function is completed
-                    // Insert mod into list
+                    // Inserts mod into list
                     Mod? mod = JsonConverterFacade.JsonToMod(PrimaryFolderPath + @"\" + modFolderPath);
 
                     if (mod != null)
