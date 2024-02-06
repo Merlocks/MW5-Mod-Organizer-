@@ -42,8 +42,6 @@ namespace MW5_Mod_Organizer_WPF
             this.DataContext = _mainViewModel;
 
             UpdateModGridView();
-
-            foreach (var item in ModService.GetInstance().ModVMCollection) Console.WriteLine($"{item.DisplayName}'s selection status is {item.IsSelected}");
         }
 
         private void ResizeConflictWindow(object sender, DragDeltaEventArgs e) 

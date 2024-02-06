@@ -11,5 +11,8 @@
     <Setting Name="SecondaryPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="Version" Type="System.String" Scope="User">
+      <Value Profile="(Default)">2.0.0</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

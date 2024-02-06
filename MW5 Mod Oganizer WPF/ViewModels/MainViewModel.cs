@@ -37,7 +37,15 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         /// Observable properties used for data binding within the View
         /// </summary>
         [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(AddModButtonCommand))]
+        [NotifyCanExecuteChangedFor(
+            nameof(AddModButtonCommand), 
+            nameof(OpenSecondaryFolderPathCommand),
+            nameof(ArrowDownCommand),
+            nameof(ArrowUpCommand),
+            nameof(DeployCommand),
+            nameof(UndoCommand),
+            nameof(ClearCommand),
+            nameof(ResetToDefaultCommand))]
         private string? primaryFolderPath;
 
         partial void OnPrimaryFolderPathChanging(string? value)
@@ -167,7 +175,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
         public void OpenSecondaryFolderPath()
         {
             if (!string.IsNullOrEmpty(PrimaryFolderPath) && PrimaryFolderPath != SecondaryFolderPath)
@@ -214,7 +222,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
         public void ArrowDown()
         {
             List<ModViewModel> selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
@@ -256,7 +264,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
         public void ArrowUp()
         {
             List<ModViewModel> selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
@@ -301,7 +309,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
         public void Deploy()
         {
             if (string.IsNullOrEmpty(PrimaryFolderPath))
@@ -356,7 +364,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
         public void Undo()
         {
             ModService.GetInstance().GetMods(false);
@@ -372,7 +380,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             DeploymentNecessary = false;
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
         public void Clear()
         {
             PrimaryFolderPath = string.Empty;
@@ -385,7 +393,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             DeploymentNecessary = false;
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
         public void ResetToDefault()
         {
             try
@@ -494,7 +502,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             DeploymentNecessary = true;
         }
 
-        [RelayCommand(CanExecute = nameof(CanAddMod))]
+        [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
         public async Task AddModButtonAsync()
         {
             var dialog = new OpenFileDialog
@@ -578,15 +586,10 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
         }
 
-        private bool CanAddMod()
+        private bool CanExecuteCommands()
         {
-            if (string.IsNullOrEmpty(PrimaryFolderPath))
-            {
-                return false;
-            } else
-            {
-                return true;
-            }
+            bool result = string.IsNullOrEmpty(PrimaryFolderPath) ? false : true;
+            return result;
         }
         #endregion
 
