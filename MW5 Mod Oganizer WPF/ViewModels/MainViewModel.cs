@@ -601,9 +601,10 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                         foreach(var item in ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected)) item.IsSelected = false;
                         modVM.IsSelected = true;
+
+                        this.DeploymentNecessary = true;
                     }
 
-                    this.DeploymentNecessary = true;
                     this.LoadingContext = string.Empty;
                 }, TaskScheduler.FromCurrentSynchronizationContext());
             }
