@@ -15,6 +15,11 @@
         WindowStartupLocation="CenterOwner"
         UseLayoutRounding="True" 
         Icon="/favicon.ico">
+    <behaviors:Interaction.Triggers>
+        <behaviors:EventTrigger EventName="Loaded">
+            <behaviors:InvokeCommandAction Command="{Binding LoadedCommand}"/>
+        </behaviors:EventTrigger>
+    </behaviors:Interaction.Triggers>
     <Grid>
         <!--Grid definitions-->
         <Grid.ColumnDefinitions>
@@ -487,6 +492,11 @@
                 </MenuItem>
             </Menu>
         </StackPanel>
+        <Button Grid.Row="0" 
+                Grid.Column="0" 
+                Grid.ColumnSpan="3"
+                HorizontalAlignment="Right"
+                Content="Update available!"/>
     </Grid>
 </Window>
     

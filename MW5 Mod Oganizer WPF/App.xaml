@@ -18,6 +18,7 @@
                 <ResourceDictionary Source="Themes/UI/DeploymentReminder.xaml"/>
                 <ResourceDictionary Source="Themes/Button/MenuItemContextTheme.xaml"/>
                 <ResourceDictionary Source="Themes/Button/ButtonAddModTheme.xaml"/>
+                <ResourceDictionary Source="Themes/Button/ButtonUpdateAvailableTheme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

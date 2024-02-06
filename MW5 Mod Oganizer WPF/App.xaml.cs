@@ -5,6 +5,7 @@ using MW5_Mod_Organizer_WPF.ViewModels;
 using MW5_Mod_Organizer_WPF.Properties;
 using System;
 using System.Windows;
+using System.Threading.Tasks;
 
 namespace MW5_Mod_Organizer_WPF
 {
@@ -59,6 +60,7 @@ namespace MW5_Mod_Organizer_WPF
             services.AddTransient<FileHandlerService>();
             services.AddTransient<JsonHandlerService>();
             services.AddSingleton<ModService>();
+            services.AddSingleton<HttpRequestService>();
 
             // Facades
             services.AddTransient<JsonConverterFacade>();

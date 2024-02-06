@@ -444,6 +444,13 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         [RelayCommand]
+        public async Task LoadedAsync()
+        {
+            HttpRequestService requestService = new HttpRequestService();
+            await requestService.Main();
+        }
+
+        [RelayCommand]
         public void ModsOverviewSelectionChanged(SelectionChangedEventArgs e)
         {
             foreach (var item in e.AddedItems)
