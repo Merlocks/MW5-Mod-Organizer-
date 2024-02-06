@@ -453,7 +453,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             HttpRequestService requestService = new HttpRequestService();
             string json = await requestService.Main();
 
-            if (json != string.Empty) 
+            if (json != string.Empty)
             {
                 VersionDto? response = JsonSerializer.Deserialize<VersionDto>(json);
                 string localVersion = Properties.Settings.Default.Properties["Version"].DefaultValue.ToString()!;
@@ -461,7 +461,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 if (response != null && response.Version != localVersion)
                 {
                     this.IsUpdateAvailable = true;
-                } else { this.IsUpdateAvailable = false; }
+                }
+                else { this.IsUpdateAvailable = false; }
             }
         }
 

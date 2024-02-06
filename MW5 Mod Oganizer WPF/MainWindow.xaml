@@ -51,50 +51,10 @@
                          VerticalAlignment="Center"
                          Style="{StaticResource TextBoxGameVersionTheme}">
                 </TextBox>
-                <Button Command="{Binding ArrowUpCommand}">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <ContentPresenter/>
-                        </ControlTemplate>
-                    </Button.Template>
-                    <TextBlock Text="&#x1F81D;"
-                               FontSize="25"
-                               Margin="20 0 0 0"
-                               Cursor="Hand">
-                        <TextBlock.Style>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="Foreground" Value="#484D54"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Foreground" Value="#F7F5F2"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Style>
-                    </TextBlock>
-                </Button>
-                <Button Command="{Binding ArrowDownCommand}">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <ContentPresenter/>
-                        </ControlTemplate>
-                    </Button.Template>
-                    <TextBlock Text="&#x1F81F;"
-                               FontSize="25"
-                               Margin="20 0 0 0"
-                               Cursor="Hand">
-                        <TextBlock.Style>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="Foreground" Value="#484D54"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Foreground" Value="#F7F5F2"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Style>
-                    </TextBlock>
-                </Button>
+                <Button Style="{StaticResource ArrowUpTheme}" 
+                        Command="{Binding ArrowUpCommand}"/>
+                <Button Style="{StaticResource ArrowDownTheme}" 
+                        Command="{Binding ArrowDownCommand}"/>
                 <Button Content="Deploy"
                         Height="25"
                         Margin="10 0 0 0"
@@ -497,6 +457,7 @@
                 Grid.Column="0" 
                 Grid.ColumnSpan="3"
                 HorizontalAlignment="Right"
+                Style="{StaticResource UpdateAvailableTheme}"
                 Command="{Binding VisitOnNexusCommand}"/>
     </Grid>
 </Window>
