@@ -22,13 +22,10 @@ namespace MW5_Mod_Organizer_WPF.Services
                 // Above three lines can be replaced with new helper method below
                 // string responseBody = await client.GetStringAsync(uri);
 
-                Console.WriteLine(responseBody);
                 return responseBody;
             }
             catch (HttpRequestException e)
             {
-                Console.WriteLine("\nException Caught!");
-                Console.WriteLine("Message :{0} ", e.Message);
                 return string.Empty;
             }
         }
