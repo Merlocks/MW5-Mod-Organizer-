@@ -501,7 +501,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     ModService.GetInstance().CheckForConflicts(mod);
                 }
             }
-            else if (selectedItems?.Count > 1)
+            else if (selectedItems?.Count > 1 || selectedItems?.Count < 1)
             {
                 ModService.GetInstance().ClearConflictWindow();
 
@@ -512,7 +512,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         item.ModViewModelStatus = ModViewModelConflictStatus.None;
                     }
                 }
-            }
+            } 
         }
 
         [RelayCommand]
