@@ -15,13 +15,13 @@ namespace MW5_Mod_Organizer_WPF
     /// </summary>
 
     /// <changelog> 
-    /// Fixed when removing mod that has conflicts, conflicts won't disappear
-    /// Fixed when deselecting mod that showed conflicts, conflicts won't disappear
-    /// Allow enabling and disabling all selected mods
+    /// Fixed when removing mod that has conflicts, conflicts wouldn't disappear
+    /// Fixed when deselecting mod through Ctrl + LMB that showed conflicts, conflicts wouldn't disappear
+    /// You can now enable and disable all selected mods by context action
     /// </changelog>
 
     /// <TODO>
-    /// Show label in  conflict list to hint at selecting mod from above to show the conflicted files
+    /// Show label in conflict list to hint at selecting mod from above to show the conflicted files
     /// </TODO>
     public partial class MainWindow : Window
     {
