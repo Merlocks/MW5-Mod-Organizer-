@@ -153,6 +153,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 }
             }
 
+            if (selectedItems != null && selectedItems.Count == 1 && isChanged) { ModService.GetInstance().CheckForConflicts(selectedItems[0]); }
             if (!_mainViewModel!.DeploymentNecessary && isChanged) _mainViewModel!.DeploymentNecessary = true;
         }
 
@@ -169,6 +170,13 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     item.IsEnabled = false;
                     isChanged = true; 
                 }
+            }
+
+            if (selectedItems != null && selectedItems.Count == 1 && isChanged) 
+            {
+                ModService.GetInstance().ClearConflictWindow();
+
+                foreach (var item in ModService.GetInstance().ModVMCollection) { item.ModViewModelStatus = ModViewModelConflictStatus.None; }
             }
 
             if (!_mainViewModel!.DeploymentNecessary && isChanged) _mainViewModel!.DeploymentNecessary = true;
