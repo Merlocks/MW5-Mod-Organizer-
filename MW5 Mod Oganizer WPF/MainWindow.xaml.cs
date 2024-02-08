@@ -15,17 +15,12 @@ namespace MW5_Mod_Organizer_WPF
     /// </summary>
 
     /// <changelog> 
-    /// Updated layout
-    /// Mod configurations will now be backed up upon first loading
-    /// Added Reset to Defaults button to revert mod configuration to backed up configuration
-    /// Added version number column when exporting loadorder.txt
-    /// Conflict Window can now be resized in width
-    /// Improved notification when changes are made to trigger on more actions
-    /// Removed Set Recovery button and Reset button (Will be replaced with Profiles later on)
+    /// Fixed when removing mod that has conflicts, conflicts won't disappear
     /// </changelog>
 
     /// <TODO>
-    /// [BUG] gameVersion doesn't update on deployment unless changed first
+    /// Show label in  conflict list to hint at selecting mod from above to show the conflicted files
+    /// Allow deselecting mods by clicking on them again
     /// </TODO>
     public partial class MainWindow : Window
     {

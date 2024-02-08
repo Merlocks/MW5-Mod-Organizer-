@@ -112,9 +112,14 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     
                     Directory.Delete(this.Path, true);
                     ModService.GetInstance().ModVMCollection.Remove(this);
+                    ModService.GetInstance().ClearConflictWindow();
 
                     // Recalculate loadorder by index positions
-                    foreach (var item in ModService.GetInstance().ModVMCollection) item.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(item);
+                    foreach (var item in ModService.GetInstance().ModVMCollection)
+                    {
+                        item.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(item);
+                        item.ModViewModelStatus = ModViewModelConflictStatus.None;
+                    }
 
                     _mainViewModel!.LoadingContext = string.Empty;
                 } else
