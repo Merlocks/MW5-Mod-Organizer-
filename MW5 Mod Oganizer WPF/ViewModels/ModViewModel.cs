@@ -100,7 +100,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public void DeleteModFolder()
         {
-            string message = $"Are you sure you want to delete {DisplayName} from your Mods folder?\n\nThis action cannot be undone.";
+            string message = $"Are you sure you want to delete {this.DisplayName} from your Mods folder?\n\nThis action cannot be undone.";
             string caption = "Warning";
             MessageBoxButtons buttons = MessageBoxButtons.YesNo;
             MessageBoxIcon icon = MessageBoxIcon.Warning;

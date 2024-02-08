@@ -43,8 +43,9 @@
                             </SelectiveScrollingGrid>
                             <Border.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="Enable selection" Command="{Binding EnableSelectedModsCommand}"/>
-                                    <MenuItem Header="Disable selection" Command="{Binding DisableSelectedModsCommand}"/>
+                                    <MenuItem Header="Enable selected" Command="{Binding EnableSelectedModsCommand}"/>
+                                    <MenuItem Header="Disable selected" Command="{Binding DisableSelectedModsCommand}"/>
+                                    <Separator/>
                                     <MenuItem Header="Remove Mod.." Command="{Binding DeleteModFolderCommand}"/>
                                     <Separator/>
                                     <MenuItem Header="Open in Explorer" Command="{Binding OpenModFolderCommand}"/>
