@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -78,7 +80,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             if (_mod.LoadOrder != null && _mod.LoadOrder >= 0)
             {
                 LoadOrder = (decimal)_mod.LoadOrder;
-            } else if (_mod.LoadOrder == null || _mod.LoadOrder < 0)
+            }
+            else if (_mod.LoadOrder == null || _mod.LoadOrder < 0)
             {
                 _mod.LoadOrder = 0;
                 LoadOrder = 0;
@@ -95,7 +98,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         [RelayCommand]
-        public void DeleteModFolder() 
+        public void DeleteModFolder()
         {
             string message = $"Are you sure you want to delete {DisplayName} from your Mods folder?\n\nThis action cannot be undone.";
             string caption = "Warning";
@@ -109,7 +112,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 if (Directory.Exists(this.Path))
                 {
                     _mainViewModel!.LoadingContext = $"Removing {this.DisplayName}";
-                    
+
                     Directory.Delete(this.Path, true);
                     ModService.GetInstance().ModVMCollection.Remove(this);
                     ModService.GetInstance().ClearConflictWindow();
@@ -122,7 +125,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     }
 
                     _mainViewModel!.LoadingContext = string.Empty;
-                } else
+                }
+                else
                 {
                     message = "Could not find the path to this Mod folder";
                     caption = "Error";
@@ -132,6 +136,42 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     MessageBox.Show(message, caption, buttons, icon);
                 }
             }
+        }
+
+        [RelayCommand]
+        public void EnableSelectedMods()
+        {
+            bool isChanged = false;
+            List<ModViewModel> selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
+
+            foreach (var item in selectedItems) 
+            { 
+                if (!item.IsEnabled) 
+                { 
+                    item.IsEnabled = true;
+                    isChanged = true;
+                }
+            }
+
+            if (!_mainViewModel!.DeploymentNecessary && isChanged) _mainViewModel!.DeploymentNecessary = true;
+        }
+
+        [RelayCommand]
+        public void DisableSelectedMods()
+        {
+            bool isChanged = false;
+            List<ModViewModel> selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
+
+            foreach (var item in selectedItems) 
+            {
+                if (item.IsEnabled)
+                {
+                    item.IsEnabled = false;
+                    isChanged = true; 
+                }
+            }
+
+            if (!_mainViewModel!.DeploymentNecessary && isChanged) _mainViewModel!.DeploymentNecessary = true;
         }
     }
 }
