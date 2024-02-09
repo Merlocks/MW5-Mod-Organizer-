@@ -10,12 +10,15 @@ using SharpCompress.Common;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -24,7 +27,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
     public partial class MainViewModel : ObservableObject, GongSolutions.Wpf.DragDrop.IDropTarget
     {
         /// <summary>
-        /// Read-only properties used as DataSource for DataGrids within the View
+        /// Read-only properties
         /// </summary>
         public IEnumerable<ModViewModel> Mods => ModService.GetInstance().ModVMCollection;
 
@@ -513,6 +516,18 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     }
                 }
             } 
+        }
+
+        [RelayCommand]
+        public void OverwrittenBySelectionChanged(SelectionChangedEventArgs e)
+        {
+            
+        }
+
+        [RelayCommand]
+        public void OverwritesSelectionChanged(SelectionChangedEventArgs e)
+        {
+            
         }
 
         [RelayCommand]

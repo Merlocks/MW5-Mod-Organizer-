@@ -22,6 +22,8 @@ namespace MW5_Mod_Organizer_WPF
 
     /// <TODO>
     /// Show label in conflict list to hint at selecting mod from above to show the conflicted files
+    /// -- Probably have to create seperate isSelected properties for "Overwritten by" and "Overwrites"
+    /// -- Move SelectionChanged logic from MainWindow to MainViewModel, commands and event are already setup
     /// </TODO>
     public partial class MainWindow : Window
     {

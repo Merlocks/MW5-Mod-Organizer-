@@ -130,8 +130,7 @@
                       ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
                       RowStyle="{DynamicResource DataGridRowStyle1}"
                       RowDetailsTemplate="{DynamicResource DataGridRowDetailsTemplate1}"
-                      Margin="10" 
-                      Background="Transparent" 
+                      Margin="10"
                       BorderBrush="Transparent"
                       BorderThickness="1"
                       dd:DragDrop.IsDragSource="True" 
@@ -248,10 +247,15 @@
                                   ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
                                   RowStyle="{DynamicResource DataGridConflictRowStyle1}" 
                                   Margin="10" 
-                                  Background="Transparent" 
+                                  Background="Transparent"
                                   BorderBrush="Transparent"
                                   SelectionChanged="DataGridOverwrites_SelectionChanged" 
                                   SelectionMode="Single">
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="SelectionChanged">
+                                    <behaviors:InvokeCommandAction Command="{Binding OverwritesSelectionChangedCommand}" PassEventArgsToCommand="True"/>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Overwrites.."
                                                     Width="*"
@@ -273,10 +277,15 @@
                                   ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
                                   RowStyle="{DynamicResource DataGridConflictRowStyle1}" 
                                   Margin="10" 
-                                  Background="Transparent" 
+                                  Background="Transparent"
                                   BorderBrush="Transparent"
                                   SelectionChanged="DataGridOverwrittenBy_SelectionChanged"
                                   SelectionMode="Single">
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="SelectionChanged">
+                                    <behaviors:InvokeCommandAction Command="{Binding OverwrittenBySelectionChangedCommand}" PassEventArgsToCommand="True"/>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Overwritten by.."
                                                     Width="*"
@@ -297,7 +306,7 @@
                                   ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
                                   RowStyle="{DynamicResource DataGridConflictRowStyle1}" 
                                   Margin="10" 
-                                  Background="Transparent" 
+                                  Background="Transparent"
                                   BorderBrush="Transparent">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Conflicts"
@@ -308,7 +317,7 @@
                             </DataGrid.Columns>
                         </DataGrid>
                     </Border>
-                    
+
                     <Thumb x:Name="leftThumb"
                            Grid.Row="0"
                            Grid.RowSpan="10"
@@ -317,7 +326,8 @@
                            HorizontalAlignment="Left" 
                            VerticalAlignment="Stretch"
                            Cursor="SizeWE"
-                           Opacity="0"/>
+                           Opacity="0">
+                    </Thumb>
                 </Grid>
             </Border>
 
