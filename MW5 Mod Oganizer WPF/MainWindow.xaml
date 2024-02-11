@@ -249,7 +249,6 @@
                                   Margin="10" 
                                   Background="Transparent"
                                   BorderBrush="Transparent"
-                                  SelectionChanged="DataGridOverwrites_SelectionChanged" 
                                   SelectionMode="Single">
                             <behaviors:Interaction.Triggers>
                                 <behaviors:EventTrigger EventName="SelectionChanged">
@@ -279,7 +278,6 @@
                                   Margin="10" 
                                   Background="Transparent"
                                   BorderBrush="Transparent"
-                                  SelectionChanged="DataGridOverwrittenBy_SelectionChanged"
                                   SelectionMode="Single">
                             <behaviors:Interaction.Triggers>
                                 <behaviors:EventTrigger EventName="SelectionChanged">
