@@ -315,6 +315,19 @@
                             </DataGrid.Columns>
                         </DataGrid>
                     </Border>
+                    <TextBlock Text="Select a conflicting mod from above to view manifests"
+                               TextWrapping="Wrap"
+                               FontSize="12"
+                               Opacity="0.4"
+                               IsHitTestVisible="False"
+                               Grid.Row="6"
+                               Grid.Column="0"
+                               Margin="0 0 10 0"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Visibility="{Binding ConflictNotificationState}">
+                        
+                    </TextBlock>
 
                     <Thumb x:Name="leftThumb"
                            Grid.Row="0"

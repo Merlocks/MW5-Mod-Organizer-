@@ -107,6 +107,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [ObservableProperty]
         private bool isUpdateAvailable;
 
+        [ObservableProperty]
+        private Visibility conflictNotificationState = Visibility.Visible;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -635,6 +638,16 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public void OverwrittenBySelectionChanged(SelectionChangedEventArgs e)
         {
+            foreach (var item in e.RemovedItems)
+            {
+                ModViewModel? mod = item as ModViewModel;
+                if (mod != null)
+                {
+                    mod.IsSelectedConflict = false;
+                    ModService.GetInstance().Conflicts.Clear();
+                }
+            }
+
             foreach (var item in e.AddedItems)
             {
                 foreach (var i in ModService.GetInstance().ModVMCollection.Where(m => m.IsSelectedConflict && m != item)) i.IsSelectedConflict = false;
@@ -647,19 +660,31 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 }
             }
 
-            foreach (var item in e.RemovedItems)
+            List<ModViewModel> selectedConflicts = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelectedConflict).ToList();
+
+            if (selectedConflicts.Count == 0)
             {
-                ModViewModel? mod = item as ModViewModel;
-                if (mod != null)
-                {
-                    mod.IsSelectedConflict = false;
-                }
+                ConflictNotificationState = Visibility.Visible;
+            } else
+            {
+                ConflictNotificationState = Visibility.Hidden;
             }
         }
 
         [RelayCommand]
         public void OverwritesSelectionChanged(SelectionChangedEventArgs e)
         {
+
+            foreach (var item in e.RemovedItems)
+            {
+                ModViewModel? mod = item as ModViewModel;
+                if (mod != null)
+                {
+                    mod.IsSelectedConflict = false;
+                    ModService.GetInstance().Conflicts.Clear();
+                }
+            }
+
             foreach (var item in e.AddedItems)
             {
                 foreach (var i in ModService.GetInstance().ModVMCollection.Where(m => m.IsSelectedConflict && m != item)) i.IsSelectedConflict = false;
@@ -672,13 +697,15 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 }
             }
 
-            foreach (var item in e.RemovedItems)
+            List<ModViewModel> selectedConflicts = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelectedConflict).ToList();
+
+            if (selectedConflicts.Count == 0)
             {
-                ModViewModel? mod = item as ModViewModel;
-                if (mod != null)
-                {
-                    mod.IsSelectedConflict = false;
-                }
+                ConflictNotificationState = Visibility.Visible;
+            }
+            else
+            {
+                ConflictNotificationState = Visibility.Hidden;
             }
         }
         #endregion
