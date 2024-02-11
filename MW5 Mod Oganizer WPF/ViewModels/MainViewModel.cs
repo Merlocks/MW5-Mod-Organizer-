@@ -529,13 +529,51 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public void OverwrittenBySelectionChanged(SelectionChangedEventArgs e)
         {
-            
+            foreach (var item in e.AddedItems)
+            {
+                foreach (var i in ModService.GetInstance().ModVMCollection.Where(m => m.IsSelectedConflict && m != item)) i.IsSelectedConflict = false;
+
+                ModViewModel? mod = item as ModViewModel;
+                if (mod != null)
+                {
+                    mod.IsSelectedConflict = true;
+                    ModService.GetInstance().GenerateManifest(mod);
+                }
+            }
+
+            foreach (var item in e.RemovedItems)
+            {
+                ModViewModel? mod = item as ModViewModel;
+                if (mod != null)
+                {
+                    mod.IsSelectedConflict = false;
+                }
+            }
         }
 
         [RelayCommand]
         public void OverwritesSelectionChanged(SelectionChangedEventArgs e)
         {
-            
+            foreach (var item in e.AddedItems)
+            {
+                foreach (var i in ModService.GetInstance().ModVMCollection.Where(m => m.IsSelectedConflict && m != item)) i.IsSelectedConflict = false;
+
+                ModViewModel? mod = item as ModViewModel;
+                if (mod != null)
+                {
+                    mod.IsSelectedConflict = true;
+                    ModService.GetInstance().GenerateManifest(mod);
+                }
+            }
+
+            foreach (var item in e.RemovedItems)
+            {
+                ModViewModel? mod = item as ModViewModel;
+                if (mod != null)
+                {
+                    mod.IsSelectedConflict = false;
+                }
+            }
         }
 
         [RelayCommand]

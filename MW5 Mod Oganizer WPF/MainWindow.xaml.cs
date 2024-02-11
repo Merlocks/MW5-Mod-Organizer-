@@ -17,6 +17,7 @@ namespace MW5_Mod_Organizer_WPF
     /// <changelog> 
     /// Fixed when removing mod that has conflicts, conflicts wouldn't disappear
     /// Fixed when deselecting mod through Ctrl + LMB that showed conflicts, conflicts wouldn't disappear
+    /// Fixed context menu showing for mods in conflict screen
     /// You can now enable and disable all selected mods by context action
     /// Added alternating color to rows
     /// Export loadorder.txt is now a save file dialog instead of an open folder dialog
@@ -63,34 +64,6 @@ namespace MW5_Mod_Organizer_WPF
             } else if (BorderConflictWindow.Visibility == Visibility.Visible)
             {
                 BorderConflictWindow.Visibility = Visibility.Collapsed;
-            }
-        }
-
-        private void DataGridOverwrites_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (DataGridOverwrites.SelectedItem != null)
-            {
-                selectedOverwrite = DataGridOverwrites.SelectedItem as ModViewModel;
-                DataGridOverwrittenBy.SelectedItem = null;
-
-                if (selectedOverwrite != null)
-                {
-                    ModService.GetInstance().GenerateManifest(selectedOverwrite);
-                }
-            }
-        }
-
-        private void DataGridOverwrittenBy_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (DataGridOverwrittenBy.SelectedItem != null)
-            {
-                selectedOverwrittenBy = DataGridOverwrittenBy.SelectedItem as ModViewModel;
-                DataGridOverwrites.SelectedItem = null;
-
-                if (selectedOverwrittenBy != null)
-                {
-                    ModService.GetInstance().GenerateManifest(selectedOverwrittenBy);
-                }
             }
         }
         #endregion
