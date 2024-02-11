@@ -22,6 +22,7 @@ namespace MW5_Mod_Organizer_WPF
     /// Added alternating color to rows
     /// Export loadorder.txt is now a save file dialog instead of an open folder dialog
     /// Added label in conflict list to hint at selecting mod from above to show the conflicted files
+    /// Added tooltips to most interactable elements
     /// </changelog>
 
     /// <TODO>

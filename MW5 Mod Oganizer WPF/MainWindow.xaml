@@ -50,32 +50,60 @@
                          HorizontalAlignment="Left"
                          VerticalAlignment="Center"
                          Style="{StaticResource TextBoxGameVersionTheme}">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Sets the game version of your mods. Should be set as the same version your game is running at."/>
+                    </ToolTipService.ToolTip>
                 </TextBox>
                 <Button Style="{StaticResource ArrowUpTheme}" 
-                        Command="{Binding ArrowUpCommand}"/>
+                        Command="{Binding ArrowUpCommand}">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Moves selected mods to the top of the loadorder."/>
+                    </ToolTipService.ToolTip>
+                </Button>
                 <Button Style="{StaticResource ArrowDownTheme}" 
-                        Command="{Binding ArrowDownCommand}"/>
+                        Command="{Binding ArrowDownCommand}">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Moves selected mods to the bottom of the loadorder."/>
+                    </ToolTipService.ToolTip>
+                </Button>
                 <Button Content="Deploy"
                         Height="25"
                         Margin="10 0 0 0"
                         Command="{Binding DeployCommand}"
-                        Style="{DynamicResource StandaloneButtonTheme}"/>
+                        Style="{DynamicResource StandaloneButtonTheme}">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Deploys your changes and saves them."/>
+                    </ToolTipService.ToolTip>
+                </Button>
                 <Button Content="Undo"
                         Height="25"
                         Margin="10 0 0 0"
                         Command="{Binding UndoCommand}"
-                        Style="{DynamicResource StandaloneButtonTheme}"/>
+                        Style="{DynamicResource StandaloneButtonTheme}">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Undo your changes made in the application."/>
+                    </ToolTipService.ToolTip>
+                </Button>
                 <Button Content="Clear"
                         Height="25"
                         Margin="10 0 0 0"
                         Command="{Binding ClearCommand}"
-                        Style="{DynamicResource StandaloneButtonTheme}"/>
+                        Style="{DynamicResource StandaloneButtonTheme}">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Clears mods and folders from application."/>
+                    </ToolTipService.ToolTip>
+                </Button>
                 <Button Content="Reset to defaults"
                         Height="25"
                         Margin="10 0 0 0"
                         Command="{Binding ResetToDefaultCommand}"
-                        Style="{DynamicResource StandaloneButtonTheme}"/>
+                        Style="{DynamicResource StandaloneButtonTheme}">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Resets the selected mods to their default state."/>
+                    </ToolTipService.ToolTip>
+                </Button>
                 <TextBlock Text="[Loading]"
+                           IsHitTestVisible="False"
                            Foreground="#484D54"
                            FontSize="13"
                            Margin="50 0 10 0"
@@ -95,6 +123,7 @@
                     </TextBlock.Style>
                 </TextBlock>
                 <TextBlock Text="{Binding LoadingContext}"
+                           IsHitTestVisible="False"
                            Foreground="#484D54"
                            FontSize="11"
                            VerticalAlignment="Center"
@@ -197,7 +226,11 @@
                     Grid.RowSpan="3">
             <ToggleButton x:Name="ToggleButtonConflictWindow"
                           Click="ToggleButtonConflictWindow_Click"
-                          Style="{StaticResource ButtonConflictWindowSlider}"/>
+                          Style="{StaticResource ButtonConflictWindowSlider}">
+                <ToolTipService.ToolTip>
+                    <ToolTip Content="Toggles visibility of the conflict window. Shows an overview of mod conflicts if there are any."/>
+                </ToolTipService.ToolTip>
+            </ToggleButton>
             <Border x:Name="BorderConflictWindow"
                     Background="#E0D7D7"
                     Visibility="Collapsed">
@@ -262,6 +295,9 @@
                                                     CanUserSort="False"
                                                     Binding="{Binding DisplayName}"/>
                             </DataGrid.Columns>
+                            <ToolTipService.ToolTip>
+                                <ToolTip Content="List of all mods that are getting overwritten by your selected mod."/>
+                            </ToolTipService.ToolTip>
                         </DataGrid>
                     </Border>
                     <!--Overwritten window-->
@@ -291,6 +327,9 @@
                                                     CanUserSort="False"
                                                     Binding="{Binding DisplayName}"/>
                             </DataGrid.Columns>
+                            <ToolTipService.ToolTip>
+                                <ToolTip Content="List of all mods that overwrite your selected mod."/>
+                            </ToolTipService.ToolTip>
                         </DataGrid>
                     </Border>
                     <!--Manifest window-->
@@ -313,6 +352,9 @@
                                                     CanUserSort="False"
                                                     Binding="{Binding}"/>
                             </DataGrid.Columns>
+                            <ToolTipService.ToolTip>
+                                <ToolTip Content="List of all files that both the selected mod and the conflicting mod have in common."/>
+                            </ToolTipService.ToolTip>
                         </DataGrid>
                     </Border>
                     <TextBlock Text="Select a conflicting mod from above to view manifests"
@@ -392,7 +434,11 @@
                         FontWeight="Normal" 
                         Style="{StaticResource StandaloneButtonTheme}" 
                         Cursor="Hand"
-                        Command="{Binding OpenPrimaryFolderPathCommand}"/>
+                        Command="{Binding OpenPrimaryFolderPathCommand}">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Opens all your mods from selected folder in the application. This should be your main mod folder."/>
+                    </ToolTipService.ToolTip>
+                </Button>
             </StackPanel>
             <!--Secondary mod folder-->
             <StackPanel Orientation="Horizontal"
@@ -415,11 +461,15 @@
                         FontWeight="Normal" 
                         Style="{StaticResource StandaloneButtonTheme}"
                         Cursor="Hand"
-                        Command="{Binding OpenSecondaryFolderPathCommand}"/>
+                        Command="{Binding OpenSecondaryFolderPathCommand}">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Opens all your mods from selected folder in the application. This should be your workshop/epic mod folder."/>
+                    </ToolTipService.ToolTip>
+                </Button>
             </StackPanel>
         </StackPanel>
         
-        <!--File drop-->
+        <!--Add mod-->
         <ContentControl Grid.Column="0"
                         Grid.ColumnSpan="2"
                         Grid.Row="4">
@@ -431,7 +481,11 @@
                                 <Setter.Value>
                                     <Button Content="Add Mod.."
                                             Style="{StaticResource ButtonAddModTheme}"
-                                            Command="{Binding AddModButtonCommand}"/>
+                                            Command="{Binding AddModButtonCommand}">
+                                        <ToolTipService.ToolTip>
+                                            <ToolTip Content="Adds mod to your mod folder and application. Accepts *.zip, *.rar and *.7z"/>
+                                        </ToolTipService.ToolTip>
+                                    </Button>
                                 </Setter.Value>
                             </Setter>
                         </DataTrigger>
@@ -479,7 +533,11 @@
                 Grid.ColumnSpan="3"
                 HorizontalAlignment="Right"
                 Style="{StaticResource UpdateAvailableTheme}"
-                Command="{Binding VisitOnNexusCommand}"/>
+                Command="{Binding VisitOnNexusCommand}">
+            <ToolTipService.ToolTip>
+                <ToolTip Content="Opens the Nexus Mod page."/>
+            </ToolTipService.ToolTip>
+        </Button>
     </Grid>
 </Window>
     
