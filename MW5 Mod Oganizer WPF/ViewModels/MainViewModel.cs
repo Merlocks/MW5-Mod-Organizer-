@@ -461,6 +461,99 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
         }
 
+        [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
+        public async Task AddModButtonAsync()
+        {
+            var dialog = new OpenFileDialog
+            {
+                Title = "Open Mod Archive",
+                Filter = "Mod Archive (*.zip *.rar *.7z)|*.zip;*.rar;*.7z",
+                FilterIndex = 0,
+                Multiselect = false,
+                CheckFileExists = true,
+                CheckPathExists = true
+            };
+
+            DialogResult dialogResult = dialog.ShowDialog();
+
+            if (dialogResult == DialogResult.OK)
+            {
+                string targetFolder = PrimaryFolderPath;
+                string sourceCompressedFile = dialog.FileName;
+                string modFolderPath = "Default";
+
+                this.LoadingContext = "Adding Mod Archive..";
+
+                await Task.Run(async () =>
+                {
+                    // SharpCompress library to extract and copy contents compressed files to PrimaryModFolder
+                    // GitHub at: https://github.com/adamhathcock/sharpcompress
+                    // Supports *.zip, *.rar and *.7z
+                    var archive = ArchiveFactory.Open(sourceCompressedFile);
+                    foreach (var entry in archive.Entries)
+                    {
+                        this.LoadingContext = $"Extracting {entry.Key}";
+                        if (!entry.IsDirectory)
+                        {
+                            if (entry.Key.EndsWith(@"\mod.json"))
+                            {
+                                modFolderPath = entry.Key.Substring(0, entry.Key.IndexOf(@"\mod.json"));
+                            }
+                            else if (entry.Key.EndsWith(@"/mod.json"))
+                            {
+                                modFolderPath = entry.Key.Substring(0, entry.Key.IndexOf(@"/mod.json"));
+                            }
+
+                            await Task.Run(() =>
+                            {
+                                entry.WriteToDirectory(targetFolder, new ExtractionOptions { ExtractFullPath = true, Overwrite = true });
+                            });
+                        }
+                    }
+                }).ContinueWith(_ =>
+                {
+                    // This code will run on the main thread after the AddModButtonAsync function is completed
+                    // Inserts mod into list
+                    Mod? mod = JsonConverterFacade.JsonToMod(PrimaryFolderPath + @"\" + modFolderPath);
+
+                    if (mod != null)
+                    {
+                        ModViewModel modVM = new ModViewModel(mod);
+
+                        if (!File.Exists(PrimaryFolderPath + @"\" + modFolderPath + @"\backup.json"))
+                        {
+                            JsonConverterFacade.Createbackup(PrimaryFolderPath + @"\" + modFolderPath);
+                        }
+
+                        var list = ModService.GetInstance().ModVMCollection.Where(m => m.Path == modVM.Path).ToList();
+
+                        if (list == null || list.Count == 0)
+                        {
+                            ModService.GetInstance().AddMod(modVM);
+                        }
+                        else if (list != null && list.Count > 0)
+                        {
+                            ModService.GetInstance().ModVMCollection.Remove(list[0]);
+                            ModService.GetInstance().AddMod(modVM);
+                        }
+
+                        foreach (var item in ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected)) item.IsSelected = false;
+                        modVM.IsSelected = true;
+
+                        this.DeploymentNecessary = true;
+                    }
+
+                    this.LoadingContext = string.Empty;
+                }, TaskScheduler.FromCurrentSynchronizationContext());
+            }
+        }
+
+        private bool CanExecuteCommands()
+        {
+            bool result = string.IsNullOrEmpty(PrimaryFolderPath) ? false : true;
+            return result;
+        }
+
         [RelayCommand]
         public async Task LoadedAsync()
         {
@@ -478,6 +571,19 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 }
                 else { this.IsUpdateAvailable = false; }
             }
+        }
+
+        [RelayCommand]
+        public void ToggleCheckBox()
+        {
+            List<ModViewModel> selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
+
+            if (selectedItems != null && selectedItems.Count == 1)
+            {
+                ModService.GetInstance().CheckForConflicts(selectedItems[0]!);
+            }
+
+            DeploymentNecessary = true;
         }
 
         [RelayCommand]
@@ -574,110 +680,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     mod.IsSelectedConflict = false;
                 }
             }
-        }
-
-        [RelayCommand]
-        public void ToggleCheckBox()
-        {
-            List<ModViewModel> selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
-
-            if (selectedItems != null && selectedItems.Count == 1)
-            {
-                ModService.GetInstance().CheckForConflicts(selectedItems[0]!);
-            }
-            
-            DeploymentNecessary = true;
-        }
-
-        [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
-        public async Task AddModButtonAsync()
-        {
-            var dialog = new OpenFileDialog
-            {
-                Title = "Open Mod Archive",
-                Filter = "Mod Archive (*.zip *.rar *.7z)|*.zip;*.rar;*.7z",
-                FilterIndex = 0,
-                Multiselect = false,
-                CheckFileExists = true,
-                CheckPathExists = true
-            };
-
-            DialogResult dialogResult = dialog.ShowDialog();
-
-            if (dialogResult == DialogResult.OK)
-            {
-                string targetFolder = PrimaryFolderPath;
-                string sourceCompressedFile = dialog.FileName;
-                string modFolderPath = "Default";
-
-                this.LoadingContext = "Adding Mod Archive..";
-
-                await Task.Run(async () =>
-                {
-                    // SharpCompress library to extract and copy contents compressed files to PrimaryModFolder
-                    // GitHub at: https://github.com/adamhathcock/sharpcompress
-                    // Supports *.zip, *.rar and *.7z
-                    var archive = ArchiveFactory.Open(sourceCompressedFile);
-                    foreach (var entry in archive.Entries)
-                    {
-                        this.LoadingContext = $"Extracting {entry.Key}";
-                        if (!entry.IsDirectory)
-                        {
-                            if (entry.Key.EndsWith(@"\mod.json"))
-                            {
-                                modFolderPath = entry.Key.Substring(0, entry.Key.IndexOf(@"\mod.json"));
-                            } else if (entry.Key.EndsWith(@"/mod.json"))
-                            {
-                                modFolderPath = entry.Key.Substring(0, entry.Key.IndexOf(@"/mod.json"));
-                            }
-                            
-                            await Task.Run(() =>
-                            {
-                                entry.WriteToDirectory(targetFolder, new ExtractionOptions { ExtractFullPath = true, Overwrite = true });
-                            });
-                        }
-                    }
-                }).ContinueWith(_ =>
-                {
-                    // This code will run on the main thread after the AddModButtonAsync function is completed
-                    // Inserts mod into list
-                    Mod? mod = JsonConverterFacade.JsonToMod(PrimaryFolderPath + @"\" + modFolderPath);
-
-                    if (mod != null)
-                    {
-                        ModViewModel modVM = new ModViewModel(mod);
-
-                        if (!File.Exists(PrimaryFolderPath + @"\" + modFolderPath + @"\backup.json"))
-                        {
-                            JsonConverterFacade.Createbackup(PrimaryFolderPath + @"\" + modFolderPath);
-                        }
-
-                        var list = ModService.GetInstance().ModVMCollection.Where(m => m.Path == modVM.Path).ToList();
-
-                        if (list == null || list.Count == 0)
-                        {
-                            ModService.GetInstance().AddMod(modVM);
-                        } else if (list != null && list.Count > 0)
-                        {
-                            ModService.GetInstance().ModVMCollection.Remove(list[0]);
-                            ModService.GetInstance().AddMod(modVM);
-                        }
-
-                        foreach(var item in ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected)) item.IsSelected = false;
-                        modVM.IsSelected = true;
-
-                        this.DeploymentNecessary = true;
-                    }
-
-                    this.LoadingContext = string.Empty;
-                }, TaskScheduler.FromCurrentSynchronizationContext());
-            }
-        }
-
-        private bool CanExecuteCommands()
-        {
-            bool result = string.IsNullOrEmpty(PrimaryFolderPath) ? false : true;
-            return result;
         }
         #endregion
 
