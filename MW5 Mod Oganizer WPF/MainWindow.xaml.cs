@@ -29,9 +29,6 @@ namespace MW5_Mod_Organizer_WPF
     /// </TODO>
     public partial class MainWindow : Window
     {
-        public static ModViewModel? selectedMod = null;
-        public static ModViewModel? selectedOverwrite = null;
-        public static ModViewModel? selectedOverwrittenBy = null;
         private readonly MainViewModel? _mainViewModel;
 
         public MainWindow()
