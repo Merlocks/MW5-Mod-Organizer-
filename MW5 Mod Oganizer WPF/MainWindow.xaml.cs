@@ -34,6 +34,7 @@ namespace MW5_Mod_Organizer_WPF
             this.DataContext = _mainViewModel;
 
             UpdateModGridView();
+            //ModService.GetInstance().CheckForAllConflicts();
         }
 
         private void ResizeConflictWindow(object sender, DragDeltaEventArgs e) 

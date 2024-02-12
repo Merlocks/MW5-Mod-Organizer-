@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace MW5_Mod_Organizer_WPF.Services
 {
@@ -30,6 +32,7 @@ namespace MW5_Mod_Organizer_WPF.Services
         {
             ModList = new List<Mod>();
             ModVMCollection = new ObservableCollection<ModViewModel>();
+            ModVMCollection.CollectionChanged += ModVMCollection_CollectionChanged;
             Overwrites = new ObservableCollection<ModViewModel>();
             OverwrittenBy = new ObservableCollection<ModViewModel>();
             Conflicts = new ObservableCollection<string>();
@@ -230,6 +233,35 @@ namespace MW5_Mod_Organizer_WPF.Services
             }
         }
 
+        // BETA TESTING
+        public async Task CheckForAllConflictsAsync()
+        {
+            await Task.Run(() =>
+            {
+                ObservableCollection<ModViewModel> collection = ModVMCollection;
+
+                Parallel.ForEach(collection.Where(m => m.IsEnabled && m.Manifest != null && m.Manifest.Length != 0), async mod =>
+                {
+                    List<string> modManifestToLower = mod.Manifest!.Select(str => str.ToLower()).ToList();
+
+                    foreach (var modToCompare in collection.Where(m => m != mod && m.IsEnabled && m.Manifest != null && m.Manifest.Length != 0))
+                    {
+                        List<string> modToCompareManifestToLower = modToCompare.Manifest!.Select(str => str.ToLower()).ToList();
+
+                        if (modManifestToLower.Intersect(modToCompareManifestToLower).Any())
+                        {
+                            Application.Current.Dispatcher.Invoke(() => mod.HasConflicts = Visibility.Visible);
+                            break;
+                        }
+                        else if (mod.HasConflicts != Visibility.Hidden)
+                        {
+                            Application.Current.Dispatcher.Invoke(() => mod.HasConflicts = Visibility.Hidden);
+                        }
+                    }
+                });
+            });
+        }
+
         public void GenerateManifest(ModViewModel input)
         {
             Conflicts.Clear();
@@ -260,6 +292,16 @@ namespace MW5_Mod_Organizer_WPF.Services
                     }
                 } 
             }
+        }
+
+        private void ModVMCollection_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            //_ = HandleCollectionChangedAsync();
+        }
+
+        private async Task HandleCollectionChangedAsync()
+        {
+            //await CheckForAllConflictsAsync();
         }
     }
 }

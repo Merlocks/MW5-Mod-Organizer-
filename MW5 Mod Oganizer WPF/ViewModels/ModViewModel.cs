@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Forms;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -68,6 +69,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [ObservableProperty]
         private bool isSelectedConflict;
 
+        [ObservableProperty]
+        private Visibility hasConflicts = Visibility.Hidden;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -108,7 +112,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             MessageBoxButtons buttons = MessageBoxButtons.YesNo;
             MessageBoxIcon icon = MessageBoxIcon.Warning;
 
-            DialogResult result = MessageBox.Show(message, caption, buttons, icon);
+            DialogResult result = System.Windows.Forms.MessageBox.Show(message, caption, buttons, icon);
 
             if (result == DialogResult.Yes)
             {
@@ -136,7 +140,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     buttons = MessageBoxButtons.OK;
                     icon = MessageBoxIcon.Error;
 
-                    MessageBox.Show(message, caption, buttons, icon);
+                    System.Windows.Forms.MessageBox.Show(message, caption, buttons, icon);
                 }
             }
         }

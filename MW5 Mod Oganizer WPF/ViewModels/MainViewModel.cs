@@ -548,6 +548,12 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                     this.LoadingContext = string.Empty;
                 }, TaskScheduler.FromCurrentSynchronizationContext());
+
+                // BETA TESTING
+                await Task.Run( async () =>
+                {
+                    await ModService.GetInstance().CheckForAllConflictsAsync();
+                });
             }
         }
 
@@ -574,6 +580,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 }
                 else { this.IsUpdateAvailable = false; }
             }
+
+            // BETA TESTING
+            await ModService.GetInstance().CheckForAllConflictsAsync();
         }
 
         [RelayCommand]
