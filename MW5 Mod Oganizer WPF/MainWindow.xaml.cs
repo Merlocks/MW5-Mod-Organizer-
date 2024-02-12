@@ -15,14 +15,8 @@ namespace MW5_Mod_Organizer_WPF
     /// </summary>
 
     /// <changelog> 
-    /// Fixed when removing mod that has conflicts, conflicts wouldn't disappear
-    /// Fixed when deselecting mod through Ctrl + LMB that showed conflicts, conflicts wouldn't disappear
-    /// Fixed context menu showing for mods in conflict screen
-    /// You can now enable and disable all selected mods by context action
-    /// Added alternating color to rows
-    /// Export loadorder.txt is now a save file dialog instead of an open folder dialog
-    /// Added label in conflict list to hint at selecting mod from above to show the conflicted files
-    /// Added tooltips to most interactable elements
+    /// Changed alternating color to slightly darker tone for more contrast
+    /// Fixed issue with certain conflicts not picking up correctly
     /// </changelog>
 
     /// <TODO>
