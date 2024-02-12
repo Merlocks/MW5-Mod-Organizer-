@@ -65,7 +65,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="AlternationIndex" Value="1">
-                <Setter Property="Background" Value="#FFF1EDE7"/>
+                <Setter Property="Background" Value="#F2E8E1"/>
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="BorderBrush" Value="#FFC8C8C8"/>
