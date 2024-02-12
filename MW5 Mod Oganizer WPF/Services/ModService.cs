@@ -2,6 +2,7 @@
 using MW5_Mod_Organizer_WPF.Facades;
 using MW5_Mod_Organizer_WPF.Models;
 using MW5_Mod_Organizer_WPF.ViewModels;
+using SharpCompress;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -111,12 +112,12 @@ namespace MW5_Mod_Organizer_WPF.Services
 
             if (mod.LoadOrder > highestIndex) mod.LoadOrder = highestIndex;
 
-            // Create temporary list with contents of ModVMCollection + added mod
+            // Create temporary list with contents of ModVMCollection + added selectedMod
             // Sort temporary list first by Loadorder, then by DisplayName
             List<ModViewModel> list = new List<ModViewModel>(ModVMCollection) { mod };
             list = list.OrderBy(m => m.LoadOrder).ThenBy(m => m.DisplayName).ToList();
 
-            // Insert mod into ModVMCollection by index calculated by temporary list
+            // Insert selectedMod into ModVMCollection by index calculated by temporary list
             ModVMCollection.Insert(list.IndexOf(mod), mod);
 
             // Recalculate loadorder by index positions
@@ -136,7 +137,7 @@ namespace MW5_Mod_Organizer_WPF.Services
                 List<ModViewModel> list = new List<ModViewModel> { currentMod, targetMod };
                 list = list.OrderBy(m => m.DisplayName).ToList();
 
-                // If statement checks in what order the current mod should be inserted
+                // If statement checks in what order the current selectedMod should be inserted
                 // currentMod will be removed and then inserted either infront or behind targetMod depending on DisplayName
                 if (currentMod == list[0])
                 {
@@ -190,55 +191,72 @@ namespace MW5_Mod_Organizer_WPF.Services
             Conflicts.Clear();
         }
 
-        public void CheckForConflicts(ModViewModel ModVM)
+        public void CheckForConflicts(ModViewModel input)
         {
             ClearConflictWindow();
 
-            foreach (var ModVM2 in ModVMCollection.Where(m => m != ModVM && m.Manifest != null))
-            {
-                ModVM2.ModViewModelStatus = ModViewModelConflictStatus.None;
+            string[]? inputManifestToLower = null;
 
-                foreach (var str in ModVM2.Manifest)
+            if (input.Manifest != null)
+            {
+                inputManifestToLower = Array.ConvertAll(input.Manifest, str => str.ToLower());
+            }
+
+            foreach (var mod in ModVMCollection.Where(m => m != input && m.Manifest != null))
+            {
+                mod.ModViewModelStatus = ModViewModelConflictStatus.None;
+
+                foreach (var manifest in mod.Manifest!)
                 {
-                    if (ModVM.Manifest != null && ModVM.Manifest.Contains(str))
+                    string manifestToLower = manifest.ToLower();
+
+                    if (inputManifestToLower != null && inputManifestToLower.Contains(manifestToLower))
                     {
-                        //ModVM gets overwritten by ModVM2
-                        if (ModVMCollection.IndexOf(ModVM) < ModVMCollection.IndexOf(ModVM2) && ModVM.IsEnabled == true && ModVM2.IsEnabled == true && !OverwrittenBy.Contains(ModVM2))
+                        //input gets overwritten by mod
+                        if (ModVMCollection.IndexOf(input) < ModVMCollection.IndexOf(mod) && input.IsEnabled == true && mod.IsEnabled == true && !OverwrittenBy.Contains(mod))
                         {
-                            OverwrittenBy.Add(ModVM2);
-                            ModVM2.ModViewModelStatus = ModViewModelConflictStatus.Overwrites;
+                            OverwrittenBy.Add(mod);
+                            mod.ModViewModelStatus = ModViewModelConflictStatus.Overwrites;
                         }
 
-                        //ModVM overwrites ModVM2
-                        if (ModVMCollection.IndexOf(ModVM) > ModVMCollection.IndexOf(ModVM2) && ModVM.IsEnabled == true && ModVM2.IsEnabled == true && !Overwrites.Contains(ModVM2))
+                        //input overwrites mod
+                        if (ModVMCollection.IndexOf(input) > ModVMCollection.IndexOf(mod) && input.IsEnabled == true && mod.IsEnabled == true && !Overwrites.Contains(mod))
                         {
-                            Overwrites.Add(ModVM2);
-                            ModVM2.ModViewModelStatus = ModViewModelConflictStatus.OverwrittenBy;
+                            Overwrites.Add(mod);
+                            mod.ModViewModelStatus = ModViewModelConflictStatus.OverwrittenBy;
                         }
                     }
                 }
             }
         }
 
-        public void GenerateManifest(ModViewModel ModVM)
+        public void GenerateManifest(ModViewModel input)
         {
             Conflicts.Clear();
 
-            if (ModVM.Manifest != null)
+            if (input.Manifest != null)
             {
-                foreach (string str in ModVM.Manifest)
+                foreach (string manifest in input.Manifest)
                 {
-                    ModViewModel? modViewModel = null;
+                    string[]? selectedModManifestToLower = null;
+                    string manifestToLower = manifest.ToLower();
+                    
+                    ModViewModel? selectedMod = null;
                     List<ModViewModel> selectedItems = ModVMCollection.Where(m => m.IsSelected).ToList();
 
                     if (selectedItems != null && selectedItems.Count == 1)
                     {
-                        modViewModel = selectedItems?[0];
+                        selectedMod = selectedItems?[0];
                     }
 
-                    if (modViewModel != null && modViewModel.Manifest != null && modViewModel.Manifest.Contains(str))
+                    if (selectedMod != null && selectedMod.Manifest != null)
                     {
-                        Conflicts.Add(str);
+                        selectedModManifestToLower = Array.ConvertAll(selectedMod.Manifest, str => str.ToLower());
+                    }
+
+                    if (selectedMod != null && selectedModManifestToLower != null && selectedModManifestToLower.Contains(manifestToLower))
+                    {
+                        Conflicts.Add(manifest);
                     }
                 } 
             }
