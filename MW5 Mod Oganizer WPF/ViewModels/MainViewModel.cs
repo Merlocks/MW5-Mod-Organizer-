@@ -174,13 +174,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     ModService.GetInstance().GetMods(false);
 
                     //Generate loadorder by targetIndex
-                    foreach (var mod in ModService.GetInstance().ModVMCollection)
-                    {
-                        if (mod.LoadOrder != null)
-                        {
-                            mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);
-                        }
-                    }
+                    foreach (var mod in ModService.GetInstance().ModVMCollection) mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);
 
                     await ModService.GetInstance().CheckForAllConflictsAsync();
                 }
@@ -213,13 +207,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         ModService.GetInstance().GetMods(false);
 
                         //Generate loadorder by targetIndex
-                        foreach (var mod in ModService.GetInstance().ModVMCollection)
-                        {
-                            if (mod.LoadOrder != null)
-                            {
-                                mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);
-                            }
-                        }
+                        foreach (var mod in ModService.GetInstance().ModVMCollection) mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);
 
                         await ModService.GetInstance().CheckForAllConflictsAsync();
                     }
@@ -392,13 +380,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         {
             ModService.GetInstance().GetMods(false);
 
-            foreach (var mod in ModService.GetInstance().ModVMCollection)
-            {
-                if (mod.LoadOrder != null)
-                {
-                    mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);
-                }
-            }
+            foreach (var mod in ModService.GetInstance().ModVMCollection) mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);
 
             DeploymentNecessary = false;
 
@@ -494,7 +476,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
             if (dialogResult == DialogResult.OK)
             {
-                string targetFolder = PrimaryFolderPath;
+                string targetFolder = PrimaryFolderPath!;
                 string sourceCompressedFile = dialog.FileName;
                 string modFolderPath = "Default";
 
