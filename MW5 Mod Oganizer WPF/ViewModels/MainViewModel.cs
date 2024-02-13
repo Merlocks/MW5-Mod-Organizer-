@@ -453,12 +453,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
         }
 
-        [RelayCommand]
-        private async Task Test()
-        {
-            await ModService.GetInstance().CheckForAllConflictsAsync();
-        }
-
         [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
         public async Task AddModButtonAsync()
         {

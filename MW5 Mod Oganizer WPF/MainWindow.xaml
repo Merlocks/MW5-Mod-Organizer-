@@ -102,13 +102,6 @@
                         <ToolTip Content="Resets the selected mods to their default state."/>
                     </ToolTipService.ToolTip>
                 </Button>
-                <Button Content="Test async conflict checker"
-                        Height="25"
-                        Margin="10 0 0 0"
-                        Command="{Binding TestCommand}"
-                        Style="{StaticResource StandaloneButtonTheme}">
-                    
-                </Button>
                 <TextBlock Text="[Loading]"
                            IsHitTestVisible="False"
                            Foreground="#484D54"
