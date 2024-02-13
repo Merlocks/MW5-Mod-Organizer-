@@ -20,7 +20,7 @@ namespace MW5_Mod_Organizer_WPF
     /// </changelog>
 
     /// <TODO>
-    /// Set canExecute to false when mod is being added.
+    /// Add a loading window when adding a mod so main application can't be used meanwhile.
     /// </TODO>
     public partial class MainWindow : Window
     {

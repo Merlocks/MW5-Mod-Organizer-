@@ -254,7 +254,6 @@ namespace MW5_Mod_Organizer_WPF.Services
                         if (modManifestToLower.Intersect(modToCompareManifestToLower).Any() && mod.IsEnabled && modToCompare.IsEnabled)
                         {
                             modVisibility[mod] = Visibility.Visible;
-                            //Console.WriteLine($"{mod.DisplayName} has a conflict with {modToCompare.DisplayName}");
                             return;
                         }
                         else
