@@ -238,10 +238,14 @@ namespace MW5_Mod_Organizer_WPF.Services
         {
             await Task.Run(() =>
             {
+                Console.WriteLine("Starting Task.Run() in CheckForAllConflictsAsync");
+
                 ObservableCollection<ModViewModel> collection = ModVMCollection;
 
-                Parallel.ForEach(collection.Where(m => m.IsEnabled && m.Manifest != null && m.Manifest.Length != 0), async mod =>
+                Parallel.ForEach(collection.Where(m => m.IsEnabled && m.Manifest != null && m.Manifest.Length != 0), mod =>
                 {
+                    Console.WriteLine($"Starting Parallel.ForEach for {mod.DisplayName}");
+
                     List<string> modManifestToLower = mod.Manifest!.Select(str => str.ToLower()).ToList();
 
                     foreach (var modToCompare in collection.Where(m => m != mod && m.IsEnabled && m.Manifest != null && m.Manifest.Length != 0))
@@ -251,6 +255,7 @@ namespace MW5_Mod_Organizer_WPF.Services
                         if (modManifestToLower.Intersect(modToCompareManifestToLower).Any())
                         {
                             Application.Current.Dispatcher.Invoke(() => mod.HasConflicts = Visibility.Visible);
+                            Console.WriteLine($"Found conflict for {mod.DisplayName}");
                             break;
                         }
                         else if (mod.HasConflicts != Visibility.Hidden)

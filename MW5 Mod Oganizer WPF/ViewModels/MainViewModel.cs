@@ -464,6 +464,12 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
         }
 
+        [RelayCommand]
+        private async Task Test()
+        {
+            await ModService.GetInstance().CheckForAllConflictsAsync();
+        }
+
         [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
         public async Task AddModButtonAsync()
         {
@@ -550,10 +556,10 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 }, TaskScheduler.FromCurrentSynchronizationContext());
 
                 // BETA TESTING
-                await Task.Run( async () =>
-                {
-                    await ModService.GetInstance().CheckForAllConflictsAsync();
-                });
+                //await Task.Run( async () =>
+                //{
+                //    await ModService.GetInstance().CheckForAllConflictsAsync();
+                //});
             }
         }
 
@@ -582,7 +588,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
 
             // BETA TESTING
-            await ModService.GetInstance().CheckForAllConflictsAsync();
+            //await ModService.GetInstance().CheckForAllConflictsAsync();
         }
 
         [RelayCommand]
