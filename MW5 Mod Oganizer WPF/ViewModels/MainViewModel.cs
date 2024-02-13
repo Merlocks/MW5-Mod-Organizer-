@@ -124,7 +124,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         /// <summary>
         /// Collection of all Commands used within the View
         /// </summary>
-        #region *--- Commands ---*
         [RelayCommand]
         public void ExportLoadorder()
         {
@@ -159,7 +158,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         [RelayCommand]
-        public void OpenPrimaryFolderPath()
+        public async Task OpenPrimaryFolderPath()
         {
             var dialog = new FolderBrowserDialog();
             DialogResult result = dialog.ShowDialog();
@@ -180,6 +179,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                             mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);
                         }
                     }
+
+                    await ModService.GetInstance().CheckForAllConflictsAsync();
                 }
                 else if (dialog.SelectedPath == SecondaryFolderPath)
                 {
@@ -194,7 +195,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
-        public void OpenSecondaryFolderPath()
+        public async Task OpenSecondaryFolderPath()
         {
             if (!string.IsNullOrEmpty(PrimaryFolderPath) && PrimaryFolderPath != SecondaryFolderPath)
             {
@@ -217,6 +218,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                                 mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);
                             }
                         }
+
+                        await ModService.GetInstance().CheckForAllConflictsAsync();
                     }
                     else if (dialog.SelectedPath == PrimaryFolderPath)
                     {
@@ -383,7 +386,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
-        public void Undo()
+        public async Task Undo()
         {
             ModService.GetInstance().GetMods(false);
 
@@ -396,6 +399,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
 
             DeploymentNecessary = false;
+
+            await ModService.GetInstance().CheckForAllConflictsAsync();
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
@@ -556,10 +561,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 }, TaskScheduler.FromCurrentSynchronizationContext());
 
                 // BETA TESTING
-                //await Task.Run( async () =>
-                //{
-                //    await ModService.GetInstance().CheckForAllConflictsAsync();
-                //});
+                //await ModService.GetInstance().CheckForAllConflictsAsync();
             }
         }
 
@@ -592,7 +594,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         [RelayCommand]
-        public void ToggleCheckBox()
+        public async Task ToggleCheckBox()
         {
             List<ModViewModel> selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
 
@@ -600,6 +602,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             {
                 ModService.GetInstance().CheckForConflicts(selectedItems[0]!);
             }
+
+            await ModService.GetInstance().CheckForAllConflictsAsync();
 
             DeploymentNecessary = true;
         }
@@ -723,13 +727,11 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 ConflictNotificationState = Visibility.Hidden;
             }
         }
-        #endregion
 
         /// <summary>
         /// Logic for DragDrop library
         /// Controls Drag and Drop behavior for DataGrid
         /// </summary>
-        #region *--- DragDrop ---*
         public void DragOver(IDropInfo dropInfo)
         {
             DefaultDropHandler defaultDropHandler = new DefaultDropHandler();
@@ -758,6 +760,5 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
             DeploymentNecessary = true;
         }
-        #endregion
     }
 }

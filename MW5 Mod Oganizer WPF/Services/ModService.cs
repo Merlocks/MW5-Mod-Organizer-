@@ -236,7 +236,8 @@ namespace MW5_Mod_Organizer_WPF.Services
         // BETA TESTING
         public async Task CheckForAllConflictsAsync()
         {
-            await Task.Run(() =>
+            await Task.Delay(2000);
+            await Task.Run(async() =>
             {
                 ObservableCollection<ModViewModel> collection = ModVMCollection;
 
@@ -255,7 +256,7 @@ namespace MW5_Mod_Organizer_WPF.Services
                         {
                             modVisibility[mod] = Visibility.Visible;
                             //Console.WriteLine($"{mod.DisplayName} has a conflict with {modToCompare.DisplayName}");
-                            break;
+                            return;
                         }
                         else
                         {
@@ -265,7 +266,7 @@ namespace MW5_Mod_Organizer_WPF.Services
                 });
 
                 // Update UI on dispatcher thread
-                Application.Current.Dispatcher.Invoke(() =>
+                await Application.Current.Dispatcher.InvokeAsync(() =>
                 {
                     foreach (var mod in modVisibility.Keys)
                     {
