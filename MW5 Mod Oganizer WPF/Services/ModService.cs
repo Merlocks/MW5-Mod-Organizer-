@@ -4,6 +4,7 @@ using MW5_Mod_Organizer_WPF.Models;
 using MW5_Mod_Organizer_WPF.ViewModels;
 using SharpCompress;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -238,30 +239,37 @@ namespace MW5_Mod_Organizer_WPF.Services
         {
             await Task.Run(() =>
             {
-                Console.WriteLine("Starting Task.Run() in CheckForAllConflictsAsync");
-
                 ObservableCollection<ModViewModel> collection = ModVMCollection;
+
+                // Use ConcurrentDictionary for thread safety
+                ConcurrentDictionary<ModViewModel, Visibility> modVisibility = new ConcurrentDictionary<ModViewModel, Visibility>();
 
                 Parallel.ForEach(collection.Where(m => m.IsEnabled && m.Manifest != null && m.Manifest.Length != 0), mod =>
                 {
-                    Console.WriteLine($"Starting Parallel.ForEach for {mod.DisplayName}");
-
-                    List<string> modManifestToLower = mod.Manifest!.Select(str => str.ToLower()).ToList();
+                    HashSet<string> modManifestToLower = new HashSet<string>(mod.Manifest!.Select(str => str.ToLower()));
 
                     foreach (var modToCompare in collection.Where(m => m != mod && m.IsEnabled && m.Manifest != null && m.Manifest.Length != 0))
                     {
-                        List<string> modToCompareManifestToLower = modToCompare.Manifest!.Select(str => str.ToLower()).ToList();
+                        HashSet<string> modToCompareManifestToLower = new HashSet<string>(modToCompare.Manifest!.Select(str => str.ToLower()));
 
                         if (modManifestToLower.Intersect(modToCompareManifestToLower).Any())
                         {
-                            Application.Current.Dispatcher.Invoke(() => mod.HasConflicts = Visibility.Visible);
-                            Console.WriteLine($"Found conflict for {mod.DisplayName}");
+                            modVisibility[mod] = Visibility.Visible;
                             break;
                         }
-                        else if (mod.HasConflicts != Visibility.Hidden)
+                        else
                         {
-                            Application.Current.Dispatcher.Invoke(() => mod.HasConflicts = Visibility.Hidden);
+                            modVisibility[mod] = Visibility.Hidden;
                         }
+                    }
+                });
+
+                // Update UI on dispatcher thread
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    foreach (var mod in modVisibility.Keys)
+                    {
+                        mod.HasConflicts = modVisibility[mod];
                     }
                 });
             });
