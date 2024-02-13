@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -105,7 +106,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         [RelayCommand]
-        public void DeleteModFolder()
+        public async Task DeleteModFolder()
         {
             string message = $"Are you sure you want to delete {this.DisplayName} from your Mods folder?\n\nThis action cannot be undone.";
             string caption = "Warning";
@@ -132,6 +133,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     }
 
                     _mainViewModel!.LoadingContext = string.Empty;
+
+                    await ModService.GetInstance().CheckForAllConflictsAsync();
                 }
                 else
                 {
@@ -146,7 +149,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         [RelayCommand]
-        public void EnableSelectedMods()
+        public async Task EnableSelectedMods()
         {
             bool isChanged = false;
             List<ModViewModel> selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
@@ -162,10 +165,11 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
             if (selectedItems != null && selectedItems.Count == 1 && isChanged) { ModService.GetInstance().CheckForConflicts(selectedItems[0]); }
             if (!_mainViewModel!.DeploymentNecessary && isChanged) _mainViewModel!.DeploymentNecessary = true;
+            if (isChanged) { await ModService.GetInstance().CheckForAllConflictsAsync(); }
         }
 
         [RelayCommand]
-        public void DisableSelectedMods()
+        public async Task DisableSelectedMods()
         {
             bool isChanged = false;
             List<ModViewModel> selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
@@ -187,6 +191,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
 
             if (!_mainViewModel!.DeploymentNecessary && isChanged) _mainViewModel!.DeploymentNecessary = true;
+            if (isChanged) { await ModService.GetInstance().CheckForAllConflictsAsync(); }
         }
     }
 }

@@ -9,6 +9,7 @@ using SharpCompress.Archives;
 using SharpCompress.Common;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
@@ -40,6 +41,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         /// <summary>
         /// Observable properties used for data binding within the View
         /// </summary>
+
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(
             nameof(AddModButtonCommand), 
@@ -88,6 +90,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         private bool isZipDropVisible;
 
         [ObservableProperty]
+        private bool isLoading;
+
+        [ObservableProperty]
         private string? loadingContext;
 
         partial void OnLoadingContextChanged(string? value)
@@ -100,9 +105,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 this.IsLoading = true;
             }
         }
-
-        [ObservableProperty]
-        private bool isLoading;
 
         [ObservableProperty]
         private bool isUpdateAvailable;
@@ -498,7 +500,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                 this.LoadingContext = "Adding Mod Archive..";
 
-                await Task.Run(async () =>
+                await Task.Run(() =>
                 {
                     // SharpCompress library to extract and copy contents compressed files to PrimaryModFolder
                     // GitHub at: https://github.com/adamhathcock/sharpcompress
@@ -518,10 +520,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                                 modFolderPath = entry.Key.Substring(0, entry.Key.IndexOf(@"/mod.json"));
                             }
 
-                            await Task.Run(() =>
-                            {
-                                entry.WriteToDirectory(targetFolder, new ExtractionOptions { ExtractFullPath = true, Overwrite = true });
-                            });
+                            entry.WriteToDirectory(targetFolder, new ExtractionOptions { ExtractFullPath = true, Overwrite = true });
                         }
                     }
                 }).ContinueWith(_ =>
@@ -561,8 +560,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 }, TaskScheduler.FromCurrentSynchronizationContext());
 
                 // BETA TESTING
-                //await ModService.GetInstance().CheckForAllConflictsAsync();
-            }
+                await ModService.GetInstance().CheckForAllConflictsAsync();
+            } 
         }
 
         private bool CanExecuteCommands()
@@ -590,7 +589,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
 
             // BETA TESTING
-            //await ModService.GetInstance().CheckForAllConflictsAsync();
+            await ModService.GetInstance().CheckForAllConflictsAsync();
         }
 
         [RelayCommand]

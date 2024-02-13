@@ -20,7 +20,7 @@ namespace MW5_Mod_Organizer_WPF
     /// </changelog>
 
     /// <TODO>
-    /// 
+    /// Set canExecute to false when mod is being added.
     /// </TODO>
     public partial class MainWindow : Window
     {

@@ -236,7 +236,6 @@ namespace MW5_Mod_Organizer_WPF.Services
         // BETA TESTING
         public async Task CheckForAllConflictsAsync()
         {
-            await Task.Delay(2000);
             await Task.Run(async() =>
             {
                 ObservableCollection<ModViewModel> collection = ModVMCollection;
