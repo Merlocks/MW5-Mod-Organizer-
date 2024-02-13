@@ -8,7 +8,7 @@
         xmlns:local="clr-namespace:MW5_Mod_Organizer_WPF.ViewModels"
         mc:Ignorable="d" 
         FontSize="14"
-        Title="MW5 Mod Organizer" 
+        Title="MW5 Mod Organizer - Test Build" 
         Height="720" 
         Width="1080" 
         Background="#D1C9C9" 

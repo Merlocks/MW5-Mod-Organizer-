@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>MW5_Mod_Organizer_WPF</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
