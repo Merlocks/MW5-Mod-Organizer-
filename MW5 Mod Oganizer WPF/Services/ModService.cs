@@ -33,7 +33,6 @@ namespace MW5_Mod_Organizer_WPF.Services
         {
             ModList = new List<Mod>();
             ModVMCollection = new ObservableCollection<ModViewModel>();
-            ModVMCollection.CollectionChanged += ModVMCollection_CollectionChanged;
             Overwrites = new ObservableCollection<ModViewModel>();
             OverwrittenBy = new ObservableCollection<ModViewModel>();
             Conflicts = new ObservableCollection<string>();
@@ -244,17 +243,18 @@ namespace MW5_Mod_Organizer_WPF.Services
                 // Use ConcurrentDictionary for thread safety
                 ConcurrentDictionary<ModViewModel, Visibility> modVisibility = new ConcurrentDictionary<ModViewModel, Visibility>();
 
-                Parallel.ForEach(collection.Where(m => m.IsEnabled && m.Manifest != null && m.Manifest.Length != 0), mod =>
+                Parallel.ForEach(collection.Where(m => m.Manifest != null && m.Manifest.Length != 0), mod =>
                 {
                     HashSet<string> modManifestToLower = new HashSet<string>(mod.Manifest!.Select(str => str.ToLower()));
 
-                    foreach (var modToCompare in collection.Where(m => m != mod && m.IsEnabled && m.Manifest != null && m.Manifest.Length != 0))
+                    foreach (var modToCompare in collection.Where(m => m != mod && m.Manifest != null && m.Manifest.Length != 0))
                     {
                         HashSet<string> modToCompareManifestToLower = new HashSet<string>(modToCompare.Manifest!.Select(str => str.ToLower()));
 
-                        if (modManifestToLower.Intersect(modToCompareManifestToLower).Any())
+                        if (modManifestToLower.Intersect(modToCompareManifestToLower).Any() && mod.IsEnabled && modToCompare.IsEnabled)
                         {
                             modVisibility[mod] = Visibility.Visible;
+                            //Console.WriteLine($"{mod.DisplayName} has a conflict with {modToCompare.DisplayName}");
                             break;
                         }
                         else
@@ -305,16 +305,6 @@ namespace MW5_Mod_Organizer_WPF.Services
                     }
                 } 
             }
-        }
-
-        private void ModVMCollection_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            //_ = HandleCollectionChangedAsync();
-        }
-
-        private async Task HandleCollectionChangedAsync()
-        {
-            //await CheckForAllConflictsAsync();
         }
     }
 }
