@@ -71,7 +71,7 @@ namespace MW5_Mod_Organizer_WPF.Services
                         AddToTempList(primarySubdirectories);
 
                         //Sort temporary list
-                        List<Mod> sortedModList = ModList.OrderBy(m => m.LoadOrder).ToList();
+                        List<Mod> sortedModList = ModList.OrderBy(m => m.LoadOrder).ThenBy(m => m.DisplayName).ToList();
 
                         //Add mods to collection
                         foreach (var mod in sortedModList)
@@ -94,7 +94,7 @@ namespace MW5_Mod_Organizer_WPF.Services
                         AddToTempList(secondarySubdirectories);
 
                         //Sort temporary list
-                        List<Mod> sortedModList = ModList.OrderBy(m => m.LoadOrder).ToList();
+                        List<Mod> sortedModList = ModList.OrderBy(m => m.LoadOrder).ThenBy(m => m.DisplayName).ToList();
 
                         //Add mods to collection
                         foreach (var mod in sortedModList)
