@@ -184,7 +184,7 @@
                     </DataGridTemplateColumn>
                     <DataGridTextColumn Header="Loadorder" 
                                         IsReadOnly="True" 
-                                        MinWidth="100" 
+                                        Width="auto" 
                                         Binding="{Binding LoadOrder, UpdateSourceTrigger=PropertyChanged}" 
                                         CanUserSort="False"/>
                     <DataGridTextColumn Header="Mod" 
@@ -204,9 +204,10 @@
                                        Width="16"
                                        HorizontalAlignment="Stretch"
                                        VerticalAlignment="Stretch"
+                                       Cursor="Help"
                                        Visibility="{Binding HasConflicts}">
                                     <ToolTipService.ToolTip>
-                                        <ToolTip Content="Mod(s) detected altering the same asset(s). This may be intentional, please check before committing load order."/>
+                                        <ToolTip Content="Mod(s) detected altering the same asset(s). &#x0a;This may be intentional, please check before committing loadorder."/>
                                     </ToolTipService.ToolTip>
                                 </Image>
                             </DataTemplate>
@@ -214,13 +215,12 @@
                     </DataGridTemplateColumn>
                     <DataGridTextColumn Header="Author" 
                                         IsReadOnly="True" 
-                                        MinWidth="200" 
+                                        Width="auto" 
                                         Binding="{Binding Author}" 
                                         CanUserSort="False"/>
                     <DataGridTextColumn Header="Version" 
                                         IsReadOnly="True" 
                                         Width="*"
-                                        MinWidth="100"
                                         Binding="{Binding Version}" 
                                         CanUserSort="False"/>
                 </DataGrid.Columns>
