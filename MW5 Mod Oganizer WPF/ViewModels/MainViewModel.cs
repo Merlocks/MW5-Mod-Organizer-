@@ -549,6 +549,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public async Task LoadedAsync()
         {
+            // BETA TESTING
+            await ModService.GetInstance().CheckForAllConflictsAsync();
+
             HttpRequestService requestService = new HttpRequestService();
             string json = await requestService.Main();
 
@@ -563,9 +566,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 }
                 else { this.IsUpdateAvailable = false; }
             }
-
-            // BETA TESTING
-            await ModService.GetInstance().CheckForAllConflictsAsync();
         }
 
         [RelayCommand]
