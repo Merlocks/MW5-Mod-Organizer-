@@ -13,7 +13,8 @@
         Background="#D1C9C9" 
         WindowStartupLocation="CenterOwner"
         UseLayoutRounding="True"
-        Icon="/favicon.ico">
+        Icon="/favicon.ico"
+        SizeChanged="Window_SizeChanged">
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Loaded">
             <behaviors:InvokeCommandAction Command="{Binding LoadedCommand}"/>
@@ -270,8 +271,8 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition x:Name="resizableColumn" 
                                           Width="300"
-                                          MinWidth="200"
-                                          MaxWidth="500"/>
+                                          MinWidth="20"
+                                          />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>

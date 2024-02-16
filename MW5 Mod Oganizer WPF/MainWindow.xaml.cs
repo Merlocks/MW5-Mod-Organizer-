@@ -44,9 +44,11 @@ namespace MW5_Mod_Organizer_WPF
         private void ResizeConflictWindow(object sender, DragDeltaEventArgs e) 
         {
             var thumb = sender as Thumb;
+            var windowWidth = System.Windows.Application.Current.MainWindow.ActualWidth;
 
             if (thumb != null)
             {
+                resizableColumn.MaxWidth = 0.5*windowWidth;
                 resizableColumn.Width = new GridLength(resizableColumn.ActualWidth - e.HorizontalChange * 0.2, GridUnitType.Pixel);
             }
         }
@@ -89,6 +91,17 @@ namespace MW5_Mod_Organizer_WPF
             DataGridColumnNotification.MinWidth = DataGridColumnNotification.ActualWidth;
             DataGridColumnAuthor.MinWidth = DataGridColumnAuthor.ActualWidth;
             DataGridColumnVersion.MinWidth = DataGridColumnVersion.ActualWidth;
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var windowWidth = System.Windows.Application.Current.MainWindow.ActualWidth;
+            var conflictWindowWidth = resizableColumn.ActualWidth;
+
+            if (conflictWindowWidth > windowWidth*0.5) 
+            {
+                resizableColumn.Width = new GridLength(windowWidth*0.5, GridUnitType.Pixel); ;
+            }
         }
     }
 }
