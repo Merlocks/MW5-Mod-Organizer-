@@ -12,7 +12,7 @@
         Width="1080" 
         Background="#D1C9C9" 
         WindowStartupLocation="CenterOwner"
-        UseLayoutRounding="True" 
+        UseLayoutRounding="True"
         Icon="/favicon.ico">
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Loaded">
@@ -166,14 +166,16 @@
                       dd:DragDrop.SelectDroppedItems="True" 
                       dd:DragDrop.DropHandler="{Binding}" 
                       dd:DragDrop.DropTargetAdornerBrush="#484D54"
-                      VirtualizingPanel.VirtualizationMode="Recycling">
+                      VirtualizingPanel.VirtualizationMode="Recycling"
+                      SizeChanged="ModList_SizeChanged">
                 <behaviors:Interaction.Triggers>
                     <behaviors:EventTrigger EventName="SelectionChanged">
                         <behaviors:InvokeCommandAction Command="{Binding ModsOverviewSelectionChangedCommand}" PassEventArgsToCommand="True"/>
                     </behaviors:EventTrigger>
                 </behaviors:Interaction.Triggers>
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn MinWidth="50">
+                    <DataGridTemplateColumn x:Name="DataGridColumnEnabled"
+                                            Width="Auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <CheckBox x:Name="CheckBoxIsEnabled"
@@ -182,20 +184,22 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Loadorder" 
+                    <DataGridTextColumn x:Name="DataGridColumnLoadorder"
+                                        Header="Loadorder" 
                                         IsReadOnly="True" 
-                                        Width="auto" 
+                                        Width="Auto" 
                                         Binding="{Binding LoadOrder, UpdateSourceTrigger=PropertyChanged}" 
                                         CanUserSort="False"/>
-                    <DataGridTextColumn Header="Mod" 
+                    <DataGridTextColumn x:Name="DataGridColumnMod"
+                                        Header="Mod" 
                                         IsReadOnly="True"
-                                        Width="auto"
+                                        Width="Auto"
                                         Binding="{Binding DisplayName}" 
-                                        CanUserSort="False"/>
-                    <DataGridTemplateColumn IsReadOnly="True"
-                                            Width="50"
-                                            MinWidth="50"
-                                            MaxWidth="50"
+                                        CanUserSort="False"
+                                        VirtualizingPanel.VirtualizationMode="Standard"/>
+                    <DataGridTemplateColumn x:Name="DataGridColumnNotification"
+                                            IsReadOnly="True"
+                                            Width="Auto"
                                             CanUserSort="False">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -213,19 +217,23 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Author" 
+                    <DataGridTextColumn x:Name="DataGridColumnAuthor"
+                                        Header="Author" 
                                         IsReadOnly="True" 
-                                        Width="auto" 
+                                        Width="Auto" 
                                         Binding="{Binding Author}" 
                                         CanUserSort="False"/>
-                    <DataGridTextColumn Header="Version" 
+                    <DataGridTextColumn x:Name="DataGridColumnVersion"
+                                        Header="Version" 
                                         IsReadOnly="True" 
-                                        Width="auto"
+                                        Width="Auto"
                                         Binding="{Binding Version}" 
                                         CanUserSort="False"/>
-                    <DataGridTextColumn Header="Source"
+                    <DataGridTextColumn x:Name="DataGridColumnSource"
+                                        Header="Source"
                                         IsReadOnly="True"
                                         Width="*"
+                                        MinWidth="200"
                                         Binding="{Binding Source}"
                                         CanUserSort="False"/>
                 </DataGrid.Columns>

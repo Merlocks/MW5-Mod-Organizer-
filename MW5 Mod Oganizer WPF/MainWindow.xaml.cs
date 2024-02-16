@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Controls;
 
 namespace MW5_Mod_Organizer_WPF
 {
@@ -18,6 +19,7 @@ namespace MW5_Mod_Organizer_WPF
     /// Added Source column to list that shows what folder the mod came from
     /// Changed alternating color to slightly darker tone for more contrast
     /// Adjusted logic behind reset to defaults to be more consistent
+    /// Improved behavior of list when resizing window in width
     /// Fixed issue with certain conflicts not picking up correctly
     /// Fixed ordering of loadorder by FolderName instead of DisplayName if defaultLoadOrder is equal
     /// </changelog>
@@ -31,9 +33,9 @@ namespace MW5_Mod_Organizer_WPF
 
         public MainWindow()
         {
+            _mainViewModel = App.Current.Services.GetService<MainViewModel>();
 
             this.InitializeComponent();
-            _mainViewModel = App.Current.Services.GetService<MainViewModel>();
             this.DataContext = _mainViewModel;
 
             UpdateModGridView();
@@ -78,5 +80,15 @@ namespace MW5_Mod_Organizer_WPF
             }
         }
         #endregion
+
+        private void ModList_SizeChanged(object sender, EventArgs e)
+        {
+            DataGridColumnEnabled.MinWidth = DataGridColumnEnabled.ActualWidth;
+            DataGridColumnLoadorder.MinWidth = DataGridColumnLoadorder.ActualWidth;
+            DataGridColumnMod.MinWidth = DataGridColumnMod.ActualWidth;
+            DataGridColumnNotification.MinWidth = DataGridColumnNotification.ActualWidth;
+            DataGridColumnAuthor.MinWidth = DataGridColumnAuthor.ActualWidth;
+            DataGridColumnVersion.MinWidth = DataGridColumnVersion.ActualWidth;
+        }
     }
 }
