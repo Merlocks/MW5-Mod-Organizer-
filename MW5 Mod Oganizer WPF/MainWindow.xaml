@@ -291,16 +291,15 @@
                             BorderBrush="#FFADADAD"
                             BorderThickness="0 0 3 4"
                             Margin="0 0 10 0">
+                        <TextBlock Text="Conflict window"
+                                   TextOptions.TextFormattingMode="Display"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Foreground="#484D54"
+                                   Margin="0 5 0 0"/>
                     </Border>
 
-                    <TextBlock Grid.Row="0"
-                               Text="Conflict window"
-                               TextOptions.TextFormattingMode="Display"
-                               FontWeight="Bold"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Foreground="#484D54"
-                               Margin="0 5 0 0"/>
                     <!--Overwrites window-->
                     <Border Grid.Row="2"
                             Grid.Column="0"
