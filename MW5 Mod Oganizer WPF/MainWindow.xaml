@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
         xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
         mc:Ignorable="d" 
         FontSize="14"
         Title="MW5 Mod Organizer" 
@@ -520,7 +521,7 @@
             </Menu>
         </StackPanel>
         
-        <!--Loading screen-->
+        <!--Update button-->
         <Button Content="Update available!"
                 Grid.Row="0"
                 Grid.Column="0" 
@@ -532,6 +533,8 @@
                 <ToolTip Content="Opens the Nexus Mod page."/>
             </ToolTipService.ToolTip>
         </Button>
+        
+        <!--Loading screen-->
         <Grid   Grid.Column="0" 
                 Grid.ColumnSpan="99"
                 Grid.Row="0"
@@ -541,7 +544,6 @@
                     Opacity="0.2"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
-                
             </Border>
             <Border Background="#8e8e8e"
                     BorderThickness="0 0 5 8"
@@ -552,15 +554,31 @@
                     Padding="20 10"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center">
-                <TextBlock Text="{Binding LoadingContext}"
-                           TextWrapping="Wrap"
-                           Foreground="#E2E0DD"
-                           FontSize="18"
-                           FontWeight="Bold"
-                           TextOptions.TextFormattingMode="Display"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Center"
-                           IsHitTestVisible="False"/>
+                <Grid>
+                    <TextBlock Text="{Binding LoadingContext}"
+                               TextWrapping="Wrap"
+                               Foreground="#E2E0DD"
+                               FontSize="16"
+                               FontWeight="Bold"
+                               TextOptions.TextFormattingMode="Display"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"
+                               IsHitTestVisible="False">
+                        <TextBlock.Effect>
+                            <DropShadowEffect BlurRadius="0" ShadowDepth="3" RenderingBias="Quality" Color="#B8B7B5"/>
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <Image gif:AnimationBehavior.SourceUri="/gear-gif.gif"
+                           RenderOptions.BitmapScalingMode="Fant"
+                           Height="32"
+                           Width="32"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Bottom">
+                        <Image.Effect>
+                            <DropShadowEffect BlurRadius="0" ShadowDepth="3" RenderingBias="Quality" Color="#B8B7B5"/>
+                        </Image.Effect>
+                    </Image>
+                </Grid>
                 <Border.Effect>
                     <DropShadowEffect BlurRadius="10" Color="Black" ShadowDepth="5" Direction="270" Opacity="0.1"/>
                 </Border.Effect>

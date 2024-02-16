@@ -40,7 +40,9 @@
 
 	<ItemGroup>
 	  <None Remove="favicon.ico" />
+	  <None Remove="gear-gif.gif" />
 	  <None Remove="Images\favicon.ico" />
+	  <None Remove="Images\gear-gif.gif" />
 	  <None Remove="Images\logo.png" />
 	  <None Remove="Images\logo2.png" />
 	  <None Remove="Images\WarningIcon.png" />
@@ -52,6 +54,7 @@
 	  <Content Include="Images\favicon.ico">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Content>
+	  <EmbeddedResource Include="Images\gear-gif.gif" />
 	  <EmbeddedResource Include="Images\logo2.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </EmbeddedResource>
@@ -83,6 +86,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
     <PackageReference Include="SharpCompress" Version="0.36.0" />
+    <PackageReference Include="XamlAnimatedGif" Version="2.2.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -93,6 +97,7 @@
 
   <ItemGroup>
     <Resource Include="favicon.ico" />
+    <Resource Include="gear-gif.gif" />
     <Resource Include="logo2.png" />
     <Resource Include="WarningIcon.png" />
   </ItemGroup>

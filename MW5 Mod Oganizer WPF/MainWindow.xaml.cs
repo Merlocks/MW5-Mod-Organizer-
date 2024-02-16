@@ -17,6 +17,7 @@ namespace MW5_Mod_Organizer_WPF
 
     /// <changelog> 
     /// Added Source column to list that shows what folder the mod came from
+    /// Added proper loading screen when adding mod through MW5MO
     /// Changed alternating color to slightly darker tone for more contrast
     /// Adjusted logic behind reset to defaults to be more consistent
     /// Improved behavior of list when resizing window in width
@@ -27,7 +28,7 @@ namespace MW5_Mod_Organizer_WPF
     /// </changelog>
 
     /// <TODO>
-    /// Add a loading window when adding a mod so main application can't be used meanwhile.
+    /// 
     /// </TODO>
     public partial class MainWindow : Window
     {
