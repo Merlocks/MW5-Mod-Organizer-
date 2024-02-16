@@ -124,8 +124,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             {
                 if (Directory.Exists(this.Path))
                 {
-                    _mainViewModel!.LoadingContext = $"Removing {this.DisplayName}";
-
                     Directory.Delete(this.Path, true);
                     ModService.GetInstance().ModVMCollection.Remove(this);
                     ModService.GetInstance().ClearConflictWindow();
@@ -137,7 +135,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         item.ModViewModelStatus = ModViewModelConflictStatus.None;
                     }
 
-                    _mainViewModel!.LoadingContext = string.Empty;
                     _mainViewModel!.DeploymentNecessary = true;
 
                     await ModService.GetInstance().CheckForAllConflictsAsync();

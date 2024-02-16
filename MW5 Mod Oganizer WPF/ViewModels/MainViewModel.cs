@@ -24,6 +24,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Forms;
 using System.Windows.Input;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
 {
@@ -92,7 +93,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         private bool isZipDropVisible;
 
         [ObservableProperty]
-        private bool isLoading;
+        private Visibility isLoading = Visibility.Hidden;
 
         [ObservableProperty]
         private string? loadingContext;
@@ -101,10 +102,10 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         {
             if (value == string.Empty)
             {
-                this.IsLoading = false;
+                this.IsLoading = Visibility.Hidden;
             } else
             {
-                this.IsLoading = true;
+                this.IsLoading = Visibility.Visible;
             }
         }
 
@@ -467,6 +468,41 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
         [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
         public async Task AddModButtonAsync()
+        {
+            try
+            {
+                var dialog = new OpenFileDialog
+                {
+                    Title = "Open Mod Archive",
+                    Filter = "Mod Archive (*.zip *.rar *.7z)|*.zip;*.rar;*.7z",
+                    FilterIndex = 0,
+                    Multiselect = false,
+                    CheckFileExists = true,
+                    CheckPathExists = true
+                };
+
+                DialogResult dialogResult = dialog.ShowDialog();
+
+                if (dialogResult == DialogResult.OK)
+                {
+                    // Begin loading
+                    this.LoadingContext = "Extracting Mod Archive. Please wait. ";
+
+                    await Task.Delay(6000);
+                    
+                    // End loading
+                    this.LoadingContext = string.Empty;
+                }
+
+
+            } catch (Exception)
+            {
+
+            }
+        }
+
+        [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
+        public async Task AddModButtonOriginalAsync()
         {
             var dialog = new OpenFileDialog
             {

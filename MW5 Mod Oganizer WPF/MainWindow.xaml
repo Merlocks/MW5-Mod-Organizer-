@@ -34,7 +34,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        
+
         <!--Taskbar-->
         <StackPanel Orientation="Vertical"
                     Grid.Row="2"
@@ -102,46 +102,6 @@
                         <ToolTip Content="Resets the selected mods to their default state."/>
                     </ToolTipService.ToolTip>
                 </Button>
-                <TextBlock Text="[Loading]"
-                           IsHitTestVisible="False"
-                           Foreground="#484D54"
-                           FontSize="13"
-                           Margin="50 0 10 0"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Center">
-                    <TextBlock.Style>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsLoading}" Value="True">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding IsLoading}" Value="False">
-                                    <Setter Property="Visibility" Value="Hidden"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
-                <TextBlock Text="{Binding LoadingContext}"
-                           IsHitTestVisible="False"
-                           Foreground="#484D54"
-                           FontSize="11"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Center"
-                           Margin="0 3 0 0">
-                    <TextBlock.Style>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsLoading}" Value="True">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding IsLoading}" Value="False">
-                                    <Setter Property="Visibility" Value="Hidden"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
             </StackPanel>
         </StackPanel>
 
@@ -240,7 +200,7 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Border>
-        
+
         <!--Header-->
         <Border Grid.Column="0"
                 Grid.ColumnSpan="10"
@@ -250,7 +210,7 @@
                 <DropShadowEffect BlurRadius="10" Color="Black" ShadowDepth="5" Direction="270" Opacity="0.1"/>
             </Border.Effect>
         </Border>
-        
+
 
         <!--Conflict window-->
         <StackPanel Orientation="Horizontal"
@@ -400,7 +360,7 @@
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                Visibility="{Binding ConflictNotificationState}">
-                        
+
                     </TextBlock>
 
                     <Thumb x:Name="leftThumb"
@@ -500,7 +460,7 @@
                 </Button>
             </StackPanel>
         </StackPanel>
-        
+
         <!--Add mod-->
         <ContentControl Grid.Column="0"
                         Grid.ColumnSpan="2"
@@ -559,6 +519,8 @@
                 </MenuItem>
             </Menu>
         </StackPanel>
+        
+        <!--Loading screen-->
         <Button Content="Update available!"
                 Grid.Row="0"
                 Grid.Column="0" 
@@ -570,6 +532,38 @@
                 <ToolTip Content="Opens the Nexus Mod page."/>
             </ToolTipService.ToolTip>
         </Button>
+        <Grid   Grid.Column="0" 
+                Grid.ColumnSpan="99"
+                Grid.Row="0"
+                Grid.RowSpan="99"
+                Visibility="{Binding IsLoading}">
+            <Border Background="Black"
+                    Opacity="0.2"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+                
+            </Border>
+            <Border Background="#f7f5f2"
+                    BorderThickness="1"
+                    BorderBrush="#484D54"
+                    CornerRadius="2"
+                    Height="200"
+                    Width="500"
+                    Padding="20 10"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center">
+                <TextBlock Text="{Binding LoadingContext}"
+                           TextWrapping="Wrap"
+                           Foreground="#484D54"
+                           FontSize="18"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           IsHitTestVisible="False"/>
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="10" Color="Black" ShadowDepth="5" Direction="270" Opacity="0.1"/>
+                </Border.Effect>
+            </Border>
+        </Grid>
     </Grid>
 </Window>
     
