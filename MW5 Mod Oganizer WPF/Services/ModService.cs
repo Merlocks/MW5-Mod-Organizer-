@@ -71,7 +71,7 @@ namespace MW5_Mod_Organizer_WPF.Services
                         AddToTempList(primarySubdirectories);
 
                         //Sort temporary list
-                        List<ModViewModel> sortedModList = temporaryModVMList.OrderBy(m => m.LoadOrder).ThenBy(m => m.DisplayName).ToList();
+                        List<ModViewModel> sortedModList = temporaryModVMList.OrderBy(m => m.LoadOrder).ThenBy(m => m.FolderName).ToList();
 
                         //Add mods to collection
                         foreach (var mod in sortedModList)
@@ -94,7 +94,7 @@ namespace MW5_Mod_Organizer_WPF.Services
                         AddToTempList(secondarySubdirectories);
 
                         //Sort temporary list
-                        List<ModViewModel> sortedModList = temporaryModVMList.OrderBy(m => m.LoadOrder).ThenBy(m => m.DisplayName).ToList();
+                        List<ModViewModel> sortedModList = temporaryModVMList.OrderBy(m => m.LoadOrder).ThenBy(m => m.FolderName).ToList();
 
                         //Add mods to collection
                         foreach (var mod in sortedModList)
@@ -118,7 +118,7 @@ namespace MW5_Mod_Organizer_WPF.Services
             // Create temporary list with contents of ModVMCollection + added selectedMod
             // Sort temporary list first by Loadorder, then by DisplayName
             List<ModViewModel> list = new List<ModViewModel>(ModVMCollection) { mod };
-            list = list.OrderBy(m => m.LoadOrder).ThenBy(m => m.DisplayName).ToList();
+            list = list.OrderBy(m => m.LoadOrder).ThenBy(m => m.FolderName).ToList();
 
             // Insert selectedMod into ModVMCollection by index calculated by temporary list
             ModVMCollection.Insert(list.IndexOf(mod), mod);
@@ -138,10 +138,10 @@ namespace MW5_Mod_Organizer_WPF.Services
             if (targetMod != currentMod && currentIndex != targetIndex)
             {
                 List<ModViewModel> list = new List<ModViewModel> { currentMod, targetMod };
-                list = list.OrderBy(m => m.DisplayName).ToList();
+                list = list.OrderBy(m => m.FolderName).ToList();
 
                 // If statement checks in what order the current selectedMod should be inserted
-                // currentMod will be removed and then inserted either infront or behind targetMod depending on DisplayName
+                // currentMod will be removed and then inserted either infront or behind targetMod depending on FolderName
                 if (currentMod == list[0])
                 {
                     ModVMCollection.RemoveAt(currentIndex);
