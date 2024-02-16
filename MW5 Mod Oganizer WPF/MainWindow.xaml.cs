@@ -23,6 +23,7 @@ namespace MW5_Mod_Organizer_WPF
     /// Improved behavior of conflict window when resizing
     /// Fixed issue with certain conflicts not picking up correctly
     /// Fixed ordering of loadorder by FolderName instead of DisplayName if defaultLoadOrder is equal
+    /// Fixed bug causing crash when resizing conflict window to negative value
     /// </changelog>
 
     /// <TODO>
@@ -54,7 +55,9 @@ namespace MW5_Mod_Organizer_WPF
             if (thumb != null)
             {
                 resizableColumn.MaxWidth = 0.5*windowWidth;
-                resizableColumn.Width = new GridLength(resizableColumn.ActualWidth - e.HorizontalChange * 0.2, GridUnitType.Pixel);
+                var newWidth = new GridLength(resizableColumn.ActualWidth - e.HorizontalChange * 0.2, GridUnitType.Pixel);
+                
+                if (newWidth.Value > 0) resizableColumn.Width = newWidth;
             }
         }
 

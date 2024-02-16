@@ -271,7 +271,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition x:Name="resizableColumn" 
                                           Width="300"
-                                          MinWidth="20"
+                                          MinWidth="50"
                                           />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
