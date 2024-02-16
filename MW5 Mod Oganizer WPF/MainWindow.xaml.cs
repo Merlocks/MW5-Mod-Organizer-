@@ -20,6 +20,7 @@ namespace MW5_Mod_Organizer_WPF
     /// Changed alternating color to slightly darker tone for more contrast
     /// Adjusted logic behind reset to defaults to be more consistent
     /// Improved behavior of list when resizing window in width
+    /// Improved behavior of conflict window when resizing
     /// Fixed issue with certain conflicts not picking up correctly
     /// Fixed ordering of loadorder by FolderName instead of DisplayName if defaultLoadOrder is equal
     /// </changelog>
@@ -38,7 +39,11 @@ namespace MW5_Mod_Organizer_WPF
             this.InitializeComponent();
             this.DataContext = _mainViewModel;
 
-            UpdateModGridView();
+            //Retrieve mods
+            ModService.GetInstance().GetMods(false);
+
+            //Generate loadorder by index
+            foreach (var mod in ModService.GetInstance().ModVMCollection) mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);
         }
 
         private void ResizeConflictWindow(object sender, DragDeltaEventArgs e) 
@@ -66,23 +71,6 @@ namespace MW5_Mod_Organizer_WPF
         }
         #endregion
 
-        #region functions
-        private void UpdateModGridView(bool reset = false)
-        {
-            //Retrieve mods
-            ModService.GetInstance().GetMods(reset);
-
-            //Generate loadorder by index
-            foreach (var mod in ModService.GetInstance().ModVMCollection) 
-            {
-                if (mod.LoadOrder != null)
-                {
-                    mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);
-                }
-            }
-        }
-        #endregion
-
         private void ModList_SizeChanged(object sender, EventArgs e)
         {
             DataGridColumnEnabled.MinWidth = DataGridColumnEnabled.ActualWidth;
@@ -100,7 +88,7 @@ namespace MW5_Mod_Organizer_WPF
 
             if (conflictWindowWidth > windowWidth*0.5) 
             {
-                resizableColumn.Width = new GridLength(windowWidth*0.5, GridUnitType.Pixel); ;
+                resizableColumn.Width = new GridLength(windowWidth*0.5, GridUnitType.Pixel);
             }
         }
     }
