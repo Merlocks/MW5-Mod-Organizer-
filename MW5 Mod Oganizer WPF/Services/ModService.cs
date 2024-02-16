@@ -236,7 +236,6 @@ namespace MW5_Mod_Organizer_WPF.Services
             }
         }
 
-        // BETA TESTING
         public async Task CheckForAllConflictsAsync()
         {
             await Task.Run(async() =>

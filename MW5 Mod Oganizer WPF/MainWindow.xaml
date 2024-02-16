@@ -16,7 +16,7 @@
         Icon="/favicon.ico">
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Loaded">
-            <behaviors:InvokeCommandAction Command="{Binding LoadedCommand, IsAsync=True}"/>
+            <behaviors:InvokeCommandAction Command="{Binding LoadedCommand}"/>
         </behaviors:EventTrigger>
     </behaviors:Interaction.Triggers>
     <Grid>
@@ -77,7 +77,7 @@
                 <Button Content="Undo"
                         Height="25"
                         Margin="10 0 0 0"
-                        Command="{Binding UndoCommand, IsAsync=True}"
+                        Command="{Binding UndoCommand}"
                         Style="{DynamicResource StandaloneButtonTheme}">
                     <ToolTipService.ToolTip>
                         <ToolTip Content="Undo your changes made in the application."/>
@@ -100,6 +100,12 @@
                     <ToolTipService.ToolTip>
                         <ToolTip Content="Resets the selected mods to their default state."/>
                     </ToolTipService.ToolTip>
+                </Button>
+                <Button Content="Debug"
+                        Height="25"
+                        Margin="10 0 0 0"
+                        Command="{Binding DebugCommand}"
+                        Style="{StaticResource StandaloneButtonTheme}">
                 </Button>
                 <TextBlock Text="[Loading]"
                            IsHitTestVisible="False"
@@ -180,7 +186,7 @@
                             <DataTemplate>
                                 <CheckBox x:Name="CheckBoxIsEnabled"
                                           IsChecked="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged}"
-                                          Command="{Binding DataContext.ToggleCheckBoxCommand, RelativeSource={RelativeSource AncestorType=Window}, IsAsync=True}"/>
+                                          Command="{Binding DataContext.ToggleCheckBoxCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -466,7 +472,7 @@
                         FontWeight="Normal" 
                         Style="{StaticResource StandaloneButtonTheme}" 
                         Cursor="Hand"
-                        Command="{Binding OpenPrimaryFolderPathCommand, IsAsync=True}">
+                        Command="{Binding OpenPrimaryFolderPathCommand}">
                     <ToolTipService.ToolTip>
                         <ToolTip Content="Opens all your mods from selected folder in the application. This should be your main mod folder."/>
                     </ToolTipService.ToolTip>
@@ -493,7 +499,7 @@
                         FontWeight="Normal" 
                         Style="{StaticResource StandaloneButtonTheme}"
                         Cursor="Hand"
-                        Command="{Binding OpenSecondaryFolderPathCommand, IsAsync=True}">
+                        Command="{Binding OpenSecondaryFolderPathCommand}">
                     <ToolTipService.ToolTip>
                         <ToolTip Content="Opens all your mods from selected folder in the application. This should be your workshop/epic mod folder."/>
                     </ToolTipService.ToolTip>

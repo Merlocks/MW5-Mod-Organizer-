@@ -23,6 +23,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Forms;
 using System.Windows.Input;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
 {
@@ -464,6 +465,20 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
         }
 
+        [RelayCommand]
+        public async Task DebugAsync()
+        {
+            var timer = Stopwatch.StartNew();
+
+            await ModService.GetInstance().CheckForAllConflictsAsync();
+
+            timer.Stop();
+
+            var time = timer.ElapsedMilliseconds;
+
+            Console.WriteLine($"Debug time elapsed in milliseconds: {time}");
+        }
+
         [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
         public async Task AddModButtonAsync()
         {
@@ -560,7 +575,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public async Task LoadedAsync()
         {
-            // BETA TESTING
             await ModService.GetInstance().CheckForAllConflictsAsync();
 
             HttpRequestService requestService = new HttpRequestService();
