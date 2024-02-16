@@ -16,7 +16,7 @@
         Icon="/favicon.ico">
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Loaded">
-            <behaviors:InvokeCommandAction Command="{Binding LoadedCommand}"/>
+            <behaviors:InvokeCommandAction Command="{Binding LoadedCommand, IsAsync=True}"/>
         </behaviors:EventTrigger>
     </behaviors:Interaction.Triggers>
     <Grid>
@@ -77,7 +77,7 @@
                 <Button Content="Undo"
                         Height="25"
                         Margin="10 0 0 0"
-                        Command="{Binding UndoCommand}"
+                        Command="{Binding UndoCommand, IsAsync=True}"
                         Style="{DynamicResource StandaloneButtonTheme}">
                     <ToolTipService.ToolTip>
                         <ToolTip Content="Undo your changes made in the application."/>
@@ -180,7 +180,7 @@
                             <DataTemplate>
                                 <CheckBox x:Name="CheckBoxIsEnabled"
                                           IsChecked="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged}"
-                                          Command="{Binding DataContext.ToggleCheckBoxCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                          Command="{Binding DataContext.ToggleCheckBoxCommand, RelativeSource={RelativeSource AncestorType=Window}, IsAsync=True}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -466,7 +466,7 @@
                         FontWeight="Normal" 
                         Style="{StaticResource StandaloneButtonTheme}" 
                         Cursor="Hand"
-                        Command="{Binding OpenPrimaryFolderPathCommand}">
+                        Command="{Binding OpenPrimaryFolderPathCommand, IsAsync=True}">
                     <ToolTipService.ToolTip>
                         <ToolTip Content="Opens all your mods from selected folder in the application. This should be your main mod folder."/>
                     </ToolTipService.ToolTip>
@@ -493,7 +493,7 @@
                         FontWeight="Normal" 
                         Style="{StaticResource StandaloneButtonTheme}"
                         Cursor="Hand"
-                        Command="{Binding OpenSecondaryFolderPathCommand}">
+                        Command="{Binding OpenSecondaryFolderPathCommand, IsAsync=True}">
                     <ToolTipService.ToolTip>
                         <ToolTip Content="Opens all your mods from selected folder in the application. This should be your workshop/epic mod folder."/>
                     </ToolTipService.ToolTip>
@@ -513,7 +513,7 @@
                                 <Setter.Value>
                                     <Button Content="Add Mod.."
                                             Style="{StaticResource ButtonAddModTheme}"
-                                            Command="{Binding AddModButtonCommand}">
+                                            Command="{Binding AddModButtonCommand, IsAsync=True}">
                                         <ToolTipService.ToolTip>
                                             <ToolTip Content="Adds mod to your mod folder and application. Accepts *.zip, *.rar and *.7z"/>
                                         </ToolTipService.ToolTip>
