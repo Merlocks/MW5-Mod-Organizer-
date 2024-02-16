@@ -55,14 +55,5 @@ namespace MW5_Mod_Organizer_WPF.Models
         [JsonPropertyName("bEnabled")]
         [JsonPropertyOrder(12)]
         public bool IsEnabled { get; set; }
-
-        [JsonIgnore]
-        public string? Path { get; set; }
-
-        [JsonIgnore]
-        public string? FolderName { get; set; }
-
-        [JsonIgnore]
-        public string? Conflicts { get; set; }
     }
 }
