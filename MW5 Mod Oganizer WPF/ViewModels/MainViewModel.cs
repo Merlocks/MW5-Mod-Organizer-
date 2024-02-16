@@ -486,9 +486,77 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 if (dialogResult == DialogResult.OK)
                 {
                     // Begin loading
-                    this.LoadingContext = "Extracting Mod Archive. Please wait. ";
+                    string targetFolder = PrimaryFolderPath!;
+                    string sourceCompressedFile = dialog.FileName;
+                    string modFolderPath = "Default";
 
-                    await Task.Delay(6000);
+                    this.LoadingContext = "Extracting Mod Archive. Please wait... ";
+
+                    await Task.Delay(500);
+                    
+                    await Task.Run(() =>
+                    {
+                        // SharpCompress library to extract and copy contents compressed files to PrimaryModFolder
+                        // GitHub at: https://github.com/adamhathcock/sharpcompress
+                        // Supports *.zip, *.rar and *.7z
+                        var archive = ArchiveFactory.Open(sourceCompressedFile);
+
+                        foreach (var entry in archive.Entries)
+                        {
+                            double fileSize = Math.Round((double)entry.Size / 1073741824, 2);
+                            this.LoadingContext = $"Extracting: \"{entry.Key}\" \nSize: {fileSize} GB";
+
+                            if (fileSize > 5) LoadingContext += "\n\nThis may take a while..";
+
+                            if (!entry.IsDirectory)
+                            {
+                                if (entry.Key.EndsWith(@"\mod.json"))
+                                {
+                                    modFolderPath = entry.Key.Substring(0, entry.Key.IndexOf(@"\mod.json"));
+                                }
+                                else if (entry.Key.EndsWith(@"/mod.json"))
+                                {
+                                    modFolderPath = entry.Key.Substring(0, entry.Key.IndexOf(@"/mod.json"));
+                                }
+
+                                entry.WriteToDirectory(targetFolder, new ExtractionOptions { ExtractFullPath = true, Overwrite = true });
+                            }
+                        }
+                    });
+
+                    await System.Windows.Application.Current.Dispatcher.InvokeAsync(() => 
+                    {
+                        Mod? mod = JsonConverterFacade.JsonToMod(PrimaryFolderPath + @"\" + modFolderPath);
+
+                        if (mod != null)
+                        {
+                            ModViewModel modVM = new ModViewModel(mod);
+                            modVM.Path = PrimaryFolderPath + @"\" + modFolderPath;
+                            modVM.Source = "Primary Folder";
+
+                            if (!File.Exists(PrimaryFolderPath + @"\" + modFolderPath + @"\backup.json"))
+                            {
+                                JsonConverterFacade.Createbackup(PrimaryFolderPath + @"\" + modFolderPath);
+                            }
+
+                            var list = ModService.GetInstance().ModVMCollection.Where(m => m.Path == modVM.Path).ToList();
+
+                            if (list == null || list.Count == 0)
+                            {
+                                ModService.GetInstance().AddMod(modVM);
+                            }
+                            else if (list != null && list.Count > 0)
+                            {
+                                ModService.GetInstance().ModVMCollection.Remove(list[0]);
+                                ModService.GetInstance().AddMod(modVM);
+                            }
+
+                            foreach (var item in ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected)) item.IsSelected = false;
+                            modVM.IsSelected = true;
+
+                            this.DeploymentNecessary = true;
+                        }
+                    });
                     
                     // End loading
                     this.LoadingContext = string.Empty;

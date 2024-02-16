@@ -543,9 +543,9 @@
                     VerticalAlignment="Stretch">
                 
             </Border>
-            <Border Background="#f7f5f2"
-                    BorderThickness="1"
-                    BorderBrush="#484D54"
+            <Border Background="#8e8e8e"
+                    BorderThickness="0 0 5 8"
+                    BorderBrush="#777777"
                     CornerRadius="2"
                     Height="200"
                     Width="500"
@@ -554,8 +554,10 @@
                     HorizontalAlignment="Center">
                 <TextBlock Text="{Binding LoadingContext}"
                            TextWrapping="Wrap"
-                           Foreground="#484D54"
+                           Foreground="#E2E0DD"
                            FontSize="18"
+                           FontWeight="Bold"
+                           TextOptions.TextFormattingMode="Display"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Center"
                            IsHitTestVisible="False"/>
