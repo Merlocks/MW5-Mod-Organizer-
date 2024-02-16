@@ -17,8 +17,6 @@ namespace MW5_Mod_Organizer_WPF.Facades
                 if (jsonString != null) 
                 {
                     Mod? mod = JsonHandlerService.JsonStringToMod(jsonString);
-                    mod.Path = path;
-                    mod.FolderName = Path.GetFileName(path);
 
                     return mod;
                 } else
@@ -77,8 +75,6 @@ namespace MW5_Mod_Organizer_WPF.Facades
                 if (jsonString != null)
                 {
                     Mod? mod = JsonHandlerService.JsonStringToMod(jsonString);
-                    mod.Path = path;
-                    mod.FolderName = Path.GetFileName(path);
 
                     return mod;
                 }

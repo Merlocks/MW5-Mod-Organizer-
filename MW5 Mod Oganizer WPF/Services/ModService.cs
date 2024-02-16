@@ -19,7 +19,7 @@ namespace MW5_Mod_Organizer_WPF.Services
         private static ModService? instance;
         private static readonly object padlock = new object();
         private readonly MainViewModel? _mainViewModel;
-        private List<Mod> ModList { get; set; }
+        private List<ModViewModel> temporaryModVMList { get; set; }
 
         public ObservableCollection<ModViewModel> ModVMCollection { get; set; }
 
@@ -31,7 +31,7 @@ namespace MW5_Mod_Organizer_WPF.Services
 
         private ModService()
         {
-            ModList = new List<Mod>();
+            temporaryModVMList = new List<ModViewModel>();
             ModVMCollection = new ObservableCollection<ModViewModel>();
             Overwrites = new ObservableCollection<ModViewModel>();
             OverwrittenBy = new ObservableCollection<ModViewModel>();
@@ -71,12 +71,12 @@ namespace MW5_Mod_Organizer_WPF.Services
                         AddToTempList(primarySubdirectories);
 
                         //Sort temporary list
-                        List<Mod> sortedModList = ModList.OrderBy(m => m.LoadOrder).ThenBy(m => m.DisplayName).ToList();
+                        List<ModViewModel> sortedModList = temporaryModVMList.OrderBy(m => m.LoadOrder).ThenBy(m => m.DisplayName).ToList();
 
                         //Add mods to collection
                         foreach (var mod in sortedModList)
                         {
-                            ModVMCollection.Add(new ModViewModel(mod));
+                            ModVMCollection.Add(mod);
                         }
                     }
                 //Primary and secondary path
@@ -94,12 +94,12 @@ namespace MW5_Mod_Organizer_WPF.Services
                         AddToTempList(secondarySubdirectories);
 
                         //Sort temporary list
-                        List<Mod> sortedModList = ModList.OrderBy(m => m.LoadOrder).ThenBy(m => m.DisplayName).ToList();
+                        List<ModViewModel> sortedModList = temporaryModVMList.OrderBy(m => m.LoadOrder).ThenBy(m => m.DisplayName).ToList();
 
                         //Add mods to collection
                         foreach (var mod in sortedModList)
                         {
-                            ModVMCollection.Add(new ModViewModel(mod));
+                            ModVMCollection.Add(mod);
                         }
                     }
                 }
@@ -172,14 +172,16 @@ namespace MW5_Mod_Organizer_WPF.Services
                         mod.LoadOrder = 0;
                     }
 
-                    ModList.Add(mod);
+                    ModViewModel modVM = new ModViewModel(mod);
+                    modVM.Path = path;
+                    temporaryModVMList.Add(modVM);
                 } 
             }
         }
 
         public void ClearTemporaryModList()
         {
-            ModList.Clear();
+            temporaryModVMList.Clear();
         }
 
         public void ClearModCollection()

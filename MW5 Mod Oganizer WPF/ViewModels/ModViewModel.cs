@@ -30,9 +30,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
         public string[]? Manifest => _mod.Manifest;
 
-        public string? Path => _mod.Path;
-
-        public string? FolderName => _mod.FolderName;
+        public string? FolderName => System.IO.Path.GetFileName(this.Path);
 
         /// <summary>
         /// Observable properties used for data binding within the View
@@ -44,6 +42,10 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         {
             _mod.IsEnabled = value;
         }
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(FolderName))]
+        private string? path;
 
         [ObservableProperty]
         private string? gameVersion;
