@@ -465,20 +465,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
         }
 
-        [RelayCommand]
-        public async Task DebugAsync()
-        {
-            var timer = Stopwatch.StartNew();
-
-            await ModService.GetInstance().CheckForAllConflictsAsync();
-
-            timer.Stop();
-
-            var time = timer.ElapsedMilliseconds;
-
-            Console.WriteLine($"Debug time elapsed in milliseconds: {time}");
-        }
-
         [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
         public async Task AddModButtonAsync()
         {

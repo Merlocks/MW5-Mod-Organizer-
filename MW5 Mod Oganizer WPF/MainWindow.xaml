@@ -101,12 +101,6 @@
                         <ToolTip Content="Resets the selected mods to their default state."/>
                     </ToolTipService.ToolTip>
                 </Button>
-                <Button Content="Debug"
-                        Height="25"
-                        Margin="10 0 0 0"
-                        Command="{Binding DebugCommand}"
-                        Style="{StaticResource StandaloneButtonTheme}">
-                </Button>
                 <TextBlock Text="[Loading]"
                            IsHitTestVisible="False"
                            Foreground="#484D54"
