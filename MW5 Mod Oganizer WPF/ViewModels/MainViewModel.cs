@@ -336,7 +336,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
             else
             {
-                //Save mod(s).json
+                //Save mod(s).taskRequestVersion
                 if (!string.IsNullOrEmpty(GameVersion))
                 {
                     foreach (var modVM in ModService.GetInstance().ModVMCollection)
@@ -350,7 +350,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     }
                 }
 
-                //Save modlist.json
+                //Save modlist.taskRequestVersion
                 ModList modList = new ModList
                 {
                     ModStatus = new Dictionary<string, Status>()
@@ -513,13 +513,13 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         this.LoadingContext = $"Extracting {entry.Key}";
                         if (!entry.IsDirectory)
                         {
-                            if (entry.Key.EndsWith(@"\mod.json"))
+                            if (entry.Key.EndsWith(@"\mod.taskRequestVersion"))
                             {
-                                modFolderPath = entry.Key.Substring(0, entry.Key.IndexOf(@"\mod.json"));
+                                modFolderPath = entry.Key.Substring(0, entry.Key.IndexOf(@"\mod.taskRequestVersion"));
                             }
-                            else if (entry.Key.EndsWith(@"/mod.json"))
+                            else if (entry.Key.EndsWith(@"/mod.taskRequestVersion"))
                             {
-                                modFolderPath = entry.Key.Substring(0, entry.Key.IndexOf(@"/mod.json"));
+                                modFolderPath = entry.Key.Substring(0, entry.Key.IndexOf(@"/mod.taskRequestVersion"));
                             }
 
                             entry.WriteToDirectory(targetFolder, new ExtractionOptions { ExtractFullPath = true, Overwrite = true });
@@ -535,7 +535,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     {
                         ModViewModel modVM = new ModViewModel(mod);
 
-                        if (!File.Exists(PrimaryFolderPath + @"\" + modFolderPath + @"\backup.json"))
+                        if (!File.Exists(PrimaryFolderPath + @"\" + modFolderPath + @"\backup.taskRequestVersion"))
                         {
                             JsonConverterFacade.Createbackup(PrimaryFolderPath + @"\" + modFolderPath);
                         }
@@ -575,14 +575,17 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public async Task LoadedAsync()
         {
-            await ModService.GetInstance().CheckForAllConflictsAsync();
-
             HttpRequestService requestService = new HttpRequestService();
-            string json = await requestService.Main();
+            List<Task> tasks = new List<Task> { Task.Run(() => ModService.GetInstance().CheckForAllConflictsAsync()) };
 
-            if (json != string.Empty)
+            Task<string> taskRequestVersion = requestService.Main();
+            tasks.Add(taskRequestVersion);
+
+            await taskRequestVersion;
+
+            if (taskRequestVersion.Result != string.Empty)
             {
-                VersionDto? response = JsonSerializer.Deserialize<VersionDto>(json);
+                VersionDto? response = JsonSerializer.Deserialize<VersionDto>(taskRequestVersion.Result);
                 string localVersion = Properties.Settings.Default.Properties["Version"].DefaultValue.ToString()!;
 
                 if (response != null && response.Version != localVersion)
@@ -591,6 +594,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 }
                 else { this.IsUpdateAvailable = false; }
             }
+
+            await Task.WhenAll(tasks);
         }
 
         [RelayCommand]
