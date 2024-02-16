@@ -68,7 +68,7 @@ namespace MW5_Mod_Organizer_WPF.Services
                     if (primarySubdirectories != null)
                     {
                         //Add primary mods to temporary list
-                        AddToTempList(primarySubdirectories);
+                        AddToTempList(primarySubdirectories, "Primary Folder");
 
                         //Sort temporary list
                         List<ModViewModel> sortedModList = temporaryModVMList.OrderBy(m => m.LoadOrder).ThenBy(m => m.FolderName).ToList();
@@ -88,10 +88,10 @@ namespace MW5_Mod_Organizer_WPF.Services
                     if (primarySubdirectories != null && secondarySubdirectories != null)
                     {
                         //Add primary mods to temporary list
-                        AddToTempList(primarySubdirectories);
+                        AddToTempList(primarySubdirectories, "Primary Folder");
 
                         //Add secondary mods to temporary list
-                        AddToTempList(secondarySubdirectories);
+                        AddToTempList(secondarySubdirectories, "Secondary Folder");
 
                         //Sort temporary list
                         List<ModViewModel> sortedModList = temporaryModVMList.OrderBy(m => m.LoadOrder).ThenBy(m => m.FolderName).ToList();
@@ -154,7 +154,7 @@ namespace MW5_Mod_Organizer_WPF.Services
             }
         }
 
-        private void AddToTempList(string[] directory)
+        private void AddToTempList(string[] directory, string source)
         {
             foreach (var path in directory)
             {
@@ -174,6 +174,7 @@ namespace MW5_Mod_Organizer_WPF.Services
 
                     ModViewModel modVM = new ModViewModel(mod);
                     modVM.Path = path;
+                    modVM.Source = source;
                     temporaryModVMList.Add(modVM);
                 } 
             }

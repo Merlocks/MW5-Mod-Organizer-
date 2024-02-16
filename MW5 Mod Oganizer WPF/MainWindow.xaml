@@ -220,8 +220,13 @@
                                         CanUserSort="False"/>
                     <DataGridTextColumn Header="Version" 
                                         IsReadOnly="True" 
-                                        Width="*"
+                                        Width="auto"
                                         Binding="{Binding Version}" 
+                                        CanUserSort="False"/>
+                    <DataGridTextColumn Header="Source"
+                                        IsReadOnly="True"
+                                        Width="*"
+                                        Binding="{Binding Source}"
                                         CanUserSort="False"/>
                 </DataGrid.Columns>
             </DataGrid>

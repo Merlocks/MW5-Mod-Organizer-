@@ -48,6 +48,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         private string? path;
 
         [ObservableProperty]
+        private string? source;
+
+        [ObservableProperty]
         private string? gameVersion;
 
         partial void OnGameVersionChanged(string? value)
