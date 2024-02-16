@@ -241,7 +241,7 @@ namespace MW5_Mod_Organizer_WPF.Services
         {
             await Task.Run(async() =>
             {
-                ObservableCollection<ModViewModel> collection = ModVMCollection;
+                ObservableCollection<ModViewModel> collection = new ObservableCollection<ModViewModel>(ModVMCollection);
 
                 // Use ConcurrentDictionary for thread safety
                 ConcurrentDictionary<ModViewModel, Visibility> modVisibility = new ConcurrentDictionary<ModViewModel, Visibility>();
