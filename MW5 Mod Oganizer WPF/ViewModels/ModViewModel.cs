@@ -138,6 +138,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     }
 
                     _mainViewModel!.LoadingContext = string.Empty;
+                    _mainViewModel!.DeploymentNecessary = true;
 
                     await ModService.GetInstance().CheckForAllConflictsAsync();
                 }
