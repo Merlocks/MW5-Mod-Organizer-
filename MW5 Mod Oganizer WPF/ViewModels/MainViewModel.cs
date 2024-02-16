@@ -497,15 +497,18 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     foreach (var entry in archive.Entries)
                     {
                         this.LoadingContext = $"Extracting {entry.Key}";
+
                         if (!entry.IsDirectory)
                         {
-                            if (entry.Key.EndsWith(@"\mod.taskRequestVersion"))
+                            if (entry.Key.EndsWith(@"\mod.json"))
                             {
-                                modFolderPath = entry.Key.Substring(0, entry.Key.IndexOf(@"\mod.taskRequestVersion"));
+                                modFolderPath = entry.Key.Substring(0, entry.Key.IndexOf(@"\mod.json"));
+                                Console.WriteLine(modFolderPath);
                             }
-                            else if (entry.Key.EndsWith(@"/mod.taskRequestVersion"))
+                            else if (entry.Key.EndsWith(@"/mod.json"))
                             {
-                                modFolderPath = entry.Key.Substring(0, entry.Key.IndexOf(@"/mod.taskRequestVersion"));
+                                modFolderPath = entry.Key.Substring(0, entry.Key.IndexOf(@"/mod.json"));
+                                Console.WriteLine(modFolderPath);
                             }
 
                             entry.WriteToDirectory(targetFolder, new ExtractionOptions { ExtractFullPath = true, Overwrite = true });
@@ -520,8 +523,10 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     if (mod != null)
                     {
                         ModViewModel modVM = new ModViewModel(mod);
+                        modVM.Path = PrimaryFolderPath + @"\" + modFolderPath;
+                        modVM.Source = "Primary Folder";
 
-                        if (!File.Exists(PrimaryFolderPath + @"\" + modFolderPath + @"\backup.taskRequestVersion"))
+                        if (!File.Exists(PrimaryFolderPath + @"\" + modFolderPath + @"\backup.json"))
                         {
                             JsonConverterFacade.Createbackup(PrimaryFolderPath + @"\" + modFolderPath);
                         }
@@ -547,7 +552,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     this.LoadingContext = string.Empty;
                 }, TaskScheduler.FromCurrentSynchronizationContext());
 
-                // BETA TESTING
                 await ModService.GetInstance().CheckForAllConflictsAsync();
             } 
         }
