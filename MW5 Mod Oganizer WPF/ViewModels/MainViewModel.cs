@@ -11,6 +11,7 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
@@ -409,34 +410,44 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 
                 if (selectedItems != null && selectedItems.Count != 0)
                 {
-                    selectedItems = selectedItems.OrderBy(m => m.LoadOrder).ThenBy(m => m.DisplayName).ToList();
+                    selectedItems = selectedItems.OrderBy(m => m.LoadOrder).ThenBy(m => m.FolderName).ToList();
 
                     foreach (var item in selectedItems)
                     {
                         if (item != null)
                         {
-                            string? path = item.Path;
+                            ModViewModel mod = item;
                             ModViewModel? backup = new ModViewModel(JsonConverterFacade.ReadBackup(item.Path!)!);
 
-                            // First assign new values to needed properties 
-                            // Otherwise ObservableProperty will not be fired and View won't update
+                            // First assign backup values to ObservableProperties 
+                            // Otherwise ObservableProperty will not detect change and View won't update
                             item.IsEnabled = backup.IsEnabled;
                             item.LoadOrder = backup.LoadOrder;
-                            item.GameVersion = backup.GameVersion;
                             item.ModViewModelStatus = backup.ModViewModelStatus;
                             item._mod = backup._mod;
+                        }
+                    }
 
-                            int targetIndex = (int)item.LoadOrder;
-                            int currentIndex = ModService.GetInstance().ModVMCollection.IndexOf(item);
+                    // Reorder the index positions of ModVMCollection by LoadOrder and FolderName
+                    List<ModViewModel> sortedModVMCollection = ModService.GetInstance().ModVMCollection.OrderBy(m => m.LoadOrder).ThenBy(m => m.FolderName).ToList();
+                    ModService.GetInstance().ModVMCollection.Clear();
 
-                            ModService.GetInstance().MoveMod(currentIndex, targetIndex);
+                    foreach (var item in sortedModVMCollection) ModService.GetInstance().ModVMCollection.Add(item);
 
+                    // Recalculate loadorder by index positions & Reselect all mods
+                    foreach (var item in ModService.GetInstance().ModVMCollection)
+                    {
+                        item.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(item);
+
+                        if (selectedItems.Contains(item))
+                        {
                             item.IsSelected = true;
                         }
                     }
 
-                    // Recalculate loadorder by index positions
-                    foreach (var item in ModService.GetInstance().ModVMCollection) item.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(item);
+                    Console.WriteLine("");
+                    Console.WriteLine("- - - - - - - - -");
+                    Console.WriteLine("");
 
                     // If only one mod is selected, check for conflicts
                     if (selectedItems.Count == 1)
