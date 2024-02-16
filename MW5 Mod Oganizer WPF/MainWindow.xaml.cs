@@ -17,6 +17,7 @@ namespace MW5_Mod_Organizer_WPF
     /// <changelog> 
     /// Added Source column to list that shows what folder the mod came from
     /// Changed alternating color to slightly darker tone for more contrast
+    /// Adjusted logic behind reset to defaults to be more consistent
     /// Fixed issue with certain conflicts not picking up correctly
     /// Fixed ordering of loadorder by FolderName instead of DisplayName if defaultLoadOrder is equal
     /// </changelog>
