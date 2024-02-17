@@ -1,4 +1,9 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
+using MW5_Mod_Organizer_WPF.Models;
+using MW5_Mod_Organizer_WPF.Services;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -6,11 +11,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using Microsoft.Extensions.DependencyInjection;
-using MW5_Mod_Organizer_WPF.Models;
-using MW5_Mod_Organizer_WPF.Services;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
 {

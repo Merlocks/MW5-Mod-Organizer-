@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GongSolutions.Wpf.DragDrop;
-using Microsoft.Extensions.DependencyInjection;
 using MW5_Mod_Organizer_WPF.Facades;
 using MW5_Mod_Organizer_WPF.Models;
 using MW5_Mod_Organizer_WPF.Services;
@@ -9,10 +8,8 @@ using SharpCompress.Archives;
 using SharpCompress.Common;
 using System;
 using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -20,11 +17,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Forms;
-using System.Windows.Input;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
 {
@@ -33,21 +26,32 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         /// <summary>
         /// Read-only properties
         /// </summary>
-        public IEnumerable<ModViewModel> Mods => ModService.GetInstance().ModVMCollection;
+        public IEnumerable<ModViewModel> Mods => this.ModVMCollection;
 
-        public IEnumerable<ModViewModel> Overwrites => ModService.GetInstance().Overwrites;
+        public IEnumerable<ModViewModel> Overwrites => this.OverwritesCollection;
 
-        public IEnumerable<ModViewModel> OverwrittenBy => ModService.GetInstance().OverwrittenBy;
+        public IEnumerable<ModViewModel> OverwrittenBy => this.OverwrittenByCollection;
 
-        public IEnumerable<string> Conflicts => ModService.GetInstance().Conflicts;
+        public IEnumerable<string> Conflicts => this.ConflictsCollection;
 
         /// <summary>
         /// Observable properties used for data binding within the View
         /// </summary>
+        [ObservableProperty]
+        private ObservableCollection<ModViewModel> modVMCollection;
+
+        [ObservableProperty]
+        private ObservableCollection<ModViewModel> overwritesCollection;
+
+        [ObservableProperty]
+        private ObservableCollection<ModViewModel> overwrittenByCollection;
+
+        [ObservableProperty]
+        private ObservableCollection<string> conflictsCollection;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(
-            nameof(AddModButtonCommand), 
+            nameof(AddModButtonCommand),
             nameof(OpenSecondaryFolderPathCommand),
             nameof(ArrowDownCommand),
             nameof(ArrowUpCommand),
@@ -103,7 +107,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             if (value == string.Empty)
             {
                 this.IsLoading = Visibility.Hidden;
-            } else
+            }
+            else
             {
                 this.IsLoading = Visibility.Visible;
             }
@@ -241,7 +246,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         {
             List<ModViewModel> selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
             bool areChangesMade = false;
-            
+
             if (selectedItems != null && selectedItems.Count > 0)
             {
                 var items = new List<ModViewModel>();
@@ -255,7 +260,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 {
                     int oldIndex = ModService.GetInstance().ModVMCollection.IndexOf(item);
                     int newIndex = ModService.GetInstance().ModVMCollection.Count - 1;
-                    
+
                     if (oldIndex != newIndex)
                     {
                         ModService.GetInstance().ModVMCollection.Move(oldIndex, newIndex);
@@ -409,7 +414,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             try
             {
                 var selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
-                
+
                 if (selectedItems != null && selectedItems.Count != 0)
                 {
                     selectedItems = selectedItems.OrderBy(m => m.LoadOrder).ThenBy(m => m.FolderName).ToList();
@@ -493,7 +498,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     this.LoadingContext = "Extracting Mod Archive. Please wait... ";
 
                     await Task.Delay(500);
-                    
+
                     await Task.Run(() =>
                     {
                         // SharpCompress library to extract and copy contents compressed files to PrimaryModFolder
@@ -524,7 +529,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         }
                     });
 
-                    await System.Windows.Application.Current.Dispatcher.InvokeAsync(() => 
+                    await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
                     {
                         Mod? mod = JsonConverterFacade.JsonToMod(PrimaryFolderPath + @"\" + modFolderPath);
 
@@ -557,13 +562,14 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                             this.DeploymentNecessary = true;
                         }
                     });
-                    
+
                     // End loading
                     this.LoadingContext = string.Empty;
                 }
 
 
-            } catch (Exception)
+            }
+            catch (Exception)
             {
 
             }
@@ -627,7 +633,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     mod.IsSelected = true;
                 }
             }
-               
+
             foreach (var item in e.RemovedItems)
             {
                 ModViewModel? mod = item as ModViewModel;
@@ -636,7 +642,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     mod.IsSelected = false;
                 }
             }
-                
+
             List<ModViewModel> selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
 
             if (selectedItems?.Count == 1)
@@ -659,7 +665,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         item.ModViewModelStatus = ModViewModelConflictStatus.None;
                     }
                 }
-            } 
+            }
         }
 
         [RelayCommand]
@@ -692,7 +698,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             if (selectedConflicts.Count == 0)
             {
                 ConflictNotificationState = Visibility.Visible;
-            } else
+            }
+            else
             {
                 ConflictNotificationState = Visibility.Hidden;
             }
@@ -759,7 +766,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                 dropInfo.Data = selectedMods.OrderBy(m => m.LoadOrder);
             }
-            
+
             DefaultDropHandler defaultDropHandler = new DefaultDropHandler();
             defaultDropHandler.Drop(dropInfo);
 
