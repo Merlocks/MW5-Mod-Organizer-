@@ -16,14 +16,7 @@ namespace MW5_Mod_Organizer_WPF
     /// </summary>
 
     /// <changelog> 
-    /// Added information icon when a mod changes the same asset(s) as another mod.
-    /// Added Source column to list that shows what folder the mod came from
-    /// Added proper loading screen when adding mod through MW5MO
-    /// Adjusted logic behind reset to defaults to be more consistent and in-line with game rules
-    /// Improved behavior of list when resizing window in width
-    /// Improved behavior of conflict window when resizing
-    /// Fixed ordering of loadorder by FolderName instead of DisplayName if DefaultLoadOrder is equal
-    /// Fixed bug causing crash when resizing conflict window to negative value
+    /// 
     /// </changelog>
 
     /// <TODO>
