@@ -34,7 +34,7 @@ namespace MW5_Mod_Organizer_WPF
             this.DataContext = _mainViewModel;
 
             //Retrieve mods
-            ModService.GetInstance().GetMods(false);
+            ModService.GetInstance().GetMods();
 
             //Generate loadorder by index
             foreach (var mod in ModService.GetInstance().ModVMCollection) mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);

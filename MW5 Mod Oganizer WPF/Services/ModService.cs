@@ -51,7 +51,7 @@ namespace MW5_Mod_Organizer_WPF.Services
             }
         }
 
-        public void GetMods(bool reset)
+        public void GetMods()
         {
             try
             {

@@ -174,7 +174,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     PrimaryFolderPath = dialog.SelectedPath;
 
                     //Retrieve mods
-                    ModService.GetInstance().GetMods(false);
+                    ModService.GetInstance().GetMods();
 
                     //Generate loadorder by targetIndex
                     foreach (var mod in ModService.GetInstance().ModVMCollection) mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);
@@ -207,7 +207,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         SecondaryFolderPath = dialog.SelectedPath;
 
                         //Retrieve mods
-                        ModService.GetInstance().GetMods(false);
+                        ModService.GetInstance().GetMods();
 
                         //Generate loadorder by targetIndex
                         foreach (var mod in ModService.GetInstance().ModVMCollection) mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);
@@ -381,7 +381,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
         public async Task Undo()
         {
-            ModService.GetInstance().GetMods(false);
+            ModService.GetInstance().GetMods();
 
             foreach (var mod in ModService.GetInstance().ModVMCollection) mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);
 
