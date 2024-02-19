@@ -34,7 +34,7 @@ namespace MW5_Mod_Organizer_WPF.Services
         {
             try
             {
-                ObservableCollection<ModViewModel>? collection = _mainViewModel!.ModVMCollection;
+                ObservableCollection<ModViewModel> collection = _mainViewModel!.ModVMCollection;
 
                 //Make space for mods
                 ClearTempList();

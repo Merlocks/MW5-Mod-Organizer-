@@ -134,6 +134,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             _httpRequestService = httpRequestService;
 
             this.ModVMCollection = new ObservableCollection<ModViewModel>();
+            ModVMCollection.CollectionChanged += ModVMCollection_CollectionChanged;
             this.OverwrittenByCollection = new ObservableCollection<ModViewModel>();
             this.OverwritesCollection = new ObservableCollection<ModViewModel>();
             this.ConflictsCollection = new ObservableCollection<string>();
@@ -764,6 +765,18 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         /// <summary>
+        /// Methods and events
+        /// </summary>
+        private void ModVMCollection_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            Console.WriteLine("Collection changed");
+            foreach (var item in ModVMCollection)
+            {
+                item.LoadOrder = ModVMCollection.IndexOf(item);
+            }
+        }
+
+        /// <summary>
         /// Logic for DragDrop library
         /// Controls Drag and Drop behavior for DataGrid
         /// </summary>
@@ -789,9 +802,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
             DefaultDropHandler defaultDropHandler = new DefaultDropHandler();
             defaultDropHandler.Drop(dropInfo);
-
-            // Recalculate loadorder by index positions
-            foreach (var item in ModVMCollection) item.LoadOrder = ModVMCollection.IndexOf(item);
 
             DeploymentNecessary = true;
         }
