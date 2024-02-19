@@ -25,6 +25,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
     public partial class MainViewModel : ObservableObject, GongSolutions.Wpf.DragDrop.IDropTarget
     {
         private readonly IModService _modService;
+        private readonly HttpRequestService _httpRequestService;
         
         /// <summary>
         /// Read-only properties
@@ -126,10 +127,11 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         /// <summary>
         /// Constructor
         /// </summary>
-        public MainViewModel(IModService modService)
+        public MainViewModel(IModService modService, HttpRequestService httpRequestService)
         {
             _modService = modService;
             _modService.SetMainViewModel(this);
+            _httpRequestService = httpRequestService;
 
             this.ModVMCollection = new ObservableCollection<ModViewModel>();
             this.OverwrittenByCollection = new ObservableCollection<ModViewModel>();
@@ -596,7 +598,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public async Task LoadedAsync()
         {
-            HttpRequestService requestService = new HttpRequestService();
+            //HttpRequestService requestService = new HttpRequestService();
 
             // Load all mods into memory when Window is loaded
             _modService.GetMods();
@@ -605,7 +607,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             List<Task> tasks = new List<Task> { Task.Run(() => _modService.CheckForAllConflictsAsync()) };
 
             // Create task and add task to list of tasks so it can start running in the background
-            Task<string> taskRequestVersion = requestService.Main();
+            Task<string> taskRequestVersion = _httpRequestService.Main();
             tasks.Add(taskRequestVersion);
 
             // Await task before following code runs
