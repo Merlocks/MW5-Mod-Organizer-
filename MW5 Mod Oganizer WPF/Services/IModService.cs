@@ -9,7 +9,8 @@ namespace MW5_Mod_Organizer_WPF.Services
 {
     public interface IModService
     {
-
+        void SetMainViewModel(MainViewModel mainViewModel);
+        
         void GetMods();
 
         void AddMod(ModViewModel mod);

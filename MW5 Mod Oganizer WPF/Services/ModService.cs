@@ -16,13 +16,18 @@ namespace MW5_Mod_Organizer_WPF.Services
 {
     public class ModService : IModService
     {
-        private readonly MainViewModel _mainViewModel;
+        private MainViewModel? _mainViewModel;
+
         public List<ModViewModel> tempModVMList { get; set; }
 
-        public ModService(MainViewModel mainViewModel)
+        public ModService()
+        {
+            tempModVMList = new List<ModViewModel>();
+        }
+
+        public void SetMainViewModel(MainViewModel mainViewModel)
         {
             _mainViewModel = mainViewModel;
-            tempModVMList = new List<ModViewModel>();
         }
 
         public void GetMods()
@@ -103,7 +108,7 @@ namespace MW5_Mod_Organizer_WPF.Services
                         mod.LoadOrder = 0;
                     }
 
-                    ModViewModel modVM = new ModViewModel(mod);
+                    ModViewModel modVM = new ModViewModel(mod, _mainViewModel, this);
                     modVM.Path = path;
                     modVM.Source = source;
                     tempModVMList.Add(modVM);

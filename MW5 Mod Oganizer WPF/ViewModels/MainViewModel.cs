@@ -24,18 +24,18 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 {
     public partial class MainViewModel : ObservableObject, GongSolutions.Wpf.DragDrop.IDropTarget
     {
-        private IModService _modService;
+        private readonly IModService _modService;
         
         /// <summary>
         /// Read-only properties
         /// </summary>
-        private IEnumerable<ModViewModel> Mods => this.ModVMCollection;
+        public IEnumerable<ModViewModel> Mods => this.ModVMCollection;
 
-        private IEnumerable<ModViewModel> Overwrites => this.OverwritesCollection;
+        public IEnumerable<ModViewModel> Overwrites => this.OverwritesCollection;
 
-        private IEnumerable<ModViewModel> OverwrittenBy => this.OverwrittenByCollection;
+        public IEnumerable<ModViewModel> OverwrittenBy => this.OverwrittenByCollection;
 
-        private IEnumerable<string> Conflicts => this.ConflictsCollection;
+        public IEnumerable<string> Conflicts => this.ConflictsCollection;
 
         /// <summary>
         /// Observable properties used for data binding within the View
@@ -129,6 +129,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         public MainViewModel(IModService modService)
         {
             _modService = modService;
+            _modService.SetMainViewModel(this);
 
             this.ModVMCollection = new ObservableCollection<ModViewModel>();
             this.OverwrittenByCollection = new ObservableCollection<ModViewModel>();
@@ -140,8 +141,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             SecondaryFolderPath = Properties.Settings.Default.SecondaryPath;
 
             IsZipDropVisible = false;
-
-            _modService.GetMods();
         }
 
         /// <summary>
@@ -437,7 +436,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         if (item != null)
                         {
                             ModViewModel mod = item;
-                            ModViewModel? backup = new ModViewModel(JsonConverterFacade.ReadBackup(item.Path!)!);
+                            ModViewModel? backup = new ModViewModel(JsonConverterFacade.ReadBackup(item.Path!)!, this, _modService);
 
                             // First assign backup values to ObservableProperties 
                             // Otherwise ObservableProperty will not detect change and View won't update
@@ -548,7 +547,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                         if (mod != null)
                         {
-                            ModViewModel modVM = new ModViewModel(mod);
+                            ModViewModel modVM = new ModViewModel(mod, this, _modService);
                             modVM.Path = PrimaryFolderPath + @"\" + modFolderPath;
                             modVM.Source = "Primary Folder";
 
@@ -598,11 +597,18 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         public async Task LoadedAsync()
         {
             HttpRequestService requestService = new HttpRequestService();
+
+            // Load all mods into memory when Window is loaded
+            _modService.GetMods();
+
+            // Create list of tasks and add task so it can start running in the background
             List<Task> tasks = new List<Task> { Task.Run(() => _modService.CheckForAllConflictsAsync()) };
 
+            // Create task and add task to list of tasks so it can start running in the background
             Task<string> taskRequestVersion = requestService.Main();
             tasks.Add(taskRequestVersion);
 
+            // Await task before following code runs
             await taskRequestVersion;
 
             if (taskRequestVersion.Result != string.Empty)
@@ -617,6 +623,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 else { this.IsUpdateAvailable = false; }
             }
 
+            // Await all started tasks before ending method
             await Task.WhenAll(tasks);
         }
 

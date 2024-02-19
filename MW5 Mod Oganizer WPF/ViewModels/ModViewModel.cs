@@ -17,8 +17,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
     public partial class ModViewModel : ObservableObject
     {
         public Mod _mod;
-        private MainViewModel _mainViewModel;
-        private IModService _modService;
+        private readonly MainViewModel _mainViewModel;
+        private readonly IModService _modService;
 
         /// <summary>
         /// Read-only properties used as Data within the View
@@ -82,11 +82,11 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         /// <summary>
         /// Constructor
         /// </summary>
-        public ModViewModel(Mod mod)
+        public ModViewModel(Mod mod, MainViewModel mainViewModel, IModService modService)
         {
             _mod = mod;
-            _mainViewModel = App.Current.Services.GetService<MainViewModel>()!;
-            _modService = App.Current.Services.GetService<IModService>()!;
+            _mainViewModel = mainViewModel;
+            _modService = modService;
 
             ModViewModelStatus = ModViewModelConflictStatus.None;
             IsEnabled = _mod.IsEnabled;
