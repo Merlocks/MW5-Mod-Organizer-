@@ -20,7 +20,13 @@ namespace MW5_Mod_Organizer_WPF
     /// </changelog>
 
     /// <TODO>
-    /// 
+    /// Change mods with defaultLoadOrder as decimal to int when adjusting list
+    /// When a file is corrupt when adding a mod, throw exception and handle
+    /// When adding a zipped mod that has 3 individual mods inside, only one is getting added to collection
+    /// Add Header to bEnabled state in datagrid
+    /// Move over collection from modservice to mainviewmodel
+    /// fix width of columns when adding primary folder on first startup
+    /// - - Make ColumnWidth class with width and minwidth and add instances for each column in MainViewModel for binding
     /// </TODO>
     public partial class MainWindow : Window
     {

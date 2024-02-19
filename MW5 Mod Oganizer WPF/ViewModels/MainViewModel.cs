@@ -26,28 +26,28 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         /// <summary>
         /// Read-only properties
         /// </summary>
-        public IEnumerable<ModViewModel> Mods => this.ModVMCollection;
+        public IEnumerable<ModViewModel>? Mods => this.ModVMCollection;
 
-        public IEnumerable<ModViewModel> Overwrites => this.OverwritesCollection;
+        public IEnumerable<ModViewModel>? Overwrites => this.OverwritesCollection;
 
-        public IEnumerable<ModViewModel> OverwrittenBy => this.OverwrittenByCollection;
+        public IEnumerable<ModViewModel>? OverwrittenBy => this.OverwrittenByCollection;
 
-        public IEnumerable<string> Conflicts => this.ConflictsCollection;
+        public IEnumerable<string>? Conflicts => this.ConflictsCollection;
 
         /// <summary>
         /// Observable properties used for data binding within the View
         /// </summary>
         [ObservableProperty]
-        private ObservableCollection<ModViewModel> modVMCollection;
+        private ObservableCollection<ModViewModel>? modVMCollection;
 
         [ObservableProperty]
-        private ObservableCollection<ModViewModel> overwritesCollection;
+        private ObservableCollection<ModViewModel>? overwritesCollection;
 
         [ObservableProperty]
-        private ObservableCollection<ModViewModel> overwrittenByCollection;
+        private ObservableCollection<ModViewModel>? overwrittenByCollection;
 
         [ObservableProperty]
-        private ObservableCollection<string> conflictsCollection;
+        private ObservableCollection<string>? conflictsCollection;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(
