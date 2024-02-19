@@ -132,9 +132,6 @@ namespace MW5_Mod_Organizer_WPF.Services
 
             // Insert selectedMod into ModVMCollection by index calculated by temporary list
             collection.Insert(list.IndexOf(mod), mod);
-
-            // Recalculate loadorder by index positions
-            foreach (var item in collection) item.LoadOrder = collection.IndexOf(item);
         }
 
         public void ClearConflictWindow()

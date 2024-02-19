@@ -196,9 +196,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     //Retrieve mods
                     _modService.GetMods();
 
-                    //Generate loadorder by targetIndex
-                    foreach (var mod in ModVMCollection) mod.LoadOrder = ModVMCollection.IndexOf(mod);
-
                     await _modService.CheckForAllConflictsAsync();
                 }
                 else if (dialog.SelectedPath == SecondaryFolderPath)
@@ -228,9 +225,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                         //Retrieve mods
                         _modService.GetMods();
-
-                        //Generate loadorder by targetIndex
-                        foreach (var mod in ModVMCollection) mod.LoadOrder = ModVMCollection.IndexOf(mod);
 
                         await _modService.CheckForAllConflictsAsync();
                     }
@@ -283,9 +277,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     }
                 }
 
-                // Recalculate loadorder by index positions
-                foreach (var item in ModVMCollection) item.LoadOrder = ModVMCollection.IndexOf(item);
-
                 if (selectedItems.Count == 1)
                 {
                     _modService.CheckForConflicts((ModViewModel)selectedItems[0]!);
@@ -327,9 +318,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                     newIndex++;
                 }
-
-                // Recalculate loadorder by index positions
-                foreach (var item in ModVMCollection) item.LoadOrder = ModVMCollection.IndexOf(item);
 
                 if (selectedItems.Count == 1)
                 {
@@ -403,8 +391,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         {
             _modService.GetMods();
 
-            foreach (var mod in ModVMCollection) mod.LoadOrder = ModVMCollection.IndexOf(mod);
-
             DeploymentNecessary = false;
 
             await _modService.CheckForAllConflictsAsync();
@@ -456,11 +442,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                     foreach (var item in sortedModVMCollection) ModVMCollection.Add(item);
 
-                    // Recalculate loadorder by index positions & Reselect all mods
+                    // Reselect all mods
                     foreach (var item in ModVMCollection)
                     {
-                        item.LoadOrder = ModVMCollection.IndexOf(item);
-
                         if (selectedItems.Contains(item))
                         {
                             item.IsSelected = true;
@@ -769,7 +753,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         /// </summary>
         private void ModVMCollection_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            Console.WriteLine("Collection changed");
             foreach (var item in ModVMCollection)
             {
                 item.LoadOrder = ModVMCollection.IndexOf(item);
