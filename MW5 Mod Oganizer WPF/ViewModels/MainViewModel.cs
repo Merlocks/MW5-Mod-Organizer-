@@ -451,10 +451,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         }
                     }
 
-                    Console.WriteLine("");
-                    Console.WriteLine("- - - - - - - - -");
-                    Console.WriteLine("");
-
                     // If only one mod is selected, check for conflicts
                     if (selectedItems.Count == 1)
                     {
