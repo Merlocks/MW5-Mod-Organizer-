@@ -38,12 +38,6 @@ namespace MW5_Mod_Organizer_WPF
 
             this.InitializeComponent();
             this.DataContext = _mainViewModel;
-
-            //Retrieve mods
-            ModService.GetInstance().GetMods();
-
-            //Generate loadorder by index
-            foreach (var mod in ModService.GetInstance().ModVMCollection) mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);
         }
 
         private void ResizeConflictWindow(object sender, DragDeltaEventArgs e) 
