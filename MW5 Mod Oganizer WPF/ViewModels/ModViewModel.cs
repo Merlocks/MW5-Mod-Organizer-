@@ -18,7 +18,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
     {
         public Mod _mod;
         private MainViewModel _mainViewModel;
-        private ModService _modService;
+        private IModService _modService;
 
         /// <summary>
         /// Read-only properties used as Data within the View
@@ -86,7 +86,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         {
             _mod = mod;
             _mainViewModel = App.Current.Services.GetService<MainViewModel>()!;
-            _modService = App.Current.Services.GetService<ModService>()!;
+            _modService = App.Current.Services.GetService<IModService>()!;
 
             ModViewModelStatus = ModViewModelConflictStatus.None;
             IsEnabled = _mod.IsEnabled;

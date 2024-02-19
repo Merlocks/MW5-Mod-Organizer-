@@ -14,15 +14,15 @@ using System.Windows;
 
 namespace MW5_Mod_Organizer_WPF.Services
 {
-    public class ModService
+    public class ModService : IModService
     {
         private readonly MainViewModel _mainViewModel;
         public List<ModViewModel> tempModVMList { get; set; }
 
-        public ModService()
+        public ModService(MainViewModel mainViewModel)
         {
+            _mainViewModel = mainViewModel;
             tempModVMList = new List<ModViewModel>();
-            _mainViewModel = App.Current.Services.GetService<MainViewModel>()!;
         }
 
         public void GetMods()
@@ -32,7 +32,7 @@ namespace MW5_Mod_Organizer_WPF.Services
                 ObservableCollection<ModViewModel>? collection = _mainViewModel.ModVMCollection;
 
                 //Make space for mods
-                this.tempModVMList.Clear();
+                ClearTempList();
                 collection.Clear();
                 ClearConflictWindow();
 
@@ -145,6 +145,11 @@ namespace MW5_Mod_Organizer_WPF.Services
                 overwrittenBy.Clear();
                 conflicts.Clear(); 
             }
+        }
+
+        public void ClearTempList()
+        {
+            this.tempModVMList.Clear();
         }
 
         public void CheckForConflicts(ModViewModel input)

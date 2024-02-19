@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GongSolutions.Wpf.DragDrop;
+using Microsoft.Extensions.DependencyInjection;
 using MW5_Mod_Organizer_WPF.Facades;
 using MW5_Mod_Organizer_WPF.Models;
 using MW5_Mod_Organizer_WPF.Services;
@@ -23,7 +24,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 {
     public partial class MainViewModel : ObservableObject, GongSolutions.Wpf.DragDrop.IDropTarget
     {
-        private ModService _modService;
+        private IModService _modService;
         
         /// <summary>
         /// Read-only properties
@@ -125,7 +126,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         /// <summary>
         /// Constructor
         /// </summary>
-        public MainViewModel(ModService modService)
+        public MainViewModel(IModService modService)
         {
             _modService = modService;
 
@@ -413,7 +414,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             PrimaryFolderPath = string.Empty;
             SecondaryFolderPath = string.Empty;
 
-            _modService.tempModVMList.Clear();
+            _modService.ClearTempList();
             this.ModVMCollection.Clear();
             _modService.ClearConflictWindow();
 

@@ -57,7 +57,7 @@ namespace MW5_Mod_Organizer_WPF
             // Services
             services.AddTransient<FileHandlerService>();
             services.AddTransient<JsonHandlerService>();
-            services.AddSingleton<ModService>();
+            services.AddSingleton<IModService, ModService>();
             services.AddSingleton<HttpRequestService>();
 
             // Facades
