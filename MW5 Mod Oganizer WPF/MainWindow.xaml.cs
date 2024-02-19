@@ -37,7 +37,6 @@ namespace MW5_Mod_Organizer_WPF
             _mainViewModel = App.Current.Services.GetService<MainViewModel>()!;
 
             this.InitializeComponent();
-
             this.DataContext = _mainViewModel;
         }
 

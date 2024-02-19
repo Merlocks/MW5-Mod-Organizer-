@@ -34,7 +34,7 @@ namespace MW5_Mod_Organizer_WPF.Services
         {
             try
             {
-                ObservableCollection<ModViewModel>? collection = _mainViewModel.ModVMCollection;
+                ObservableCollection<ModViewModel>? collection = _mainViewModel!.ModVMCollection;
 
                 //Make space for mods
                 ClearTempList();
@@ -108,7 +108,7 @@ namespace MW5_Mod_Organizer_WPF.Services
                         mod.LoadOrder = 0;
                     }
 
-                    ModViewModel modVM = new ModViewModel(mod, _mainViewModel, this);
+                    ModViewModel modVM = new ModViewModel(mod, _mainViewModel!, this);
                     modVM.Path = path;
                     modVM.Source = source;
                     tempModVMList.Add(modVM);
@@ -118,7 +118,7 @@ namespace MW5_Mod_Organizer_WPF.Services
 
         public void AddMod(ModViewModel mod)
         {
-            ObservableCollection<ModViewModel> collection = _mainViewModel.ModVMCollection;
+            ObservableCollection<ModViewModel> collection = _mainViewModel!.ModVMCollection;
 
 
             int highestIndex = collection.Count;
@@ -139,7 +139,7 @@ namespace MW5_Mod_Organizer_WPF.Services
 
         public void ClearConflictWindow()
         {
-            ObservableCollection<string>? conflicts = _mainViewModel.ConflictsCollection;
+            ObservableCollection<string>? conflicts = _mainViewModel!.ConflictsCollection;
             ObservableCollection<ModViewModel>? overwrites = _mainViewModel.OverwritesCollection;
             ObservableCollection<ModViewModel>? overwrittenBy = _mainViewModel.OverwrittenByCollection;
 
@@ -159,7 +159,7 @@ namespace MW5_Mod_Organizer_WPF.Services
 
         public void CheckForConflicts(ModViewModel input)
         {
-            ObservableCollection<ModViewModel> collection = _mainViewModel.ModVMCollection;
+            ObservableCollection<ModViewModel> collection = _mainViewModel!.ModVMCollection;
             ObservableCollection<ModViewModel> overwrites = _mainViewModel.OverwritesCollection;
             ObservableCollection<ModViewModel> overwrittenBy = _mainViewModel.OverwrittenByCollection;
 
@@ -204,7 +204,7 @@ namespace MW5_Mod_Organizer_WPF.Services
         {
             await Task.Run(async() =>
             {
-                ObservableCollection<ModViewModel> collectionCopy = new ObservableCollection<ModViewModel>(_mainViewModel.ModVMCollection);
+                ObservableCollection<ModViewModel> collectionCopy = new ObservableCollection<ModViewModel>(_mainViewModel!.ModVMCollection);
 
                 // Use ConcurrentDictionary for thread safety
                 ConcurrentDictionary<ModViewModel, Visibility> modVisibility = new ConcurrentDictionary<ModViewModel, Visibility>();
@@ -242,7 +242,7 @@ namespace MW5_Mod_Organizer_WPF.Services
 
         public void GenerateManifest(ModViewModel input)
         {
-            ObservableCollection<ModViewModel> collection = _mainViewModel.ModVMCollection;
+            ObservableCollection<ModViewModel> collection = _mainViewModel!.ModVMCollection;
             ObservableCollection< string > conflicts = _mainViewModel.ConflictsCollection;
 
 

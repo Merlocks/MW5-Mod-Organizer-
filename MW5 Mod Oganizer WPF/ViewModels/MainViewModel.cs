@@ -24,6 +24,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 {
     public partial class MainViewModel : ObservableObject, GongSolutions.Wpf.DragDrop.IDropTarget
     {
+        /// <summary>
+        /// Dependency objects
+        /// </summary>
         private readonly IModService _modService;
         private readonly HttpRequestService _httpRequestService;
         
@@ -31,11 +34,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         /// Read-only properties
         /// </summary>
         public IEnumerable<ModViewModel> Mods => this.ModVMCollection;
-
         public IEnumerable<ModViewModel> Overwrites => this.OverwritesCollection;
-
         public IEnumerable<ModViewModel> OverwrittenBy => this.OverwrittenByCollection;
-
         public IEnumerable<string> Conflicts => this.ConflictsCollection;
 
         /// <summary>
@@ -598,8 +598,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public async Task LoadedAsync()
         {
-            //HttpRequestService requestService = new HttpRequestService();
-
             // Load all mods into memory when Window is loaded
             _modService.GetMods();
 
