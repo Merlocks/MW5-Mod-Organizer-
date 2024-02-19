@@ -17,7 +17,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
     public partial class ModViewModel : ObservableObject
     {
         public Mod _mod;
-        private MainViewModel? _mainViewModel;
+        private MainViewModel _mainViewModel;
+        private ModService _modService;
 
         /// <summary>
         /// Read-only properties used as Data within the View
@@ -84,7 +85,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         public ModViewModel(Mod mod)
         {
             _mod = mod;
-            _mainViewModel = App.Current.Services.GetService<MainViewModel>();
+            _mainViewModel = App.Current.Services.GetService<MainViewModel>()!;
+            _modService = App.Current.Services.GetService<ModService>()!;
 
             ModViewModelStatus = ModViewModelConflictStatus.None;
             IsEnabled = _mod.IsEnabled;
@@ -125,13 +127,13 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 if (Directory.Exists(this.Path))
                 {
                     Directory.Delete(this.Path, true);
-                    ModVMCollection.Remove(this);
+                    _mainViewModel.ModVMCollection.Remove(this);
                     _modService.ClearConflictWindow();
 
                     // Recalculate loadorder by index positions
-                    foreach (var item in ModVMCollection)
+                    foreach (var item in _mainViewModel.ModVMCollection)
                     {
-                        item.LoadOrder = ModVMCollection.IndexOf(item);
+                        item.LoadOrder = _mainViewModel.ModVMCollection.IndexOf(item);
                         item.ModViewModelStatus = ModViewModelConflictStatus.None;
                     }
 
@@ -155,7 +157,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         public async Task EnableSelectedMods()
         {
             bool isChanged = false;
-            List<ModViewModel> selectedItems = ModVMCollection.Where(m => m.IsSelected).ToList();
+            List<ModViewModel> selectedItems = _mainViewModel.ModVMCollection.Where(m => m.IsSelected).ToList();
 
             foreach (var item in selectedItems) 
             { 
@@ -175,7 +177,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         public async Task DisableSelectedMods()
         {
             bool isChanged = false;
-            List<ModViewModel> selectedItems = ModVMCollection.Where(m => m.IsSelected).ToList();
+            List<ModViewModel> selectedItems = _mainViewModel.ModVMCollection.Where(m => m.IsSelected).ToList();
 
             foreach (var item in selectedItems) 
             {
@@ -190,7 +192,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             {
                 _modService.ClearConflictWindow();
 
-                foreach (var item in ModVMCollection) { item.ModViewModelStatus = ModViewModelConflictStatus.None; }
+                foreach (var item in _mainViewModel.ModVMCollection) { item.ModViewModelStatus = ModViewModelConflictStatus.None; }
             }
 
             if (!_mainViewModel!.DeploymentNecessary && isChanged) _mainViewModel!.DeploymentNecessary = true;

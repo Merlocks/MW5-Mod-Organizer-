@@ -33,8 +33,6 @@ namespace MW5_Mod_Organizer_WPF
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            _modService;
-
             MainWindow = new MainWindow();
             MainWindow.Show();
 

@@ -16,27 +16,25 @@ namespace MW5_Mod_Organizer_WPF.Services
 {
     public class ModService
     {
-        private readonly MainViewModel? _mainViewModel;
+        private readonly MainViewModel _mainViewModel;
         public List<ModViewModel> tempModVMList { get; set; }
 
-        private ModService()
+        public ModService()
         {
             tempModVMList = new List<ModViewModel>();
-            _mainViewModel = App.Current.Services.GetService<MainViewModel>();
+            _mainViewModel = App.Current.Services.GetService<MainViewModel>()!;
         }
 
-        public void GetMods(
-            ObservableCollection<ModViewModel>? collection,
-            ObservableCollection<string>? conflicts,
-            ObservableCollection<ModViewModel>? overwrites,
-            ObservableCollection<ModViewModel>? overwrittenBy)
+        public void GetMods()
         {
             try
             {
+                ObservableCollection<ModViewModel>? collection = _mainViewModel.ModVMCollection;
+
                 //Make space for mods
                 this.tempModVMList.Clear();
                 collection.Clear();
-                ClearConflictWindow(conflicts, overwrites, overwrittenBy);
+                ClearConflictWindow();
 
                 //Primary path only
                 if (!string.IsNullOrEmpty(Properties.Settings.Default.Path) && string.IsNullOrEmpty(Properties.Settings.Default.SecondaryPath))
@@ -113,11 +111,34 @@ namespace MW5_Mod_Organizer_WPF.Services
             }
         }
 
-        public void ClearConflictWindow(
-            ObservableCollection<string>? conflicts, 
-            ObservableCollection<ModViewModel>? overwrites,
-            ObservableCollection<ModViewModel>? overwrittenBy)
+        public void AddMod(ModViewModel mod)
         {
+            ObservableCollection<ModViewModel> collection = _mainViewModel.ModVMCollection;
+
+
+            int highestIndex = collection.Count;
+
+            if (mod.LoadOrder > highestIndex) mod.LoadOrder = highestIndex;
+
+            // Create temporary list with contents of ModVMCollection + added selectedMod
+            // Sort temporary list first by Loadorder, then by DisplayName
+            List<ModViewModel> list = new List<ModViewModel>(collection) { mod };
+            list = list.OrderBy(m => m.LoadOrder).ThenBy(m => m.FolderName).ToList();
+
+            // Insert selectedMod into ModVMCollection by index calculated by temporary list
+            collection.Insert(list.IndexOf(mod), mod);
+
+            // Recalculate loadorder by index positions
+            foreach (var item in collection) item.LoadOrder = collection.IndexOf(item);
+        }
+
+        public void ClearConflictWindow()
+        {
+            ObservableCollection<string>? conflicts = _mainViewModel.ConflictsCollection;
+            ObservableCollection<ModViewModel>? overwrites = _mainViewModel.OverwritesCollection;
+            ObservableCollection<ModViewModel>? overwrittenBy = _mainViewModel.OverwrittenByCollection;
+
+
             if (conflicts != null && overwrites != null && overwrittenBy != null)
             {
                 overwrites.Clear();
@@ -126,14 +147,13 @@ namespace MW5_Mod_Organizer_WPF.Services
             }
         }
 
-        public void CheckForConflicts(
-            ModViewModel input, 
-            ObservableCollection<ModViewModel> collection,
-            ObservableCollection<ModViewModel> overwrites,
-            ObservableCollection<ModViewModel> overwrittenBy,
-            ObservableCollection<string> conflicts)
+        public void CheckForConflicts(ModViewModel input)
         {
-            ClearConflictWindow(conflicts, overwrites, overwrittenBy);
+            ObservableCollection<ModViewModel> collection = _mainViewModel.ModVMCollection;
+            ObservableCollection<ModViewModel> overwrites = _mainViewModel.OverwritesCollection;
+            ObservableCollection<ModViewModel> overwrittenBy = _mainViewModel.OverwrittenByCollection;
+
+            ClearConflictWindow();
 
             string[]? inputManifestToLower = null;
 
@@ -170,11 +190,11 @@ namespace MW5_Mod_Organizer_WPF.Services
             }
         }
 
-        public async Task CheckForAllConflictsAsync(ObservableCollection<ModViewModel> collection)
+        public async Task CheckForAllConflictsAsync()
         {
             await Task.Run(async() =>
             {
-                ObservableCollection<ModViewModel> collectionCopy = new ObservableCollection<ModViewModel>(collection);
+                ObservableCollection<ModViewModel> collectionCopy = new ObservableCollection<ModViewModel>(_mainViewModel.ModVMCollection);
 
                 // Use ConcurrentDictionary for thread safety
                 ConcurrentDictionary<ModViewModel, Visibility> modVisibility = new ConcurrentDictionary<ModViewModel, Visibility>();
@@ -210,11 +230,12 @@ namespace MW5_Mod_Organizer_WPF.Services
             });
         }
 
-        public void GenerateManifest(
-            ModViewModel input, 
-            ObservableCollection<ModViewModel> collection,
-            ObservableCollection<string> conflicts)
+        public void GenerateManifest(ModViewModel input)
         {
+            ObservableCollection<ModViewModel> collection = _mainViewModel.ModVMCollection;
+            ObservableCollection< string > conflicts = _mainViewModel.ConflictsCollection;
+
+
             conflicts.Clear();
 
             if (input.Manifest != null)

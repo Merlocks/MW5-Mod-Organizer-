@@ -140,7 +140,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
             IsZipDropVisible = false;
 
-            _modService.GetMods(this.ModVMCollection, this.ConflictsCollection, this.OverwritesCollection, this.OverwrittenByCollection);
+            _modService.GetMods();
         }
 
         /// <summary>
@@ -191,12 +191,12 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     PrimaryFolderPath = dialog.SelectedPath;
 
                     //Retrieve mods
-                    _modService.GetMods(this.ModVMCollection, this.ConflictsCollection, this.OverwritesCollection, this.OverwrittenByCollection);
+                    _modService.GetMods();
 
                     //Generate loadorder by targetIndex
                     foreach (var mod in ModVMCollection) mod.LoadOrder = ModVMCollection.IndexOf(mod);
 
-                    await _modService.CheckForAllConflictsAsync(this.ModVMCollection);
+                    await _modService.CheckForAllConflictsAsync();
                 }
                 else if (dialog.SelectedPath == SecondaryFolderPath)
                 {
@@ -224,12 +224,12 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         SecondaryFolderPath = dialog.SelectedPath;
 
                         //Retrieve mods
-                        _modService.GetMods(this.ModVMCollection, this.ConflictsCollection, this.OverwritesCollection, this.OverwrittenByCollection);
+                        _modService.GetMods();
 
                         //Generate loadorder by targetIndex
                         foreach (var mod in ModVMCollection) mod.LoadOrder = ModVMCollection.IndexOf(mod);
 
-                        await _modService.CheckForAllConflictsAsync(this.ModVMCollection);
+                        await _modService.CheckForAllConflictsAsync();
                     }
                     else if (dialog.SelectedPath == PrimaryFolderPath)
                     {
@@ -398,13 +398,13 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
         public async Task Undo()
         {
-            _modService.GetMods(this.ModVMCollection, this.ConflictsCollection, this.OverwritesCollection, this.OverwrittenByCollection);
+            _modService.GetMods();
 
             foreach (var mod in ModVMCollection) mod.LoadOrder = ModVMCollection.IndexOf(mod);
 
             DeploymentNecessary = false;
 
-            await _modService.CheckForAllConflictsAsync(this.ModVMCollection);
+            await _modService.CheckForAllConflictsAsync();
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
@@ -415,7 +415,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
             _modService.tempModVMList.Clear();
             this.ModVMCollection.Clear();
-            _modService.ClearConflictWindow(this.ConflictsCollection, this.OverwritesCollection, this.OverwrittenByCollection);
+            _modService.ClearConflictWindow();
 
             DeploymentNecessary = false;
         }
@@ -597,7 +597,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         public async Task LoadedAsync()
         {
             HttpRequestService requestService = new HttpRequestService();
-            List<Task> tasks = new List<Task> { Task.Run(() => _modService.CheckForAllConflictsAsync(this.ModVMCollection)) };
+            List<Task> tasks = new List<Task> { Task.Run(() => _modService.CheckForAllConflictsAsync()) };
 
             Task<string> taskRequestVersion = requestService.Main();
             tasks.Add(taskRequestVersion);
@@ -629,7 +629,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 _modService.CheckForConflicts(selectedItems[0]!);
             }
 
-            await _modService.CheckForAllConflictsAsync(this.ModVMCollection);
+            await _modService.CheckForAllConflictsAsync();
 
             DeploymentNecessary = true;
         }
@@ -668,7 +668,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
             else if (selectedItems?.Count > 1 || selectedItems?.Count < 1)
             {
-                _modService.ClearConflictWindow(this.ConflictsCollection, this.OverwritesCollection, this.OverwrittenByCollection);
+                _modService.ClearConflictWindow();
 
                 foreach (var item in Mods)
                 {
@@ -689,7 +689,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 if (mod != null)
                 {
                     mod.IsSelectedConflict = false;
-                    _modService.Conflicts.Clear();
+                    this.ConflictsCollection.Clear();
                 }
             }
 
@@ -727,7 +727,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 if (mod != null)
                 {
                     mod.IsSelectedConflict = false;
-                    _modService.Conflicts.Clear();
+                    this.ConflictsCollection.Clear();
                 }
             }
 
