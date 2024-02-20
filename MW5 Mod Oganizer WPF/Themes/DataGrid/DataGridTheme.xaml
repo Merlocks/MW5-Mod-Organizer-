@@ -3,9 +3,10 @@
     <Style x:Key="DataGridStyle1" TargetType="{x:Type DataGrid}">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="Black"/>
-        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="RowDetailsVisibilityMode" Value="VisibleWhenSelected"/>
-        <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+        <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
         <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
         <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
         <Setter Property="AutoGenerateColumns" Value="False"/>
@@ -17,6 +18,7 @@
         <Setter Property="CanUserResizeRows" Value="False"/>
         <Setter Property="CanUserResizeColumns" Value="False"/>
         <Setter Property="CanUserReorderColumns" Value="False"/>
+        <Setter Property="CanUserSortColumns" Value="False"/>
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="GridLinesVisibility" Value="None"/>
         <Setter Property="AlternationCount" Value="2"/>

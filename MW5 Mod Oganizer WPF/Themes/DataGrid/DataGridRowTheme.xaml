@@ -22,8 +22,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGridRow}">
                     <Grid>
-                        <Border x:Name="DGR_Border" 
-                                Margin="0 0 0 1" 
+                        <Border x:Name="DGR_Border"
+                                Margin="0 1"
                                 Background="{TemplateBinding Background}" 
                                 BorderBrush="{TemplateBinding BorderBrush}" 
                                 BorderThickness="{TemplateBinding BorderThickness}" 
