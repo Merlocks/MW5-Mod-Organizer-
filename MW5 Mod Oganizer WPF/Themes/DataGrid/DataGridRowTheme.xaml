@@ -9,7 +9,7 @@
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="SnapsToDevicePixels" Value="true"/>
         <Setter Property="Validation.ErrorTemplate" Value="{x:Null}"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
         <Setter Property="IsSelected" Value="{Binding Path=IsSelected}"/>
         <Setter Property="ValidationErrorTemplate">
             <Setter.Value>
@@ -23,7 +23,7 @@
                 <ControlTemplate TargetType="{x:Type DataGridRow}">
                     <Grid>
                         <Border x:Name="DGR_Border"
-                                Margin="0 1"
+                                Margin="0"
                                 Background="{TemplateBinding Background}" 
                                 BorderBrush="{TemplateBinding BorderBrush}" 
                                 BorderThickness="{TemplateBinding BorderThickness}" 
