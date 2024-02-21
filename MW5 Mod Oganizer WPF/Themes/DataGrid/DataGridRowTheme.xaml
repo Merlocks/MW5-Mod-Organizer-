@@ -5,12 +5,11 @@
     <Style x:Key="DataGridRowStyle1" TargetType="{x:Type DataGridRow}">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="#141414"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="SnapsToDevicePixels" Value="true"/>
         <Setter Property="Validation.ErrorTemplate" Value="{x:Null}"/>
-        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="IsSelected" Value="{Binding Path=IsSelected}"/>
+        <Setter Property="Height" Value="20"/>
         <Setter Property="ValidationErrorTemplate">
             <Setter.Value>
                 <ControlTemplate>
@@ -23,7 +22,6 @@
                 <ControlTemplate TargetType="{x:Type DataGridRow}">
                     <Grid>
                         <Border x:Name="DGR_Border"
-                                Margin="0"
                                 Background="{TemplateBinding Background}" 
                                 BorderBrush="{TemplateBinding BorderBrush}" 
                                 BorderThickness="{TemplateBinding BorderThickness}" 
@@ -65,27 +63,19 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="AlternationIndex" Value="1">
-                <Setter Property="Background" Value="#F2E8E1"/>
+                <Setter Property="Background" Value="#F2E8E8"/>
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderBrush" Value="#FFC8C8C8"/>
-                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Background" Value="#D2D2D2"/>
             </Trigger>
             <DataTrigger Binding="{Binding ModViewModelStatus}" Value="Overwrites">
-                <Setter Property="BorderBrush" Value="Red"/>
-                <Setter Property="BorderThickness" Value="1"/>
                 <Setter Property="Background" Value="#FFFFBDBD"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding ModViewModelStatus}" Value="OverwrittenBy">
-                <Setter Property="BorderBrush" Value="Orange"/>
-                <Setter Property="BorderThickness" Value="1"/>
                 <Setter Property="Background" Value="#FFFFDABB"/>
             </DataTrigger>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="#FFE0E0E0"/>
-                <Setter Property="Foreground" Value="#141414"/>
-                <Setter Property="BorderBrush" Value="#FF323538"/>
-                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Background" Value="#B6DFF2"/>
             </Trigger>
         </Style.Triggers>
     </Style>

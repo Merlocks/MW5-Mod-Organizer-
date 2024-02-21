@@ -169,7 +169,8 @@
                                        HorizontalAlignment="Stretch"
                                        VerticalAlignment="Stretch"
                                        Cursor="Help"
-                                       Visibility="{Binding HasConflicts}">
+                                       Visibility="{Binding HasConflicts}"
+                                       ToolTipService.InitialShowDelay="0">
                                     <ToolTipService.ToolTip>
                                         <ToolTip Content="Mod(s) detected altering the same asset(s). &#x0a;This may be intentional, please check before committing loadorder."/>
                                     </ToolTipService.ToolTip>
@@ -268,7 +269,9 @@
                                   Margin="10" 
                                   Background="Transparent"
                                   BorderBrush="Transparent"
-                                  SelectionMode="Single">
+                                  SelectionMode="Single"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Hidden">
                             <behaviors:Interaction.Triggers>
                                 <behaviors:EventTrigger EventName="SelectionChanged">
                                     <behaviors:InvokeCommandAction Command="{Binding OverwritesSelectionChangedCommand}" PassEventArgsToCommand="True"/>
@@ -300,7 +303,9 @@
                                   Margin="10" 
                                   Background="Transparent"
                                   BorderBrush="Transparent"
-                                  SelectionMode="Single">
+                                  SelectionMode="Single"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Hidden">
                             <behaviors:Interaction.Triggers>
                                 <behaviors:EventTrigger EventName="SelectionChanged">
                                     <behaviors:InvokeCommandAction Command="{Binding OverwrittenBySelectionChangedCommand}" PassEventArgsToCommand="True"/>
@@ -330,7 +335,9 @@
                                   RowStyle="{DynamicResource DataGridConflictRowStyle1}" 
                                   Margin="10" 
                                   Background="Transparent"
-                                  BorderBrush="Transparent">
+                                  BorderBrush="Transparent"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Auto">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Conflicts"
                                                     Width="auto"
