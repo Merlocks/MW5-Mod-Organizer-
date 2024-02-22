@@ -17,12 +17,13 @@ namespace MW5_Mod_Organizer_WPF
 
     /// <changelog> 
     /// Made some changes to the layout. Rows no longer have a border that isn't clickable.
-    /// Change mods with defaultLoadOrder as decimal to int when adjusting list
+    /// Change mods with defaultLoadOrder as decimal to int when adjusting list.
+    /// Adding a mod through the "Add mod" button that already exists will now get rid of all its files before installing.
+    /// Fixed infinite loading screen when a Mod Archive is corrupted and can't be extracted.
+    /// Fixed adding a Mod Archive which adds multiple mod folders not adding all mods to the list.
     /// </changelog>
 
     /// <TODO>
-    /// When a file is corrupt when adding a mod, throw exception and handle
-    /// When adding a zipped mod that has 3 individual mods inside, only one is getting added to collection
     /// Add Header to bEnabled state in datagrid
     /// fix width of columns when adding primary folder on first startup
     /// - - Make ColumnWidth class with width and minwidth and add instances for each column in MainViewModel for binding
