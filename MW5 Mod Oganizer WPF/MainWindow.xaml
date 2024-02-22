@@ -136,21 +136,23 @@
                 </behaviors:Interaction.Triggers>
                 <DataGrid.Columns>
                     <DataGridTemplateColumn x:Name="DataGridColumnEnabled"
-                                            MinWidth="45"
-                                            MaxWidth="45"
+                                            Header="Enabled"
+                                            MinWidth="75"
+                                            MaxWidth="75"
                                             CanUserResize="False">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <CheckBox x:Name="CheckBoxIsEnabled"
                                           IsChecked="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged}"
-                                          Command="{Binding DataContext.ToggleCheckBoxCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                          Command="{Binding DataContext.ToggleCheckBoxCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                          Margin="10 0 0 0"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTextColumn x:Name="DataGridColumnLoadorder"
                                         Header="Loadorder"
-                                        MinWidth="100"
-                                        MaxWidth="100"
+                                        MinWidth="75"
+                                        MaxWidth="75"
                                         CanUserResize="False"
                                         Binding="{Binding LoadOrder, UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridTextColumn x:Name="DataGridColumnMod"
@@ -158,8 +160,8 @@
                                         MinWidth="200"
                                         Binding="{Binding DisplayName}"/>
                     <DataGridTemplateColumn x:Name="DataGridColumnNotification"
-                                            MinWidth="50"
-                                            MaxWidth="50"
+                                            MinWidth="32"
+                                            MaxWidth="32"
                                             CanUserResize="False">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -350,19 +352,24 @@
                             </ToolTipService.ToolTip>
                         </DataGrid>
                     </Border>
-                    <TextBlock Text="Select a conflicting mod from above to view manifests"
-                               TextWrapping="Wrap"
-                               FontSize="12"
-                               Opacity="0.4"
-                               IsHitTestVisible="False"
-                               Grid.Row="6"
-                               Grid.Column="0"
-                               Margin="20 0 30 0"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Visibility="{Binding ConflictNotificationState}">
+                    <Border Grid.Row="6"
+                            Grid.Column="0"
+                            Margin=" 0 40">
+                        <TextBlock Text="Select a conflicting mod from above to view manifests"
+                                   TextWrapping="WrapWithOverflow"
+                                   FontSize="12"
+                                   Opacity="0.4"
+                                   IsHitTestVisible="False"
+                                   Grid.Row="6"
+                                   Grid.Column="0"
+                                   Margin="20 0 30 0"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Visibility="{Binding ConflictNotificationState}">
 
-                    </TextBlock>
+                        </TextBlock>
+                    </Border>
+                    
 
                     <Thumb x:Name="leftThumb"
                            Grid.Row="0"
