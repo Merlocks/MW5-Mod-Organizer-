@@ -26,7 +26,7 @@ namespace MW5_Mod_Organizer_WPF
     /// </changelog>
 
     /// <TODO>
-    /// Add Header to bEnabled state in datagrid
+    /// 
     /// </TODO>
     public partial class MainWindow : Window
     {
