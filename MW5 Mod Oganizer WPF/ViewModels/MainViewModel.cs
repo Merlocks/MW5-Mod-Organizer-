@@ -101,7 +101,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         private bool isZipDropVisible;
 
         [ObservableProperty]
-        private Visibility isLoading = Visibility.Hidden;
+        private bool isLoading = false;
 
         [ObservableProperty]
         private string? loadingContext;
@@ -110,11 +110,11 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         {
             if (value == string.Empty)
             {
-                this.IsLoading = Visibility.Hidden;
+                this.IsLoading = false;
             }
             else
             {
-                this.IsLoading = Visibility.Visible;
+                this.IsLoading = true;
             }
         }
 

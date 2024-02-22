@@ -16,7 +16,7 @@ namespace MW5_Mod_Organizer_WPF
     /// </summary>
 
     /// <changelog> 
-    /// 
+    /// Made some changes to the layout. Rows no longer have a border that isn't clickable.
     /// </changelog>
 
     /// <TODO>

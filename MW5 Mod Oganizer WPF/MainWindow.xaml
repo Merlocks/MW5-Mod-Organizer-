@@ -533,57 +533,79 @@
                 <ToolTip Content="Opens the Nexus Mod page."/>
             </ToolTipService.ToolTip>
         </Button>
-        
-        <!--Loading screen-->
-        <Grid   Grid.Column="0" 
-                Grid.ColumnSpan="99"
-                Grid.Row="0"
-                Grid.RowSpan="99"
-                Visibility="{Binding IsLoading}">
-            <Border Background="Black"
-                    Opacity="0.2"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch">
-            </Border>
-            <Border Background="#8e8e8e"
-                    BorderThickness="0 0 5 8"
-                    BorderBrush="#777777"
-                    CornerRadius="2"
-                    Height="200"
-                    Width="500"
-                    Padding="20 10"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center">
-                <Grid>
-                    <TextBlock Text="{Binding LoadingContext}"
-                               TextWrapping="Wrap"
-                               Foreground="#E2E0DD"
-                               FontSize="16"
-                               FontWeight="Bold"
-                               TextOptions.TextFormattingMode="Display"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Center"
-                               IsHitTestVisible="False">
-                        <TextBlock.Effect>
-                            <DropShadowEffect BlurRadius="0" ShadowDepth="3" RenderingBias="Quality" Color="#B8B7B5"/>
-                        </TextBlock.Effect>
-                    </TextBlock>
-                    <Image gif:AnimationBehavior.SourceUri="/gear-gif.gif"
-                           RenderOptions.BitmapScalingMode="Fant"
-                           Height="32"
-                           Width="32"
-                           HorizontalAlignment="Right"
-                           VerticalAlignment="Bottom">
-                        <Image.Effect>
-                            <DropShadowEffect BlurRadius="0" ShadowDepth="3" RenderingBias="Quality" Color="#B8B7B5"/>
-                        </Image.Effect>
-                    </Image>
-                </Grid>
-                <Border.Effect>
-                    <DropShadowEffect BlurRadius="10" Color="Black" ShadowDepth="5" Direction="270" Opacity="0.1"/>
-                </Border.Effect>
-            </Border>
-        </Grid>
+
+        <ContentControl Grid.Column="0" 
+                        Grid.ColumnSpan="99"
+                        Grid.Row="0"
+                        Grid.RowSpan="99">
+            <ContentControl.Style>
+                <Style TargetType="{x:Type ContentControl}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <Grid>
+                                        <Border Background="Black"
+                                                Opacity="0.2"
+                                                HorizontalAlignment="Stretch"
+                                                VerticalAlignment="Stretch">
+                                        </Border>
+                                        <Border Background="#8e8e8e"
+                                                BorderThickness="0 0 5 8"
+                                                BorderBrush="#777777"
+                                                CornerRadius="2"
+                                                Height="200"
+                                                Width="500"
+                                                Padding="20 10"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center">
+                                            <Grid>
+                                                <TextBlock Text="{Binding LoadingContext}"
+                                                           TextWrapping="Wrap"
+                                                           Foreground="#E2E0DD"
+                                                           FontSize="16"
+                                                           FontWeight="Bold"
+                                                           TextOptions.TextFormattingMode="Display"
+                                                           VerticalAlignment="Center"
+                                                           HorizontalAlignment="Center"
+                                                           IsHitTestVisible="False">
+                                                    <TextBlock.Effect>
+                                                        <DropShadowEffect BlurRadius="0" 
+                                                                          ShadowDepth="3" 
+                                                                          RenderingBias="Quality" 
+                                                                          Color="#B8B7B5"/>
+                                                    </TextBlock.Effect>
+                                                </TextBlock>
+                                                <Image gif:AnimationBehavior.SourceUri="/gear-gif.gif"
+                                                       RenderOptions.BitmapScalingMode="Fant"
+                                                       Height="32"
+                                                       Width="32"
+                                                       HorizontalAlignment="Right"
+                                                       VerticalAlignment="Bottom">
+                                                    <Image.Effect>
+                                                        <DropShadowEffect BlurRadius="0" 
+                                                                          ShadowDepth="3" 
+                                                                          RenderingBias="Quality" 
+                                                                          Color="#B8B7B5"/>
+                                                    </Image.Effect>
+                                                </Image>
+                                            </Grid>
+                                            <Border.Effect>
+                                                <DropShadowEffect BlurRadius="10" 
+                                                                  Color="Black" 
+                                                                  ShadowDepth="5" 
+                                                                  Direction="270" 
+                                                                  Opacity="0.1"/>
+                                            </Border.Effect>
+                                        </Border>
+                                    </Grid>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
     </Grid>
 </Window>
     
