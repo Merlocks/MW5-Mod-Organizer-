@@ -108,6 +108,8 @@ namespace MW5_Mod_Organizer_WPF.Services
                         mod.LoadOrder = 0;
                     }
 
+                    mod.LoadOrder = decimal.ToInt32((decimal)mod.LoadOrder);
+
                     ModViewModel modVM = new ModViewModel(mod, _mainViewModel!, this);
                     modVM.Path = path;
                     modVM.Source = source;

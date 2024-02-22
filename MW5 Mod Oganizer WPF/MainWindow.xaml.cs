@@ -17,10 +17,10 @@ namespace MW5_Mod_Organizer_WPF
 
     /// <changelog> 
     /// Made some changes to the layout. Rows no longer have a border that isn't clickable.
+    /// Change mods with defaultLoadOrder as decimal to int when adjusting list
     /// </changelog>
 
     /// <TODO>
-    /// Change mods with defaultLoadOrder as decimal to int when adjusting list
     /// When a file is corrupt when adding a mod, throw exception and handle
     /// When adding a zipped mod that has 3 individual mods inside, only one is getting added to collection
     /// Add Header to bEnabled state in datagrid

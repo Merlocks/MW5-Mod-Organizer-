@@ -530,14 +530,21 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                         if (mod != null)
                         {
-                            ModViewModel modVM = new ModViewModel(mod, this, _modService);
-                            modVM.Path = PrimaryFolderPath + @"\" + modFolderPath;
-                            modVM.Source = "Primary Folder";
-
                             if (!File.Exists(PrimaryFolderPath + @"\" + modFolderPath + @"\backup.json"))
                             {
                                 JsonConverterFacade.Createbackup(PrimaryFolderPath + @"\" + modFolderPath);
                             }
+
+                            if (mod.LoadOrder == null)
+                            {
+                                mod.LoadOrder = 0;
+                            }
+
+                            mod.LoadOrder = decimal.ToInt32((decimal)mod.LoadOrder);
+
+                            ModViewModel modVM = new ModViewModel(mod, this, _modService);
+                            modVM.Path = PrimaryFolderPath + @"\" + modFolderPath;
+                            modVM.Source = "Primary Folder";
 
                             var list = ModVMCollection.Where(m => m.Path == modVM.Path).ToList();
 
