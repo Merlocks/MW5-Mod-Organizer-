@@ -32,7 +32,7 @@ namespace MW5_Mod_Organizer_WPF.Services
                 }
                 else
                 {
-                    LoggerService.AddLog("ReadFileFunction", "The given path does not exist.");
+                    LoggerService.AddLog("ReadFileFunction", $"The given path \"{path + fileName}\"does not exist.");
                     return null;
                 }
             }

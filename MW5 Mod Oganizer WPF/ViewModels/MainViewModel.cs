@@ -45,6 +45,12 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         private ObservableCollection<ModViewModel> modVMCollection;
 
         [ObservableProperty]
+        private string modCount;
+
+        [ObservableProperty]
+        private string modCountActive;
+
+        [ObservableProperty]
         private ObservableCollection<ModViewModel> overwritesCollection;
 
         [ObservableProperty]
@@ -521,7 +527,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                                 if (folder != null && !folderList.Contains(folder))
                                 {
                                     folderList.Add(folder);
-                                    Console.WriteLine($"Added folder {folder} to list.");
                                 }
 
                                 entry.WriteToDirectory(@"downloads", new ExtractionOptions { ExtractFullPath = true, Overwrite = true });
@@ -554,7 +559,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     {
                         // Remove existing mod folder if it already exists.
                         // Also remove mod from list.
-                        foreach (var path in Directory.GetDirectories(PrimaryFolderPath!))
+                        foreach (var path in Directory.GetFileSystemEntries(PrimaryFolderPath!))
                         {
                             string? folder = Path.GetFileName(path);
 
@@ -563,14 +568,26 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                                 ModViewModel? mod = ModVMCollection.SingleOrDefault(m => m.Path == path);
                                 if (mod != null) ModVMCollection.Remove(mod);
 
-                                Directory.Delete(path, true);
+                                try
+                                {
+                                    Directory.Delete(path, true);
+                                }
+                                // If path file instead of directory, catch exception and delete as file instead.
+                                catch (IOException)
+                                {
+                                    File.Delete(path);
+                                }
+                                catch (Exception)
+                                {
+                                    throw;
+                                }
                             }
                         }
 
                         // Move mod folders from download folder to main mod folder.
                         this.LoadingContext = "Moving folders..";
                         
-                        foreach (var folder in Directory.GetDirectories(@"downloads"))
+                        foreach (var folder in Directory.GetFileSystemEntries(@"downloads"))
                         {
                             Directory.Move(folder, PrimaryFolderPath! + @"\" + Path.GetFileName(folder));
                         }
@@ -677,6 +694,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public async Task ToggleCheckBox()
         {
+            this.ModCountActive = ModVMCollection.Where(m => m.IsEnabled == true).Count().ToString();
+
             List<ModViewModel> selectedItems = ModVMCollection.Where(m => m.IsSelected).ToList();
 
             if (selectedItems != null && selectedItems.Count == 1)
@@ -815,6 +834,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         /// </summary>
         private void ModVMCollection_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
+            this.ModCount = ModVMCollection.Count().ToString();
+            this.ModCountActive = ModVMCollection.Where(m => m.IsEnabled == true).Count().ToString();
+
             foreach (var item in ModVMCollection)
             {
                 item.LoadOrder = ModVMCollection.IndexOf(item);

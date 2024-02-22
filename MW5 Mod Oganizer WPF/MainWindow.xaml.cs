@@ -19,6 +19,7 @@ namespace MW5_Mod_Organizer_WPF
     /// Made some changes to the layout. Rows no longer have a border that isn't clickable.
     /// Change mods with defaultLoadOrder as decimal to int when adjusting list.
     /// Adding a mod through the "Add mod" button that already exists will now get rid of all its files before installing.
+    /// Adding a mod through "Add mod" will now also extract extra files outside of the modfolder.
     /// Fixed infinite loading screen when a Mod Archive is corrupted and can't be extracted.
     /// Fixed adding a Mod Archive which adds multiple mod folders not adding all mods to the list.
     /// Fixed columns being too small when starting the application with an empty list and then adding a mod folder.
