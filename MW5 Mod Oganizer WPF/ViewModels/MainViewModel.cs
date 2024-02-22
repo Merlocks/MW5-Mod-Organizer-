@@ -633,7 +633,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 }
 
                 this.LoadingContext = string.Empty;
-                throw;
             }
         }
 
