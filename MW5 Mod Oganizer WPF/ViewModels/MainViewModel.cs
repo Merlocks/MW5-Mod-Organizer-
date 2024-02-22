@@ -55,7 +55,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(
-            nameof(AddModButtonCommand),
+            nameof(AddModCommand),
             nameof(OpenSecondaryFolderPathCommand),
             nameof(ArrowDownCommand),
             nameof(ArrowUpCommand),
@@ -467,7 +467,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
-        public async Task AddModButtonAsync()
+        public async Task AddModAsync()
         {
             try
             {
@@ -486,20 +486,26 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 if (dialogResult == DialogResult.OK)
                 {
                     // Begin loading
-                    string targetFolder = PrimaryFolderPath!;
                     string sourceCompressedFile = dialog.FileName;
-                    string modFolderPath = "Default";
+                    List<string> folderList = new List<string>();
 
                     this.LoadingContext = "Extracting Mod Archive. Please wait... ";
 
                     await Task.Delay(500);
 
-                    await Task.Run(() =>
+                    Task extractArchive = Task.Run(() =>
                     {
-                        // SharpCompress library to extract and copy contents compressed files to PrimaryModFolder
+                        // SharpCompress library to extract and copy contents compressed files to PrimaryModFolder.
                         // GitHub at: https://github.com/adamhathcock/sharpcompress
                         // Supports *.zip, *.rar and *.7z
                         var archive = ArchiveFactory.Open(sourceCompressedFile);
+
+                        // Create temporary downloads folder.
+                        // Will be used to extract Mod Archive to check if successful. 
+                        if (!Directory.Exists(@"downloads"))
+                        {
+                            Directory.CreateDirectory(@"downloads");
+                        }
 
                         foreach (var entry in archive.Entries)
                         {
@@ -510,70 +516,124 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                             if (!entry.IsDirectory)
                             {
-                                if (entry.Key.EndsWith(@"\mod.json"))
+                                string? folder = entry.Key.Replace("/", "\\").Split('\\').First();
+
+                                if (folder != null && !folderList.Contains(folder))
                                 {
-                                    modFolderPath = entry.Key.Substring(0, entry.Key.IndexOf(@"\mod.json"));
-                                }
-                                else if (entry.Key.EndsWith(@"/mod.json"))
-                                {
-                                    modFolderPath = entry.Key.Substring(0, entry.Key.IndexOf(@"/mod.json"));
+                                    folderList.Add(folder);
+                                    Console.WriteLine($"Added folder {folder} to list.");
                                 }
 
-                                entry.WriteToDirectory(targetFolder, new ExtractionOptions { ExtractFullPath = true, Overwrite = true });
+                                entry.WriteToDirectory(@"downloads", new ExtractionOptions { ExtractFullPath = true, Overwrite = true });
                             }
                         }
                     });
 
-                    await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
+                    // Await extractArchive until it's finished.
+                    try
                     {
-                        Mod? mod = JsonConverterFacade.JsonToMod(PrimaryFolderPath + @"\" + modFolderPath);
+                        await extractArchive;
+                    }
+                    // Catch exception when thrown during task.
+                    // Remove temporary downloads folder.
+                    catch (Exception)
+                    {
+                        this.LoadingContext = "Could not extract Mod Archive. File(s) may be corrupted.\n Removing leftover files..";
+                        await Task.Delay(2000);
 
-                        if (mod != null)
+                        if (Directory.Exists(@"downloads"))
                         {
-                            if (!File.Exists(PrimaryFolderPath + @"\" + modFolderPath + @"\backup.json"))
-                            {
-                                JsonConverterFacade.Createbackup(PrimaryFolderPath + @"\" + modFolderPath);
-                            }
-
-                            if (mod.LoadOrder == null)
-                            {
-                                mod.LoadOrder = 0;
-                            }
-
-                            mod.LoadOrder = decimal.ToInt32((decimal)mod.LoadOrder);
-
-                            ModViewModel modVM = new ModViewModel(mod, this, _modService);
-                            modVM.Path = PrimaryFolderPath + @"\" + modFolderPath;
-                            modVM.Source = "Primary Folder";
-
-                            var list = ModVMCollection.Where(m => m.Path == modVM.Path).ToList();
-
-                            if (list == null || list.Count == 0)
-                            {
-                                _modService.AddMod(modVM);
-                            }
-                            else if (list != null && list.Count > 0)
-                            {
-                                ModVMCollection.Remove(list[0]);
-                                _modService.AddMod(modVM);
-                            }
-
-                            foreach (var item in ModVMCollection.Where(m => m.IsSelected)) item.IsSelected = false;
-                            modVM.IsSelected = true;
-
-                            this.DeploymentNecessary = true;
+                            Directory.Delete(@"downloads", true);
                         }
-                    });
 
-                    // End loading
-                    this.LoadingContext = string.Empty;
+                        this.LoadingContext = string.Empty;
+                    }
+
+                    // Check if task completed succesfully.
+                    if (extractArchive.IsCompletedSuccessfully && Directory.Exists(@"downloads"))
+                    {
+                        // Remove existing mod folder if it already exists.
+                        // Also remove mod from list.
+                        foreach (var path in Directory.GetDirectories(PrimaryFolderPath!))
+                        {
+                            string? folder = Path.GetFileName(path);
+
+                            if (folderList.Contains(folder))
+                            {
+                                ModViewModel? mod = ModVMCollection.SingleOrDefault(m => m.Path == path);
+                                if (mod != null) ModVMCollection.Remove(mod);
+
+                                Directory.Delete(path, true);
+                            }
+                        }
+
+                        // Move mod folders from download folder to main mod folder.
+                        this.LoadingContext = "Moving folders..";
+                        
+                        foreach (var folder in Directory.GetDirectories(@"downloads"))
+                        {
+                            Directory.Move(folder, PrimaryFolderPath! + @"\" + Path.GetFileName(folder));
+                        }
+
+                        Directory.Delete(@"downloads", true);
+
+                        this.LoadingContext = "Adding mod to list..";
+
+                        // Read added mods and turn them into Mod objects.
+                        // Then add them into the list.
+                        await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
+                        {
+                            if (folderList.Count > 0)
+                            {
+                                foreach (var item in ModVMCollection.Where(m => m.IsSelected)) item.IsSelected = false;
+                            }
+
+                            foreach (var modFolderPath in folderList)
+                            {
+                                Mod? mod = JsonConverterFacade.JsonToMod(PrimaryFolderPath + @"\" + modFolderPath);
+
+                                if (mod != null)
+                                {
+                                    if (!File.Exists(PrimaryFolderPath + @"\" + modFolderPath + @"\backup.json"))
+                                    {
+                                        JsonConverterFacade.Createbackup(PrimaryFolderPath + @"\" + modFolderPath);
+                                    }
+
+                                    if (mod.LoadOrder == null)
+                                    {
+                                        mod.LoadOrder = 0;
+                                    }
+
+                                    mod.LoadOrder = decimal.ToInt32((decimal)mod.LoadOrder);
+
+                                    ModViewModel modVM = new ModViewModel(mod, this, _modService);
+                                    modVM.Path = PrimaryFolderPath + @"\" + modFolderPath;
+                                    modVM.Source = "Primary Folder";
+
+                                    _modService.AddMod(modVM);
+
+                                    modVM.IsSelected = true;
+                                }
+                            }
+                        });
+
+                        // End loading
+                        this.DeploymentNecessary = true;
+                        this.LoadingContext = string.Empty;
+                    }
                 }
-
-
             }
             catch (Exception)
             {
+                Console.WriteLine("Unhandled Exception at MainViewModel.AddModAsync");
 
+                if (Directory.Exists(@"downloads"))
+                {
+                    Directory.Delete(@"downloads", true);
+                }
+
+                this.LoadingContext = string.Empty;
+                throw;
             }
         }
 

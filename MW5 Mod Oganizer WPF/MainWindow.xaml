@@ -474,7 +474,7 @@
                                 <Setter.Value>
                                     <Button Content="Add Mod.."
                                             Style="{StaticResource ButtonAddModTheme}"
-                                            Command="{Binding AddModButtonCommand, IsAsync=True}">
+                                            Command="{Binding AddModCommand}">
                                         <ToolTipService.ToolTip>
                                             <ToolTip Content="Adds mod to your mod folder and application. Accepts *.zip, *.rar and *.7z"/>
                                         </ToolTipService.ToolTip>
