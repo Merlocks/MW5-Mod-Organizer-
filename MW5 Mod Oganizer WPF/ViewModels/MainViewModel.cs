@@ -39,8 +39,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         public IEnumerable<ModViewModel> OverwrittenBy => this.OverwrittenByCollection;
         public IEnumerable<string> Conflicts => this.ConflictsCollection;
 
-        public string ModCount => ModVMCollection.Count.ToString();
+        public string ModCount => ModVMCollection.Count().ToString();
         public string ModCountActive => ModVMCollection.Where(m => m.IsEnabled).Count().ToString();
+        public string SelectedModsCount => ModVMCollection.Where(m => m.IsSelected).Count().ToString();
 
         /// <summary>
         /// Observable properties used for data binding within the View
@@ -712,6 +713,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public void ModsOverviewSelectionChanged(SelectionChangedEventArgs e)
         {
+            OnPropertyChanged(nameof(SelectedModsCount));
+            
             foreach (var item in e.AddedItems)
             {
                 ModViewModel? mod = item as ModViewModel;

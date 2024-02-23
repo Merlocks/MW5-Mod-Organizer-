@@ -201,23 +201,43 @@
         <StackPanel Grid.Row="4"
                     Grid.ColumnSpan="2"
                     Orientation="Horizontal"
-                    Margin="0 0 0 10">
+                    Margin="10 0 0 10"
+                    HorizontalAlignment="Left">
             <TextBlock Text="Total Mods:"
-                       Foreground="#484D54"
-                       Margin="10 0 0 0"/>
+                       Foreground="#484D54"/>
             <TextBlock Text="{Binding ModCount}"
                        Foreground="#484D54"
-                       Margin="10 0 0 0"/>
+                       Margin="5 0 0 0"/>
 
             <Border Background="#484D54"
                     Width="1"
                     Margin="10 0"/>
 
-            <TextBlock Text="Active Mods:"
+            <TextBlock Text="Active Mod(s):"
                        Foreground="#484D54"/>
             <TextBlock Text="{Binding ModCountActive}"
                        Foreground="#484D54"
-                       Margin="10 0 0 0"/>
+                       Margin="5 0 0 0"/>
+        </StackPanel>
+        <StackPanel Grid.Row="4"
+                    Grid.ColumnSpan="2"
+                    Orientation="Horizontal"
+                    Margin="0 0 10 10"
+                    HorizontalAlignment="Right">
+            <TextBlock Text="{Binding SelectedModsCount}"
+                       Foreground="#484D54"
+                       Margin="0 0 5 0"/>
+            <TextBlock Text="Selected Mod(s)"
+                       Foreground="#484D54"/>
+            <StackPanel.Style>
+                <Style TargetType="{x:Type StackPanel}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SelectedModsCount}" Value="0">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Style>
         </StackPanel>
 
         <!--Header-->
