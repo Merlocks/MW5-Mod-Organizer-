@@ -141,9 +141,12 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
             this.ModVMCollection = new ObservableCollection<ModViewModel>();
             ModVMCollection.CollectionChanged += ModVMCollection_CollectionChanged;
+
             this.OverwrittenByCollection = new ObservableCollection<ModViewModel>();
             this.OverwritesCollection = new ObservableCollection<ModViewModel>();
             this.ConflictsCollection = new ObservableCollection<string>();
+            this.ModCount = "0";
+            this.ModCountActive = "0";
 
             GameVersion = Properties.Settings.Default.GameVersion;
             PrimaryFolderPath = Properties.Settings.Default.Path;
