@@ -26,7 +26,10 @@ namespace MW5_Mod_Organizer_WPF
     /// </changelog>
 
     /// <TODO>
-    /// 
+    /// Add profiles
+    /// Add "All mods.." context action to rows. Features:
+    ///     * Select All
+    ///     * Enable/Disable All
     /// </TODO>
     public partial class MainWindow : Window
     {
