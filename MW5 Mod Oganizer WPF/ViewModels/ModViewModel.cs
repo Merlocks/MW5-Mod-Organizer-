@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
+using MW5_Mod_Organizer_WPF.Messages;
 using MW5_Mod_Organizer_WPF.Models;
 using MW5_Mod_Organizer_WPF.Services;
 using System;
@@ -39,9 +41,11 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [ObservableProperty]
         private bool isEnabled;
 
-        partial void OnIsEnabledChanging(bool value)
+        partial void OnIsEnabledChanged(bool value)
         {
             _mod.IsEnabled = value;
+            WeakReferenceMessenger.Default.Send(new PropertyIsEnabledChangedMessage(value));
+            WeakReferenceMessenger.Default.Cleanup();
         }
 
         [ObservableProperty]

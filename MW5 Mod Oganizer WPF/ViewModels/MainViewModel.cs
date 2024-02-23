@@ -1,8 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using GongSolutions.Wpf.DragDrop;
-using Microsoft.Extensions.DependencyInjection;
 using MW5_Mod_Organizer_WPF.Facades;
+using MW5_Mod_Organizer_WPF.Messages;
 using MW5_Mod_Organizer_WPF.Models;
 using MW5_Mod_Organizer_WPF.Services;
 using SharpCompress.Archives;
@@ -22,14 +23,14 @@ using System.Windows.Forms;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
 {
-    public partial class MainViewModel : ObservableObject, GongSolutions.Wpf.DragDrop.IDropTarget
+    public partial class MainViewModel : ObservableRecipient, GongSolutions.Wpf.DragDrop.IDropTarget, IRecipient<PropertyIsEnabledChangedMessage>
     {
         /// <summary>
         /// Dependency objects
         /// </summary>
         private readonly IModService _modService;
         private readonly HttpRequestService _httpRequestService;
-        
+
         /// <summary>
         /// Read-only properties
         /// </summary>
@@ -38,17 +39,14 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         public IEnumerable<ModViewModel> OverwrittenBy => this.OverwrittenByCollection;
         public IEnumerable<string> Conflicts => this.ConflictsCollection;
 
+        public string ModCount => ModVMCollection.Count.ToString();
+        public string ModCountActive => ModVMCollection.Where(m => m.IsEnabled).Count().ToString();
+
         /// <summary>
         /// Observable properties used for data binding within the View
         /// </summary>
         [ObservableProperty]
         private ObservableCollection<ModViewModel> modVMCollection;
-
-        [ObservableProperty]
-        private string modCount;
-
-        [ObservableProperty]
-        private string modCountActive;
 
         [ObservableProperty]
         private ObservableCollection<ModViewModel> overwritesCollection;
@@ -145,14 +143,14 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             this.OverwrittenByCollection = new ObservableCollection<ModViewModel>();
             this.OverwritesCollection = new ObservableCollection<ModViewModel>();
             this.ConflictsCollection = new ObservableCollection<string>();
-            this.ModCount = "0";
-            this.ModCountActive = "0";
 
             GameVersion = Properties.Settings.Default.GameVersion;
             PrimaryFolderPath = Properties.Settings.Default.Path;
             SecondaryFolderPath = Properties.Settings.Default.SecondaryPath;
 
             IsZipDropVisible = false;
+
+            this.IsActive = true;
         }
 
         /// <summary>
@@ -589,7 +587,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                         // Move mod folders from download folder to main mod folder.
                         this.LoadingContext = "Moving folders..";
-                        
+
                         foreach (var folder in Directory.GetFileSystemEntries(@"downloads"))
                         {
                             Directory.Move(folder, PrimaryFolderPath! + @"\" + Path.GetFileName(folder));
@@ -697,7 +695,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public async Task ToggleCheckBox()
         {
-            this.ModCountActive = ModVMCollection.Where(m => m.IsEnabled == true).Count().ToString();
+            //OnPropertyChanged(nameof(this.ModCountActive));
 
             List<ModViewModel> selectedItems = ModVMCollection.Where(m => m.IsSelected).ToList();
 
@@ -837,13 +835,21 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         /// </summary>
         private void ModVMCollection_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            this.ModCount = ModVMCollection.Count().ToString();
-            this.ModCountActive = ModVMCollection.Where(m => m.IsEnabled == true).Count().ToString();
+            //this.ModCount = ModVMCollection.Count().ToString();
+            //this.ModCountActive = ModVMCollection.Where(m => m.IsEnabled == true).Count().ToString();
+
+            OnPropertyChanged(nameof(this.ModCount));
+            OnPropertyChanged(nameof(this.ModCountActive));
 
             foreach (var item in ModVMCollection)
             {
                 item.LoadOrder = ModVMCollection.IndexOf(item);
             }
+        }
+
+        public void Receive(PropertyIsEnabledChangedMessage message)
+        {
+            OnPropertyChanged(nameof(this.ModCountActive));
         }
 
         /// <summary>

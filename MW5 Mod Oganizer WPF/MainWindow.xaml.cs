@@ -1,13 +1,10 @@
-﻿using MW5_Mod_Organizer_WPF.Services;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.DependencyInjection;
+using MW5_Mod_Organizer_WPF.ViewModels;
+using MW5_Mod_Organizer_WPF.Messages;
 using System;
 using System.Windows;
-using System.Windows.Forms;
-using MW5_Mod_Organizer_WPF.ViewModels;
-using Microsoft.Extensions.DependencyInjection;
 using System.Windows.Controls.Primitives;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Controls;
 
 namespace MW5_Mod_Organizer_WPF
 {
