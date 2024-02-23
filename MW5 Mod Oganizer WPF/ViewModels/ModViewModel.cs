@@ -45,7 +45,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         {
             _mod.IsEnabled = value;
             WeakReferenceMessenger.Default.Send(new PropertyIsEnabledChangedMessage(value));
-            WeakReferenceMessenger.Default.Cleanup();
         }
 
         [ObservableProperty]
@@ -66,7 +65,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [ObservableProperty]
         private decimal loadOrder;
 
-        partial void OnLoadOrderChanging(decimal value)
+        partial void OnLoadOrderChanged(decimal value)
         {
             _mod.LoadOrder = value;
         }
