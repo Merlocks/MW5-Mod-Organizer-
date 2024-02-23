@@ -560,14 +560,8 @@
                   Background="Transparent">
                 <MenuItem Header="Profiles"
                           FontSize="14"
-                          Style="{StaticResource MenuItemContextTheme}">
-                    <MenuItem Header="Create profile..."
-                              FontSize="12"/>
-                    <MenuItem Header="Import profile..."
-                              FontSize="12"/>
-                    <Separator/>
-                    <MenuItem Header="Manage profiles..."
-                              FontSize="12"/>
+                          Style="{StaticResource MenuItemContextTheme}"
+                          Command="{Binding OpenProfilesCommand}">
                 </MenuItem>
             </Menu>
             <Menu VerticalAlignment="Center"
