@@ -128,7 +128,6 @@
                       dd:DragDrop.DropHandler="{Binding}" 
                       dd:DragDrop.DropTargetAdornerBrush="#484D54"
                       VirtualizingPanel.VirtualizationMode="Recycling"
-                      SizeChanged="ModList_SizeChanged"
                       IsReadOnly="True">
                 <behaviors:Interaction.Triggers>
                     <behaviors:EventTrigger EventName="SelectionChanged">

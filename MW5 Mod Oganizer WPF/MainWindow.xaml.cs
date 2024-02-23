@@ -67,16 +67,6 @@ namespace MW5_Mod_Organizer_WPF
         }
         #endregion
 
-        private void ModList_SizeChanged(object sender, EventArgs e)
-        {
-            //DataGridColumnEnabled.MinWidth = DataGridColumnEnabled.ActualWidth;
-            //DataGridColumnLoadorder.MinWidth = DataGridColumnLoadorder.ActualWidth;
-            //DataGridColumnMod.MinWidth = DataGridColumnMod.ActualWidth;
-            //DataGridColumnNotification.MinWidth = DataGridColumnNotification.ActualWidth;
-            //DataGridColumnAuthor.MinWidth = DataGridColumnAuthor.ActualWidth;
-            //DataGridColumnVersion.MinWidth = DataGridColumnVersion.ActualWidth;
-        }
-
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             var windowWidth = System.Windows.Application.Current.MainWindow.ActualWidth;
