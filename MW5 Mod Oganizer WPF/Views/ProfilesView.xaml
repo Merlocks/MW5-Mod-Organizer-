@@ -7,8 +7,89 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
         UseLayoutRounding="True"
-        Title="Profiles" Height="600" Width="450">
+        Title="Profiles" 
+        Height="600" 
+        Width="450"
+        FontSize="14">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Column="1"
+              Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="120"
+                               MinHeight="120"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"
+                               MinHeight="50"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="1">
+                <DataGrid ColumnHeaderStyle="{DynamicResource ProfilesDataGridColumnHeaderStyle}" x:Name="ProfilesDataGrid"
+                          
+                          SizeChanged="ProfilesDataGrid_SizeChanged">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn x:Name="ProfilesColumn"
+                                            Header="Profiles"
+                                            Width="auto"
+                                            CanUserSort="True"
+                                            CanUserReorder="False"
+                                            CanUserResize="False"/>
+                    </DataGrid.Columns>
+                    
+                </DataGrid>
+
+            </Grid>
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Give your profile a name"
+                           Foreground="#69717d"
+                           FontSize="16"
+                           Margin="0 0 0 5"
+                           Grid.Row="0"/>
+                <TextBox TextWrapping="Wrap"
+                         Grid.Row="1"
+                         VerticalAlignment="Stretch"/>
+                <TextBlock Text="*Maximum 30 characters"
+                           Foreground="#69717d"
+                           FontSize="12"
+                           Grid.Row="2"
+                           VerticalAlignment="Bottom"/>
+                <Button Content="Save profile"
+                        Style="{StaticResource ButtonAddModTheme}"
+                        Height="30"
+                        Margin="0 5"
+                        Grid.Row="3"/>
+            </Grid>
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Content="Select profile"
+                        Style="{StaticResource ButtonAddModTheme}"
+                        Height="30"
+                        Grid.Column="0"/>
+                <Button Content="Delete profile"
+                        Style="{StaticResource ButtonAddModTheme}"
+                        Height="30"
+                        Grid.Column="2"/>
+
+            </Grid>
+        </Grid>
     </Grid>
 </Window>

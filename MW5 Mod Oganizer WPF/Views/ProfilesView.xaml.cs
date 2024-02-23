@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using MW5_Mod_Organizer_WPF.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +24,19 @@ namespace MW5_Mod_Organizer_WPF.Views
         public ProfilesView()
         {
             InitializeComponent();
+            this.DataContext = App.Current.Services.GetServices<ProfilesViewModel>();
+
+            ResizeProfilesColumnToFill();
+        }
+
+        private void ProfilesDataGrid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            ResizeProfilesColumnToFill();
+        }
+
+        private void ResizeProfilesColumnToFill()
+        {
+            ProfilesColumn.Width = ProfilesDataGrid.ActualWidth;
         }
     }
 }

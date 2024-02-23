@@ -7,24 +7,23 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="0" 
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Margin="10 0"
-                                Padding="{TemplateBinding Padding}"
-                                Height="30">
-                            <Grid VerticalAlignment="Stretch"
-                                  HorizontalAlignment="Stretch"
-                                  Background="Transparent">
+                        <Grid Height="{TemplateBinding Height}">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    Padding="{TemplateBinding Padding}">
+                                <Grid VerticalAlignment="Stretch"
+                                      HorizontalAlignment="Stretch"
+                                      Background="Transparent">
 
-                                <TextBlock Text="{TemplateBinding Property=Content}"
-                                           FontWeight="Bold"
-                                           TextOptions.TextFormattingMode="Display"
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Center"/>
-                            </Grid>
-                        </Border>
+                                    <TextBlock Text="{TemplateBinding Property=Content}"
+                                               FontWeight="Bold"
+                                               TextOptions.TextFormattingMode="Display"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+                        </Grid>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>

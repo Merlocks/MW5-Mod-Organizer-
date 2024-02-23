@@ -27,6 +27,7 @@ namespace MW5_Mod_Organizer_WPF
     /// Add "All mods.." context action to rows. Features:
     ///     * Select All
     ///     * Enable/Disable All
+    /// Add logic in Add modd.. so previous loadorder gets saved in memory and reapplied.
     /// </TODO>
     public partial class MainWindow : Window
     {

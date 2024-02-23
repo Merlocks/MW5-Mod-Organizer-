@@ -21,6 +21,7 @@
                 <ResourceDictionary Source="Themes/Button/ButtonUpdateAvailableTheme.xaml"/>
                 <ResourceDictionary Source="Themes/Button/ButtonArrowUp.xaml"/>
                 <ResourceDictionary Source="Themes/Button/ButtonArrowDown.xaml"/>
+                <ResourceDictionary Source="Themes/DataGrid/ProfilesDataGridColumnHeaderTheme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
