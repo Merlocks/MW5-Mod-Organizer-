@@ -41,7 +41,8 @@
                           Style="{DynamicResource DataGridStyle1}"
                           HorizontalScrollBarVisibility="Disabled"
                           VerticalScrollBarVisibility="Auto"
-                          SizeChanged="ProfilesDataGrid_SizeChanged">
+                          SizeChanged="ProfilesDataGrid_SizeChanged"
+                          IsReadOnly="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="ProfilesColumn"
                                             Binding="{Binding Name}"

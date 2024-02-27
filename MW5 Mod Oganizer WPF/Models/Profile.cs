@@ -6,7 +6,7 @@ namespace MW5_Mod_Organizer_WPF.Models
     public class Profile
     {
         [JsonIgnore]
-        public string Name { get; private set; }
+        public string Name { get; set; }
         
         [JsonPropertyName("mods")]
         [JsonPropertyOrder(0)]

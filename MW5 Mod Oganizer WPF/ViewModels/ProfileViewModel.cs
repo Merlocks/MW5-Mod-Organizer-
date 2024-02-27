@@ -12,11 +12,18 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
     {
         public Profile _profile;
 
-        public string Name => _profile.Name;
+        [ObservableProperty]
+        private string name;
+
+        partial void OnNameChanged(string value)
+        {
+            _profile.Name = value;
+        }
 
         public ProfileViewModel(Profile profile)
         {
             _profile = profile;
+            this.Name = _profile.Name;
         }
     }
 }
