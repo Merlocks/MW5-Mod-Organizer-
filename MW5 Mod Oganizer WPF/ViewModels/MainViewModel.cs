@@ -24,7 +24,7 @@ using System.Windows.Forms;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
 {
-    public partial class MainViewModel : ObservableRecipient, GongSolutions.Wpf.DragDrop.IDropTarget, IRecipient<PropertyIsEnabledChangedMessage>
+    public partial class MainViewModel : ObservableRecipient, GongSolutions.Wpf.DragDrop.IDropTarget
     {
         /// <summary>
         /// Dependency objects
@@ -152,7 +152,10 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
             IsZipDropVisible = false;
 
-            this.IsActive = true;
+            WeakReferenceMessenger.Default.Register<PropertyIsEnabledChangedMessage>(this, (r, m) => 
+            {
+                OnPropertyChanged(nameof(this.ModCountActive));
+            });
         }
 
         /// <summary>
@@ -857,11 +860,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             {
                 item.LoadOrder = ModVMCollection.IndexOf(item);
             }
-        }
-
-        public void Receive(PropertyIsEnabledChangedMessage message)
-        {
-            OnPropertyChanged(nameof(this.ModCountActive));
         }
 
         /// <summary>
