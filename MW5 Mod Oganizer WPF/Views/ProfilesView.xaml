@@ -42,6 +42,8 @@
                           HorizontalScrollBarVisibility="Disabled"
                           VerticalScrollBarVisibility="Auto"
                           SizeChanged="ProfilesDataGrid_SizeChanged"
+                          SelectionMode="Single"
+                          SelectionUnit="FullRow"
                           IsReadOnly="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="ProfilesColumn"
@@ -68,10 +70,11 @@
                            FontSize="16"
                            Margin="0 0 0 5"
                            Grid.Row="0"/>
-                <TextBox TextWrapping="Wrap"
+                <TextBox Text="{Binding TextBoxContent, UpdateSourceTrigger=PropertyChanged}" 
+                         TextWrapping="Wrap"
                          Grid.Row="1"
                          VerticalAlignment="Stretch"/>
-                <TextBlock Text="*Maximum 30 characters"
+                <TextBlock Text="*Maximum 45 characters"
                            Foreground="#69717d"
                            FontSize="12"
                            Grid.Row="2"
@@ -80,7 +83,8 @@
                         Style="{StaticResource ButtonAddModTheme}"
                         Height="30"
                         Margin="0 5"
-                        Grid.Row="3"/>
+                        Grid.Row="3"
+                        Command="{Binding SaveProfileCommand}"/>
             </Grid>
             <Grid Grid.Row="3">
                 <Grid.ColumnDefinitions>

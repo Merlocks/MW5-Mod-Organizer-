@@ -29,6 +29,7 @@ namespace MW5_Mod_Organizer_WPF
     ///     * Enable/Disable All
     /// Add logic in Add modd.. so previous loadorder gets saved in memory and reapplied.
     /// Turn LoadOrder into template? column where you have two textboxes, one for current loadorder, one for default loadorder. default loadorder should have other color?
+    /// Add clearification what folder should be which one.
     /// </TODO>
     public partial class MainWindow : Window
     {
