@@ -3,7 +3,7 @@ using System.IO;
 
 namespace MW5_Mod_Organizer_WPF.Services
 {
-    public class FileHandlerService
+    public sealed class FileHandlerService
     {
         public static void WriteFile(string path, string fileName, string content)
         {

@@ -2,7 +2,7 @@
 
 namespace MW5_Mod_Organizer_WPF.Models
 {
-    public class Mod
+    public sealed class Mod
     {
         [JsonPropertyName("displayName")]
         [JsonPropertyOrder(0)]

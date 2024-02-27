@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace MW5_Mod_Organizer_WPF.Models
 {
-    public class Profile
+    public sealed class Profile
     {
         [JsonIgnore]
         public string Name { get; set; }

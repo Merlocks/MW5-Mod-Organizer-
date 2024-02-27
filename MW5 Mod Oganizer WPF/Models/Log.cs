@@ -1,6 +1,6 @@
 ﻿namespace MW5_Mod_Organizer_WPF.Models
 {
-    public class Log
+    public sealed class Log
     {
         public string Name { get; set; }
 

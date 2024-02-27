@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
 {
-    public partial class ProfileViewModel : ObservableObject
+    public sealed partial class ProfileViewModel : ObservableObject
     {
         public Profile _profile;
 

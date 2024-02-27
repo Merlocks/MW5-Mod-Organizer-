@@ -13,7 +13,7 @@ using MW5_Mod_Organizer_WPF.Services;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
 {
-    public partial class ProfilesViewModel : ObservableObject
+    public sealed partial class ProfilesViewModel : ObservableObject
     {
         private MainViewModel mainViewModel => App.Current.Services.GetService<MainViewModel>()!;
         private readonly ProfilesService profilesService;

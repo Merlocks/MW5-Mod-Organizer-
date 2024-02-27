@@ -19,7 +19,7 @@ namespace MW5_Mod_Organizer_WPF.Views
     /// <summary>
     /// Interaction logic for ProfilesView.xaml
     /// </summary>
-    public partial class ProfilesView : Window
+    public sealed partial class ProfilesView : Window
     {
         private ProfilesViewModel _profilesViewModel => (ProfilesViewModel)DataContext;
         

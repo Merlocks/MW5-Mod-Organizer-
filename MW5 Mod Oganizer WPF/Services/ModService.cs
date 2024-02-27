@@ -14,7 +14,7 @@ using System.Windows;
 
 namespace MW5_Mod_Organizer_WPF.Services
 {
-    public class ModService : IModService
+    public sealed class ModService : IModService
     {
         private MainViewModel? _mainViewModel;
 

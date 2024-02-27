@@ -24,7 +24,7 @@ using System.Windows.Forms;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
 {
-    public partial class MainViewModel : ObservableObject, GongSolutions.Wpf.DragDrop.IDropTarget
+    public sealed partial class MainViewModel : ObservableObject, GongSolutions.Wpf.DragDrop.IDropTarget
     {
         /// <summary>
         /// Dependency objects

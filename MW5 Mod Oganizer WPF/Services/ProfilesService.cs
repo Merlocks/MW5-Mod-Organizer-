@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MW5_Mod_Organizer_WPF.Services
 {
-    public class ProfilesService
+    public sealed class ProfilesService
     {
         public ProfilesService()
         {

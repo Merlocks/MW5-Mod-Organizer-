@@ -31,7 +31,7 @@ namespace MW5_Mod_Organizer_WPF
     /// Turn LoadOrder into template? column where you have two textboxes, one for current loadorder, one for default loadorder. default loadorder should have other color?
     /// Add clearification what folder should be which one.
     /// </TODO>
-    public partial class MainWindow : Window
+    public sealed partial class MainWindow : Window
     {
         private MainViewModel _mainViewModel => (MainViewModel)DataContext;
 

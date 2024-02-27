@@ -16,7 +16,7 @@ using System.Windows.Forms;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
 {
-    public partial class ModViewModel : ObservableObject
+    public sealed partial class ModViewModel : ObservableObject
     {
         public Mod _mod;
         private readonly MainViewModel _mainViewModel;
