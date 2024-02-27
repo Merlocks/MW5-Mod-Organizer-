@@ -21,6 +21,8 @@ namespace MW5_Mod_Organizer_WPF.Views
     /// </summary>
     public partial class ProfilesView : Window
     {
+        private ProfilesViewModel _profilesViewModel => (ProfilesViewModel)DataContext;
+        
         public ProfilesView()
         {
             InitializeComponent();

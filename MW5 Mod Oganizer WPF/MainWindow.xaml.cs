@@ -32,14 +32,12 @@ namespace MW5_Mod_Organizer_WPF
     /// </TODO>
     public partial class MainWindow : Window
     {
-        private readonly MainViewModel _mainViewModel;
+        private MainViewModel _mainViewModel => (MainViewModel)DataContext;
 
         public MainWindow()
         {
-            _mainViewModel = App.Current.Services.GetService<MainViewModel>()!;
-
             this.InitializeComponent();
-            this.DataContext = _mainViewModel;
+            this.DataContext = App.Current.Services.GetService<MainViewModel>()!;
         }
 
         private void ResizeConflictWindow(object sender, DragDeltaEventArgs e) 
