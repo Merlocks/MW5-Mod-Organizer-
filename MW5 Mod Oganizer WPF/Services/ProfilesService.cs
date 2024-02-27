@@ -37,6 +37,8 @@ namespace MW5_Mod_Organizer_WPF.Services
 
                 if (profileContainer != null && profileContainer.Profiles.Count != 0)
                 {
+                    foreach (var item in profileContainer.Profiles) { item.Value.Name = item.Key; }
+
                     return profileContainer;
                 }
                 else
@@ -59,9 +61,22 @@ namespace MW5_Mod_Organizer_WPF.Services
             }
         }
 
-        public void SaveProfiles()
+        public void SaveProfiles(ProfileContainer profileContainer)
         {
+            if (!Directory.Exists(@"Userdata"))
+            {
+                Directory.CreateDirectory(@"Userdata");
+            }
 
+            if (!File.Exists(@"Userdata\profiles.json"))
+            {
+                File.WriteAllText(@"Userdata\profiles.json", "");
+            }
+
+            var options = new JsonSerializerOptions() { WriteIndented = true };
+            string jsonString = JsonSerializer.Serialize(profileContainer, options);
+
+            File.WriteAllText(@"Userdata\profiles.json", jsonString);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace MW5_Mod_Organizer_WPF.Models
     public class ProfileContainer
     {
         [JsonPropertyName("profiles")]
-        public Dictionary<string, Profile> Profiles;
+        public Dictionary<string, Profile> Profiles { get; set; }
 
         public ProfileContainer() 
         { 

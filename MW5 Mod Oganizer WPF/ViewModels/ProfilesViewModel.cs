@@ -79,6 +79,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 profileContainer.Profiles.Add(profile.Name, profile);
 
                 // Add logic for writing profileContainer to file
+                this.profilesService.SaveProfiles(profileContainer);
 
                 // Clear textBoxContent
                 this.TextBoxContent = string.Empty;
@@ -94,7 +95,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public async Task WindowLoadedAsync(EventArgs e)
         {
-            ProfileContainer profileContainer =  await profilesService.GetProfiles();
+            ProfileContainer profileContainer =  await this.profilesService.GetProfilesAsync();
 
             foreach (var item in profileContainer.Profiles)
             {
