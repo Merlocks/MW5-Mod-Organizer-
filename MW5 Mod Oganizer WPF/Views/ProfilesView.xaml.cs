@@ -26,7 +26,7 @@ namespace MW5_Mod_Organizer_WPF.Views
         public ProfilesView()
         {
             InitializeComponent();
-            this.DataContext = App.Current.Services.GetServices<ProfilesViewModel>();
+            this.DataContext = App.Current.Services.GetService<ProfilesViewModel>();
 
             ResizeProfilesColumnToFill();
         }

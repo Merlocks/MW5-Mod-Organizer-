@@ -9,12 +9,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.ComponentModel.DataAnnotations;
+using MW5_Mod_Organizer_WPF.Services;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
 {
     public partial class ProfilesViewModel : ObservableObject
     {
-        private MainViewModel _mainViewModel => App.Current.Services.GetServices<MainViewModel>().FirstOrDefault()!;
+        private MainViewModel mainViewModel => App.Current.Services.GetService<MainViewModel>()!;
+        private readonly ProfilesService profilesService;
         
         [ObservableProperty]
         private ObservableCollection<ProfileViewModel> profiles;
@@ -22,11 +24,13 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [ObservableProperty]
         private string? textBoxContent;
 
-        public ProfilesViewModel()
+        public ProfilesViewModel(ProfilesService profilesService)
         {
+            this.profilesService = profilesService;
+            
             profiles = new ObservableCollection<ProfileViewModel>();
 
-            PopulateProfilesCollection();
+            //PopulateProfilesCollection();
         }
 
         [RelayCommand]
@@ -37,7 +41,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 // DEBUG TIMER
                 var timer = Stopwatch.StartNew();
                 
-                List<ModViewModel> mods = _mainViewModel.ModVMCollection.ToList();
+                List<ModViewModel> mods = mainViewModel.ModVMCollection.ToList();
                 ProfileContainer profileContainer = new ProfileContainer();
                 Profile profile = new Profile(this.TextBoxContent);
 
@@ -84,6 +88,17 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 var time = timer.ElapsedMilliseconds;
 
                 Console.WriteLine($"SaveProfile elapsed debug time: {time}ms");
+            }
+        }
+
+        [RelayCommand]
+        public async Task WindowLoadedAsync(EventArgs e)
+        {
+            ProfileContainer profileContainer =  await profilesService.GetProfiles();
+
+            foreach (var item in profileContainer.Profiles)
+            {
+                this.Profiles.Add(new ProfileViewModel(item.Value));
             }
         }
 
