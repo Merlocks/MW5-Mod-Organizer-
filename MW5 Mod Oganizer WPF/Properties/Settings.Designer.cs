@@ -61,7 +61,7 @@ namespace MW5_Mod_Organizer_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2.2.0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("2.3.0")]
         public string Version {
             get {
                 return ((string)(this["Version"]));

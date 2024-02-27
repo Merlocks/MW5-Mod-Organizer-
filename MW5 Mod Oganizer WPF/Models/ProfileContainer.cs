@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text.Json.Serialization;
 
 namespace MW5_Mod_Organizer_WPF.Models
@@ -6,11 +8,11 @@ namespace MW5_Mod_Organizer_WPF.Models
     public class ProfileContainer
     {
         [JsonPropertyName("profiles")]
-        public Dictionary<string, Profile> Profile;
+        public Dictionary<string, Profile> Profiles;
 
         public ProfileContainer() 
         { 
-            Profile = new Dictionary<string, Profile>();
+            this.Profiles = new Dictionary<string, Profile>();
         }
     }
 }

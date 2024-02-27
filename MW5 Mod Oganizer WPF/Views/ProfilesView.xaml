@@ -33,11 +33,18 @@
                                MinHeight="50"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="1">
-                <DataGrid ColumnHeaderStyle="{DynamicResource ProfilesDataGridColumnHeaderStyle}" x:Name="ProfilesDataGrid"
-                          
+                <DataGrid x:Name="ProfilesDataGrid"
+                          ItemsSource="{Binding Profiles}"
+                          ColumnHeaderStyle="{DynamicResource ProfilesDataGridColumnHeaderStyle}"
+                          RowStyle="{DynamicResource DataGridRowStyle1}"
+                          CellStyle="{DynamicResource DataGridCellStyle1}"
+                          Style="{DynamicResource DataGridStyle1}"
+                          HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Auto"
                           SizeChanged="ProfilesDataGrid_SizeChanged">
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="ProfilesColumn"
+                                            Binding="{Binding Name}"
                                             Header="Profiles"
                                             Width="auto"
                                             CanUserSort="True"

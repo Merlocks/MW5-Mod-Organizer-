@@ -5,12 +5,17 @@ namespace MW5_Mod_Organizer_WPF.Models
 {
     public class Profile
     {
+        [JsonIgnore]
+        public string Name { get; private set; }
+        
         [JsonPropertyName("mods")]
-        public Dictionary<string, ProfileEntry> Mod;
+        [JsonPropertyOrder(0)]
+        public Dictionary<string, bool> Entries;
 
-        public Profile() 
+        public Profile(string name) 
         { 
-            Mod = new Dictionary<string, ProfileEntry>();
+            this.Name = name;
+            this.Entries = new Dictionary<string, bool>();
         }
     }
 }
