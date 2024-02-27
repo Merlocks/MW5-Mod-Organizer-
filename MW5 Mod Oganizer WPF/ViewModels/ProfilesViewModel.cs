@@ -84,12 +84,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 var time = timer.ElapsedMilliseconds;
 
                 Console.WriteLine($"SaveProfile elapsed debug time: {time}ms");
-                Console.WriteLine("");
-
-                foreach (var item in profile.Entries)
-                {
-                    Console.WriteLine($"Key: {item.Key} - Value: {item.Value}");
-                }
             }
         }
 
