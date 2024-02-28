@@ -10,12 +10,12 @@ namespace MW5_Mod_Organizer_WPF.Models
         
         [JsonPropertyName("mods")]
         [JsonPropertyOrder(0)]
-        public Dictionary<string, bool> Entries { get; set; }
+        public Dictionary<string, ProfileEntryStatus> Entries { get; set; }
 
         public Profile(string name) 
         { 
             this.Name = name;
-            this.Entries = new Dictionary<string, bool>();
+            this.Entries = new Dictionary<string, ProfileEntryStatus>();
         }
     }
 }

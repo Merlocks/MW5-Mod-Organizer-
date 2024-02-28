@@ -13,6 +13,7 @@ using MW5_Mod_Organizer_WPF.Services;
 using System.Windows;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
+using MW5_Mod_Organizer_WPF.Subclasses;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
 {
@@ -45,41 +46,21 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 try
                 {
                     List<ModViewModel> mods = mainViewModel.ModVMCollection.ToList();
-                    ProfileContainer profileContainer = new ProfileContainer();
                     Profile profile = new Profile(this.TextBoxContent);
 
-                    List<Task> tasks = new List<Task>();
-
-                    // Start task1 to retrieve all profiles.
-                    // Add task to list of tasks.
-                    Task task1 = Task.Run(() =>
+                    Task task = Task.Run(() =>
                     {
-                        foreach (var item in this.Profiles)
+                        foreach (var item in mods)
                         {
-                            profileContainer.Profiles.Add(item._profile.Name, item._profile);
+                            profile.Entries.Add(item.FolderName!, new ProfileEntryStatus() { IsEnabled = item.IsEnabled, LoadOrder = item.LoadOrder } );
                         }
                     });
-
-                    tasks.Add(task1);
-
-                    // Start task2 to add all current mods to new profile.
-                    // Add task to list of tasks.
-                    Task task2 = Task.Run(() =>
-                    {
-                        foreach (var item in mods.Where(m => m.IsEnabled))
-                        {
-                            profile.Entries.Add(item.DisplayName!, item.IsEnabled);
-                        }
-                    });
-
-                    tasks.Add(task2);
 
                     // Wait on completion of all tasks.
-                    Task.WhenAll(tasks).Wait();
+                    task.Wait();
 
-                    // Add new profile to both list and container.
+                    // Add new profile to both list.
                     this.Profiles.Add(new ProfileViewModel(profile));
-                    profileContainer.Profiles.Add(profile.Name, profile);
 
                     // Clear textBoxContent.
                     this.TextBoxContent = string.Empty;
@@ -122,10 +103,24 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             try
             {
                 ProfileViewModel? selectedProfile = Profiles.Where(p => p.IsSelected).FirstOrDefault();
+                RaisableObservableCollection<ModViewModel> collection = this.mainViewModel.ModVMCollection;
 
                 if (selectedProfile != null)
                 {
-                    
+                    foreach (var item in CollectionsMarshal.AsSpan(collection.ToList()))
+                    {
+                        if (item.FolderName != null && selectedProfile._profile.Entries.ContainsKey(item.FolderName))
+                        {
+                            item.IsEnabled = selectedProfile._profile.Entries.GetValueOrDefault(item.FolderName)!.IsEnabled;
+                            item.LoadOrder = selectedProfile._profile.Entries.GetValueOrDefault(item.FolderName)!.LoadOrder;
+                        }
+                        else
+                        {
+                            item.IsEnabled = false;
+                        }
+                    }
+
+                    this.mainViewModel.ModVMCollection = new RaisableObservableCollection<ModViewModel>(collection.OrderBy(m => m.LoadOrder).ThenBy(m => m.FolderName));
                 }
 
             } catch (Exception e)

@@ -6,6 +6,7 @@ using MW5_Mod_Organizer_WPF.Facades;
 using MW5_Mod_Organizer_WPF.Messages;
 using MW5_Mod_Organizer_WPF.Models;
 using MW5_Mod_Organizer_WPF.Services;
+using MW5_Mod_Organizer_WPF.Subclasses;
 using MW5_Mod_Organizer_WPF.Views;
 using SharpCompress.Archives;
 using SharpCompress.Common;
@@ -35,11 +36,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         /// <summary>
         /// Read-only properties
         /// </summary>
-        public IEnumerable<ModViewModel> Mods => this.ModVMCollection;
-        public IEnumerable<ModViewModel> Overwrites => this.OverwritesCollection;
-        public IEnumerable<ModViewModel> OverwrittenBy => this.OverwrittenByCollection;
-        public IEnumerable<string> Conflicts => this.ConflictsCollection;
-
         public string ModCount => ModVMCollection.Count().ToString();
         public string ModCountActive => ModVMCollection.Where(m => m.IsEnabled).Count().ToString();
         public string SelectedModsCount => ModVMCollection.Where(m => m.IsSelected).Count().ToString();
@@ -48,7 +44,13 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         /// Observable properties used for data binding within the View
         /// </summary>
         [ObservableProperty]
-        private ObservableCollection<ModViewModel> modVMCollection;
+        private RaisableObservableCollection<ModViewModel> modVMCollection;
+
+        partial void OnModVMCollectionChanged(RaisableObservableCollection<ModViewModel> value)
+        {
+            value.CollectionChanged += ModVMCollection_CollectionChanged;
+            value.RaiseCollectionChanged();
+        }
 
         [ObservableProperty]
         private ObservableCollection<ModViewModel> overwritesCollection;
@@ -139,9 +141,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             _modService.SetMainViewModel(this);
             _httpRequestService = httpRequestService;
 
-            this.ModVMCollection = new ObservableCollection<ModViewModel>();
-            ModVMCollection.CollectionChanged += ModVMCollection_CollectionChanged;
-
+            this.ModVMCollection = new RaisableObservableCollection<ModViewModel>();
             this.OverwrittenByCollection = new ObservableCollection<ModViewModel>();
             this.OverwritesCollection = new ObservableCollection<ModViewModel>();
             this.ConflictsCollection = new ObservableCollection<string>();
@@ -760,7 +760,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             {
                 _modService.ClearConflictWindow();
 
-                foreach (var item in Mods)
+                foreach (var item in ModVMCollection)
                 {
                     if (item != null)
                     {
@@ -850,9 +850,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         /// </summary>
         private void ModVMCollection_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            //this.ModCount = ModVMCollection.Count().ToString();
-            //this.ModCountActive = ModVMCollection.Where(m => m.IsEnabled == true).Count().ToString();
-
             OnPropertyChanged(nameof(this.ModCount));
             OnPropertyChanged(nameof(this.ModCountActive));
 
