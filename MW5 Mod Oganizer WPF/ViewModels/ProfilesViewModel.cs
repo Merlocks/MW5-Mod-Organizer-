@@ -14,6 +14,7 @@ using System.Windows;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 using MW5_Mod_Organizer_WPF.Subclasses;
+using System.Windows.Forms;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
 {
@@ -83,7 +84,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         {
             try
             {
-                ProfileViewModel? selectedProfile = Profiles.Where(p => p.IsSelected).FirstOrDefault();
+                ProfileViewModel? selectedProfile = Profiles.Where(p => p.IsSelected).SingleOrDefault();
 
                 if (selectedProfile != null)
                 {
@@ -102,9 +103,10 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         {
             try
             {
-                Window? window = sender as Window;
-                ProfileViewModel? selectedProfile = Profiles.Where(p => p.IsSelected).FirstOrDefault();
+                ProfileViewModel? selectedProfile = Profiles.Where(p => p.IsSelected).SingleOrDefault();
                 RaisableObservableCollection<ModViewModel> collection = this.mainViewModel.ModVMCollection;
+                List<ModViewModel> modsOutsideProfileScope = new List<ModViewModel>();
+                List<string> modsInsideProfileScope = new List<string>();
 
                 if (selectedProfile != null)
                 {
@@ -114,20 +116,46 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         {
                             item.IsEnabled = selectedProfile._profile.Entries.GetValueOrDefault(item.FolderName)!.IsEnabled;
                             item.LoadOrder = selectedProfile._profile.Entries.GetValueOrDefault(item.FolderName)!.LoadOrder;
+                            modsInsideProfileScope.Add(item.FolderName);
                         }
                         else
                         {
                             item.IsEnabled = false;
+                            modsOutsideProfileScope.Add(item);
                         }
                     }
 
-                    this.mainViewModel.ModVMCollection = new RaisableObservableCollection<ModViewModel>(collection.OrderBy(m => m.LoadOrder).ThenBy(m => m.FolderName));
+                    this.mainViewModel.ModVMCollection = new RaisableObservableCollection<ModViewModel>(collection
+                        .OrderByDescending(m => modsOutsideProfileScope.Contains(m))
+                        .ThenBy(m => m.LoadOrder)
+                        .ThenBy(m => m.FolderName));
                     this.mainViewModel.DeploymentNecessary = true;
                     this.mainViewModel.RaiseCheckForAllConflict();
+
+                    // Close window
+                    Window? window = sender as Window;
 
                     if (window != null)
                     {
                         window.Close();
+                    }
+
+                    // Notify user of any mods included in profile but don't exist in mods folder.
+                    if (modsInsideProfileScope.Count < selectedProfile._profile.Entries.Count)
+                    {
+                        string info = "";
+                        
+                        foreach (var item in selectedProfile._profile.Entries.Where(m => !modsInsideProfileScope.Contains(m.Key)))
+                        {
+                            info += $"- {item.Key}\n";
+                        }
+
+                        string message = $"Certain mod(s) could not be activated because they don't exist:\n\n{info}";
+                        string caption = "Warning";
+                        MessageBoxButtons buttons = MessageBoxButtons.OK;
+                        MessageBoxIcon icon = MessageBoxIcon.Warning;
+
+                        System.Windows.Forms.MessageBox.Show(message, caption, buttons, icon);
                     }
                 }
 
