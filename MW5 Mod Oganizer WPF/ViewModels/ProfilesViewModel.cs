@@ -11,6 +11,8 @@ using System.Diagnostics;
 using System.ComponentModel.DataAnnotations;
 using MW5_Mod_Organizer_WPF.Services;
 using System.Windows;
+using System.Runtime.InteropServices;
+using System.ComponentModel;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
 {
@@ -39,55 +41,96 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             {
                 // DEBUG TIMER
                 var timer = Stopwatch.StartNew();
-                
-                List<ModViewModel> mods = mainViewModel.ModVMCollection.ToList();
-                ProfileContainer profileContainer = new ProfileContainer();
-                Profile profile = new Profile(this.TextBoxContent);
 
-                List<Task> tasks = new List<Task>();
-
-                // Start task1 to retrieve all profiles
-                // Add task to list of tasks
-                Task task1 = Task.Run(() => 
+                try
                 {
-                    foreach (var item in this.Profiles)
+                    List<ModViewModel> mods = mainViewModel.ModVMCollection.ToList();
+                    ProfileContainer profileContainer = new ProfileContainer();
+                    Profile profile = new Profile(this.TextBoxContent);
+
+                    List<Task> tasks = new List<Task>();
+
+                    // Start task1 to retrieve all profiles.
+                    // Add task to list of tasks.
+                    Task task1 = Task.Run(() =>
                     {
-                        profileContainer.Profiles.Add(item._profile.Name, item._profile);
-                    }
-                });
+                        foreach (var item in this.Profiles)
+                        {
+                            profileContainer.Profiles.Add(item._profile.Name, item._profile);
+                        }
+                    });
 
-                tasks.Add(task1);
+                    tasks.Add(task1);
 
-                // Start task2 to add all current mods to new profile
-                // Add task to list of tasks
-                Task task2 = Task.Run(() => 
+                    // Start task2 to add all current mods to new profile.
+                    // Add task to list of tasks.
+                    Task task2 = Task.Run(() =>
+                    {
+                        foreach (var item in mods.Where(m => m.IsEnabled))
+                        {
+                            profile.Entries.Add(item.DisplayName!, item.IsEnabled);
+                        }
+                    });
+
+                    tasks.Add(task2);
+
+                    // Wait on completion of all tasks.
+                    Task.WhenAll(tasks).Wait();
+
+                    // Add new profile to both list and container.
+                    this.Profiles.Add(new ProfileViewModel(profile));
+                    profileContainer.Profiles.Add(profile.Name, profile);
+
+                    // Clear textBoxContent.
+                    this.TextBoxContent = string.Empty;
+                }
+                catch (Exception e)
                 {
-                    foreach (var item in mods.Where(m => m.IsEnabled))
-                    {
-                        profile.Entries.Add(item.DisplayName!, item.IsEnabled);
-                    }
-                });
-
-                tasks.Add(task2);
-
-                // Wait on completion of all tasks
-                Task.WhenAll(tasks).Wait();
-
-                // Add new profile to both list and container
-                this.Profiles.Add(new ProfileViewModel(profile));
-                profileContainer.Profiles.Add(profile.Name, profile);
-
-                // Add logic for writing profileContainer to file
-                this.profilesService.SaveProfiles(profileContainer);
-
-                // Clear textBoxContent
-                this.TextBoxContent = string.Empty;
+                    Console.WriteLine($"-- ProfilesViewModel.SaveProfile -- {e.Message}");
+                }
 
                 // DEBUG TIMER
                 timer.Stop();
                 var time = timer.ElapsedMilliseconds;
 
                 Console.WriteLine($"SaveProfile elapsed debug time: {time}ms");
+            }
+        }
+
+        [RelayCommand]
+        public void DeleteProfile()
+        {
+            try
+            {
+                ProfileViewModel? selectedProfile = Profiles.Where(p => p.IsSelected).FirstOrDefault();
+
+                if (selectedProfile != null)
+                {
+                    Profiles.Remove(selectedProfile);
+                }
+
+            } catch (Exception e)
+            {
+
+                Console.WriteLine($"-- ProfilesViewModel.SaveProfile -- {e.Message}");
+            }
+        }
+
+        [RelayCommand]
+        public void ActivateProfile()
+        {
+            try
+            {
+                ProfileViewModel? selectedProfile = Profiles.Where(p => p.IsSelected).FirstOrDefault();
+
+                if (selectedProfile != null)
+                {
+                    
+                }
+
+            } catch (Exception e)
+            {
+                Console.WriteLine($"-- ProfilesViewModel.ActivateProfile -- {e.Message}");
             }
         }
 
@@ -102,6 +145,24 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
 
             e.Handled = true;
+        }
+
+        [RelayCommand]
+        public async Task WindowClosingAsync(CancelEventArgs e)
+        {
+            ProfileContainer profileContainer = new ProfileContainer();
+
+            Task task1 = Task.Run(() =>
+            {
+                foreach (var item in this.Profiles)
+                {
+                    profileContainer.Profiles.Add(item._profile.Name, item._profile);
+                }
+            });
+
+            await task1;
+
+            this.profilesService.SaveProfiles(profileContainer);
         }
     }
 }

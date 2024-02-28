@@ -16,6 +16,9 @@
         <behaviors:EventTrigger EventName="Loaded">
             <behaviors:InvokeCommandAction Command="{Binding WindowLoadedCommand}" PassEventArgsToCommand="True"/>
         </behaviors:EventTrigger>
+        <behaviors:EventTrigger EventName="Closing">
+            <behaviors:InvokeCommandAction Command="{Binding WindowClosingCommand}" PassEventArgsToCommand="True"/>
+        </behaviors:EventTrigger>
     </behaviors:Interaction.Triggers>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -98,14 +101,16 @@
                     <ColumnDefinition Width="5"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button Content="Select profile"
+                <Button Content="Activate profile"
                         Style="{StaticResource ButtonAddModTheme}"
                         Height="30"
-                        Grid.Column="0"/>
+                        Grid.Column="0"
+                        Command="{Binding ActivateProfileCommand}"/>
                 <Button Content="Delete profile"
                         Style="{StaticResource ButtonAddModTheme}"
                         Height="30"
-                        Grid.Column="2"/>
+                        Grid.Column="2"
+                        Command="{Binding DeleteProfileCommand}"/>
 
             </Grid>
         </Grid>

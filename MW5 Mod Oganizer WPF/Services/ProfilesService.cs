@@ -13,6 +13,10 @@ namespace MW5_Mod_Organizer_WPF.Services
         {
         }
 
+        /// <summary>
+        /// Retrieves all profiles from file and returns as ProfileContainer.
+        /// </summary>
+        /// <returns></returns>
         public async Task<ProfileContainer> GetProfilesAsync()
         {
             // DEBUG TIMER
@@ -61,6 +65,10 @@ namespace MW5_Mod_Organizer_WPF.Services
             }
         }
 
+        /// <summary>
+        /// Saves all profiles from parameter to file.
+        /// </summary>
+        /// <param name="profileContainer"></param>
         public void SaveProfiles(ProfileContainer profileContainer)
         {
             try
@@ -82,7 +90,6 @@ namespace MW5_Mod_Organizer_WPF.Services
             }
             catch (Exception e)
             {
-
                 Console.WriteLine($"-- ProfilesService.SaveProfiles -- {e.Message}");
             }
         }
