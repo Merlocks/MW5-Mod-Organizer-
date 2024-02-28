@@ -311,7 +311,7 @@
                             Background="#f7f5f2"
                             Margin="0 0 10 0">
                         <DataGrid x:Name="DataGridOverwrites"
-                                  ItemsSource="{Binding Overwrites}"
+                                  ItemsSource="{Binding OverwritesCollection}"
                                   Style="{DynamicResource DataGridStyle1}" 
                                   CellStyle="{DynamicResource DataGridCellStyle1}" 
                                   ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
@@ -345,7 +345,7 @@
                             Background="#f7f5f2"
                             Margin="0 0 10 0">
                         <DataGrid x:Name="DataGridOverwrittenBy"
-                                  ItemsSource="{Binding OverwrittenBy}"
+                                  ItemsSource="{Binding OverwrittenByCollection}"
                                   Style="{DynamicResource DataGridStyle1}" 
                                   CellStyle="{DynamicResource DataGridCellStyle1}" 
                                   ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
@@ -378,7 +378,7 @@
                             Grid.Column="0"
                             Background="#f7f5f2"
                             Margin="0 0 10 0">
-                        <DataGrid ItemsSource="{Binding Conflicts}" 
+                        <DataGrid ItemsSource="{Binding ConflictsCollection}" 
                                   Style="{DynamicResource DataGridStyle1}" 
                                   CellStyle="{DynamicResource DataGridCellStyle1}" 
                                   ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 

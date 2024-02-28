@@ -56,7 +56,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         }
                     });
 
-                    // Wait on completion of all tasks.
+                    // Wait on completion of task.
                     task.Wait();
 
                     // Add new profile to both list.
@@ -98,10 +98,11 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         [RelayCommand]
-        public void ActivateProfile()
+        public void ActivateProfile(object sender)
         {
             try
             {
+                Window? window = sender as Window;
                 ProfileViewModel? selectedProfile = Profiles.Where(p => p.IsSelected).FirstOrDefault();
                 RaisableObservableCollection<ModViewModel> collection = this.mainViewModel.ModVMCollection;
 
@@ -121,6 +122,13 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     }
 
                     this.mainViewModel.ModVMCollection = new RaisableObservableCollection<ModViewModel>(collection.OrderBy(m => m.LoadOrder).ThenBy(m => m.FolderName));
+                    this.mainViewModel.DeploymentNecessary = true;
+                    this.mainViewModel.RaiseCheckForAllConflict();
+
+                    if (window != null)
+                    {
+                        window.Close();
+                    }
                 }
 
             } catch (Exception e)

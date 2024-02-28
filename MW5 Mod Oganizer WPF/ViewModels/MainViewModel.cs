@@ -17,6 +17,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
@@ -193,6 +194,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         {
             ProfilesView window = new ProfilesView();
             window.Owner = App.Current.MainWindow;
+
+            foreach (var item in CollectionsMarshal.AsSpan(ModVMCollection.Where(m => m.IsSelected).ToList())) item.IsSelected = false;
+            
             window.ShowDialog();
         }
 
@@ -848,6 +852,11 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         /// <summary>
         /// Methods and events
         /// </summary>
+        public void RaiseCheckForAllConflict()
+        {
+            _modService.CheckForAllConflictsAsync();
+        }
+        
         private void ModVMCollection_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             OnPropertyChanged(nameof(this.ModCount));
