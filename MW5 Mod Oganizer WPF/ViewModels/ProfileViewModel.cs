@@ -15,6 +15,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [ObservableProperty]
         private string name;
 
+        [ObservableProperty]
+        private bool isSelected;
+
         partial void OnNameChanged(string value)
         {
             _profile.Name = value;

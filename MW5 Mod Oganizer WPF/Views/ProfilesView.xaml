@@ -42,7 +42,7 @@
                 <DataGrid x:Name="ProfilesDataGrid"
                           ItemsSource="{Binding Profiles}"
                           ColumnHeaderStyle="{DynamicResource ProfilesDataGridColumnHeaderStyle}"
-                          RowStyle="{DynamicResource DataGridRowStyle1}"
+                          RowStyle="{DynamicResource ProfilesDataGridRowStyle}"
                           CellStyle="{DynamicResource DataGridCellStyle1}"
                           Style="{DynamicResource DataGridStyle1}"
                           HorizontalScrollBarVisibility="Disabled"

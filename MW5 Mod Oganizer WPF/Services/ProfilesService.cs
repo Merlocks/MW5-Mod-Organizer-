@@ -18,21 +18,21 @@ namespace MW5_Mod_Organizer_WPF.Services
             // DEBUG TIMER
             var timer = Stopwatch.StartNew();
             
-            ProfileContainer? profileContainer = new ProfileContainer();
-            
-            if (!Directory.Exists(@"Userdata"))
-            {
-                Directory.CreateDirectory(@"Userdata");
-            }
-
-            if (!File.Exists(@"Userdata\profiles.json"))
-            {
-                File.WriteAllText(@"Userdata\profiles.json", "");
-            }
-
             try
             {
-                string? jsonString = File.ReadAllText(@"Userdata\profiles.json");
+                ProfileContainer? profileContainer = new ProfileContainer();
+
+                if (!Directory.Exists(@"Userdata"))
+                {
+                    Directory.CreateDirectory(@"Userdata");
+                }
+
+                if (!File.Exists(@"Userdata\profiles.json"))
+                {
+                    await File.WriteAllTextAsync(@"Userdata\profiles.json", "");
+                }
+
+                string? jsonString = await File.ReadAllTextAsync(@"Userdata\profiles.json");
                 profileContainer = JsonSerializer.Deserialize<ProfileContainer>(jsonString);
 
                 if (profileContainer != null && profileContainer.Profiles.Count != 0)
@@ -46,9 +46,9 @@ namespace MW5_Mod_Organizer_WPF.Services
                     return new ProfileContainer();
                 }
             }
-            catch (System.Exception)
+            catch (Exception e)
             {
-
+                Console.WriteLine($"-- ProfilesService.GetProfilesAsync -- {e.Message}");
                 return new ProfileContainer();
             }
             finally
@@ -63,20 +63,28 @@ namespace MW5_Mod_Organizer_WPF.Services
 
         public void SaveProfiles(ProfileContainer profileContainer)
         {
-            if (!Directory.Exists(@"Userdata"))
+            try
             {
-                Directory.CreateDirectory(@"Userdata");
-            }
+                if (!Directory.Exists(@"Userdata"))
+                {
+                    Directory.CreateDirectory(@"Userdata");
+                }
 
-            if (!File.Exists(@"Userdata\profiles.json"))
+                if (!File.Exists(@"Userdata\profiles.json"))
+                {
+                    File.WriteAllText(@"Userdata\profiles.json", "");
+                }
+
+                var options = new JsonSerializerOptions() { WriteIndented = true };
+                string jsonString = JsonSerializer.Serialize(profileContainer, options);
+
+                File.WriteAllText(@"Userdata\profiles.json", jsonString);
+            }
+            catch (Exception e)
             {
-                File.WriteAllText(@"Userdata\profiles.json", "");
+
+                Console.WriteLine($"-- ProfilesService.SaveProfiles -- {e.Message}");
             }
-
-            var options = new JsonSerializerOptions() { WriteIndented = true };
-            string jsonString = JsonSerializer.Serialize(profileContainer, options);
-
-            File.WriteAllText(@"Userdata\profiles.json", jsonString);
         }
     }
 }
