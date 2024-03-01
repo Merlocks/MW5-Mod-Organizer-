@@ -11,7 +11,8 @@
         Title="Profiles" 
         Height="600" 
         Width="450"
-        FontSize="14">
+        FontSize="14"
+        Background="#D1C9C9">
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Loaded">
             <behaviors:InvokeCommandAction Command="{Binding WindowLoadedCommand}" PassEventArgsToCommand="True"/>
@@ -41,7 +42,8 @@
                 <RowDefinition Height="50"
                                MinHeight="50"/>
             </Grid.RowDefinitions>
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="1"
+                  Background="#f7f5f2">
                 <DataGrid x:Name="ProfilesDataGrid"
                           ItemsSource="{Binding Profiles}"
                           ColumnHeaderStyle="{DynamicResource ProfilesDataGridColumnHeaderStyle}"
@@ -75,17 +77,19 @@
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <TextBlock Text="Give your profile a name"
-                           Foreground="#69717d"
+                           Foreground="#484D54"
                            FontSize="16"
                            Margin="0 0 0 5"
                            Grid.Row="0"/>
                 <TextBox Text="{Binding TextBoxContent, UpdateSourceTrigger=PropertyChanged}" 
                          TextWrapping="Wrap"
                          Grid.Row="1"
-                         VerticalAlignment="Stretch"/>
+                         VerticalAlignment="Stretch"
+                         VerticalContentAlignment="Center"
+                         Background="#f7f5f2"/>
                 <TextBlock Text="*Maximum 45 characters"
-                           Foreground="#69717d"
-                           FontSize="12"
+                           Foreground="#484D54"
+                           FontSize="11"
                            Grid.Row="2"
                            VerticalAlignment="Bottom"/>
                 <Button Content="Save profile"
