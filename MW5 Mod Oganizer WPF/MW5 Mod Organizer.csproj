@@ -19,7 +19,7 @@
 		<Company />
 		<Authors>Maxim Agemans</Authors>
 		<AnalysisLevel>latest</AnalysisLevel>
-		<ApplicationIcon>Images\favicon.ico</ApplicationIcon>
+		<ApplicationIcon>Images\icon-ico.ico</ApplicationIcon>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -14,7 +14,6 @@
         Background="#D1C9C9" 
         WindowStartupLocation="CenterOwner"
         UseLayoutRounding="True"
-        Icon="/favicon.ico"
         SizeChanged="Window_SizeChanged">
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Loaded">
