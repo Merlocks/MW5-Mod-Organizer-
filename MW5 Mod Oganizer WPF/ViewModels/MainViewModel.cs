@@ -23,6 +23,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Shapes;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
 {
@@ -579,7 +580,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         // Also remove mod from list.
                         foreach (var path in Directory.GetFileSystemEntries(PrimaryFolderPath!))
                         {
-                            string? folder = Path.GetFileName(path);
+                            string? folder = System.IO.Path.GetFileName(path);
 
                             if (folderList.Contains(folder))
                             {
@@ -607,7 +608,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                         foreach (var folder in Directory.GetFileSystemEntries(@"downloads"))
                         {
-                            Directory.Move(folder, PrimaryFolderPath! + @"\" + Path.GetFileName(folder));
+                            Directory.Move(folder, PrimaryFolderPath! + @"\" + System.IO.Path.GetFileName(folder));
                         }
 
                         Directory.Delete(@"downloads", true);
@@ -623,15 +624,23 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                                 foreach (var item in ModVMCollection.Where(m => m.IsSelected)) item.IsSelected = false;
                             }
 
-                            foreach (var modFolderPath in folderList)
+                            foreach (var modFolderName in folderList)
                             {
-                                Mod? mod = JsonConverterFacade.JsonToMod(PrimaryFolderPath + @"\" + modFolderPath);
+                                Mod? mod = JsonConverterFacade.JsonToMod(PrimaryFolderPath + @"\" + modFolderName);
 
                                 if (mod != null)
                                 {
-                                    if (!File.Exists(PrimaryFolderPath + @"\" + modFolderPath + @"\backup.json"))
+                                    if (!File.Exists(PrimaryFolderPath + @"\" + modFolderName + @"\backup.json"))
                                     {
-                                        JsonConverterFacade.Createbackup(PrimaryFolderPath + @"\" + modFolderPath);
+                                        JsonConverterFacade.Createbackup(PrimaryFolderPath + @"\" + modFolderName);
+                                    }
+
+                                    Mod? backup = JsonConverterFacade.ReadBackup(PrimaryFolderPath + @"\" + modFolderName);
+                                    int defaultLoadOrder = default;
+
+                                    if (backup != null && backup.LoadOrder != null)
+                                    {
+                                        defaultLoadOrder = (int)backup.LoadOrder;
                                     }
 
                                     if (mod.LoadOrder == null)
@@ -642,8 +651,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                                     mod.LoadOrder = decimal.ToInt32((decimal)mod.LoadOrder);
 
                                     ModViewModel modVM = new ModViewModel(mod, this, _modService);
-                                    modVM.Path = PrimaryFolderPath + @"\" + modFolderPath;
+                                    modVM.Path = PrimaryFolderPath + @"\" + modFolderName;
                                     modVM.Source = "Primary Folder";
+                                    modVM.DefaultLoadOrder = defaultLoadOrder;
 
                                     _modService.AddMod(modVM);
 

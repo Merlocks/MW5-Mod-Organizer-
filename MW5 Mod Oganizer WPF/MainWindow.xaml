@@ -148,12 +148,36 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn x:Name="DataGridColumnLoadorder"
-                                        Header="Loadorder"
-                                        MinWidth="75"
-                                        MaxWidth="75"
-                                        CanUserResize="False"
-                                        Binding="{Binding LoadOrder, UpdateSourceTrigger=PropertyChanged}"/>
+                    <DataGridTemplateColumn x:Name="DataGridColumnLoadorder"
+                                            Header="Loadorder"
+                                            MinWidth="75"
+                                            MaxWidth="75"
+                                            CanUserResize="False">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="5"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding LoadOrder}"
+                                               VerticalAlignment="Bottom"
+                                               Grid.Column="0"/>
+                                    <StackPanel Orientation="Horizontal"
+                                                Grid.Column="2">
+                                        <TextBlock Text="(" Foreground="#69717d" FontSize="11" FontWeight="SemiBold" TextOptions.TextFormattingMode="Display" 
+                                                   VerticalAlignment="Center"/>
+                                        <TextBlock Text="{Binding DefaultLoadOrder}" Foreground="Green" FontSize="11" TextOptions.TextFormattingMode="Display" VerticalAlignment="Center"/>
+                                        <TextBlock Text=")" Foreground="#69717d" FontSize="11" FontWeight="SemiBold" TextOptions.TextFormattingMode="Display" 
+                                                   VerticalAlignment="Center"/>
+
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn x:Name="DataGridColumnMod"
                                         Header="Mod"
                                         MinWidth="200"

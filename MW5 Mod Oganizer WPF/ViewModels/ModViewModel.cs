@@ -71,6 +71,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         [ObservableProperty]
+        private decimal? defaultLoadOrder;
+
+        [ObservableProperty]
         private ModViewModelConflictStatus modViewModelStatus;
 
         [ObservableProperty]

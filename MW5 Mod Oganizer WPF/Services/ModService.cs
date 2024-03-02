@@ -103,6 +103,14 @@ namespace MW5_Mod_Organizer_WPF.Services
                         JsonConverterFacade.Createbackup(path); 
                     }
 
+                    Mod? backup = JsonConverterFacade.ReadBackup(path);
+                    int defaultLoadOrder = default;
+                    
+                    if (backup != null && backup.LoadOrder != null)
+                    {
+                        defaultLoadOrder = (int)backup.LoadOrder;
+                    }
+
                     if (mod.LoadOrder == null)
                     {
                         mod.LoadOrder = 0;
@@ -113,6 +121,7 @@ namespace MW5_Mod_Organizer_WPF.Services
                     ModViewModel modVM = new ModViewModel(mod, _mainViewModel!, this);
                     modVM.Path = path;
                     modVM.Source = source;
+                    modVM.DefaultLoadOrder = defaultLoadOrder;
                     tempModVMList.Add(modVM);
                 } 
             }
