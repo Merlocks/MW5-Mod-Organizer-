@@ -18,6 +18,7 @@
 		<Description>MW5 Mod Organizer</Description>
 		<Company />
 		<Authors>Maxim Agemans</Authors>
+		<PublishSingleFile>true</PublishSingleFile>
 		<AnalysisLevel>latest</AnalysisLevel>
 		<ApplicationIcon>Images\icon-ico.ico</ApplicationIcon>
 	</PropertyGroup>

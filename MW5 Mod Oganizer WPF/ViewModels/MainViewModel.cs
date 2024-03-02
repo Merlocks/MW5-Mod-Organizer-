@@ -668,9 +668,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                Console.WriteLine("Unhandled Exception at MainViewModel.AddModAsync");
+                Console.WriteLine("Unhandled Exception at MainViewModel.AddModAsync\n\n" + e.Message);
 
                 if (Directory.Exists(@"downloads"))
                 {
