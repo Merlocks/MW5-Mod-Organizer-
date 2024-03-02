@@ -17,6 +17,7 @@ namespace MW5_Mod_Organizer_WPF
     /// Adding a mod through the "Add mod" button that already exists will now get rid of all its files before installing.
     /// Adding a mod through "Add mod" will now also extract extra files outside of the modfolder.
     /// Added information about total mods, active mods and how many mods you have selected
+    /// Changed the application icon.
     /// Fixed infinite loading screen when a Mod Archive is corrupted and can't be extracted.
     /// Fixed adding a Mod Archive which adds multiple mod folders not adding all mods to the list.
     /// Fixed columns being too small when starting the application with an empty list and then adding a mod folder.
