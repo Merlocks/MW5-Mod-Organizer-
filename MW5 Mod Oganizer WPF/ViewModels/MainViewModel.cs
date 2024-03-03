@@ -260,6 +260,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     //Retrieve mods
                     _modService.GetMods();
 
+                    this.IsModListLoaded = true;
+
                     await _modService.CheckForAllConflictsAsync();
                 }
                 else if (dialog.SelectedPath == SecondaryFolderPath)
@@ -289,6 +291,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                         //Retrieve mods
                         _modService.GetMods();
+
+                        this.IsModListLoaded = true;
 
                         await _modService.CheckForAllConflictsAsync();
                     }
@@ -720,7 +724,10 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             // Load all mods into memory when Window is loaded
             _modService.GetMods();
 
-            this.IsModListLoaded = true;
+            if (this.ModVMCollection.Count != 0)
+            {
+                this.IsModListLoaded = true; 
+            }
 
             // Create list of tasks and add task so it can start running in the background
             List<Task> tasks = new List<Task> { Task.Run(() => _modService.CheckForAllConflictsAsync()) };
@@ -900,14 +907,14 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             OnPropertyChanged(nameof(this.ModCount));
             OnPropertyChanged(nameof(this.ModCountActive));
 
-            foreach (var item in ModVMCollection)
-            {
-                item.LoadOrder = ModVMCollection.IndexOf(item);
-            }
-
             if (this.IsModListLoaded)
             {
                 this.CurrentProfile = string.Empty;
+
+                foreach (var item in ModVMCollection)
+                {
+                    item.LoadOrder = ModVMCollection.IndexOf(item);
+                }
 
                 if (!this.DeploymentNecessary)
                 {
