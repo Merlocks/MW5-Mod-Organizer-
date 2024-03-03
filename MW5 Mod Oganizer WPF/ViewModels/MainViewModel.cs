@@ -775,8 +775,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public void ModsOverviewSelectionChanged(SelectionChangedEventArgs e)
         {
-            OnPropertyChanged(nameof(SelectedModsCount));
-            
             foreach (var item in e.AddedItems)
             {
                 ModViewModel? mod = item as ModViewModel;
@@ -818,6 +816,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     }
                 }
             }
+
+            OnPropertyChanged(nameof(SelectedModsCount));
         }
 
         [RelayCommand]
@@ -905,15 +905,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         
         private void ModVMCollection_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            Console.WriteLine($"- ModVMCollection_CollectionChanged raised -");
-
-            OnPropertyChanged(nameof(this.ModCount));
-            OnPropertyChanged(nameof(this.ModCountActive));
-
             if (this.IsModListLoaded)
             {
-                Console.WriteLine($"- ModVMCollection_CollectionChanged while ModList is loaded raised -");
-
                 this.CurrentProfile = string.Empty;
 
                 foreach (var item in ModVMCollection)
@@ -926,6 +919,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     this.DeploymentNecessary = true;
                 }
             }
+
+            OnPropertyChanged(nameof(this.ModCount));
+            OnPropertyChanged(nameof(this.ModCountActive));
         }
 
         /// <summary>
@@ -940,17 +936,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
         public void Drop(IDropInfo dropInfo)
         {
-            List<ModViewModel> selectedMods = new List<ModViewModel>();
+            List<ModViewModel> selectedMods = this.ModVMCollection.Where(m => m.IsSelected).ToList();
 
-            if (dropInfo.Data is IEnumerable)
-            {
-                foreach (var item in (ICollection)dropInfo.Data)
-                {
-                    selectedMods.Add((ModViewModel)item);
-                }
-
-                dropInfo.Data = selectedMods.OrderBy(m => m.LoadOrder);
-            }
+            dropInfo.Data = selectedMods.OrderBy(m => m.LoadOrder);
 
             DefaultDropHandler defaultDropHandler = new DefaultDropHandler();
             defaultDropHandler.Drop(dropInfo);

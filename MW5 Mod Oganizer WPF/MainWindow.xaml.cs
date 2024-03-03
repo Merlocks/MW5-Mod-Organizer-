@@ -23,6 +23,7 @@ namespace MW5_Mod_Organizer_WPF
     /// Fixed adding a Mod Archive which adds multiple mod folders not adding all mods to the list.
     /// Fixed columns being too small when starting the application with an empty list and then adding a mod folder.
     /// Fixed issue visual issue with mods when author uses a decimal in defaultLoadOrder instead of an integer.
+    /// Fixed issue where selected mods wasnt properly updated when dragging and dropping mods.
     /// </changelog>
 
     /// <TODO>
