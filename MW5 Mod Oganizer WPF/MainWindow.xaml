@@ -249,6 +249,15 @@
         <StackPanel Grid.Row="4"
                     Grid.ColumnSpan="2"
                     Orientation="Horizontal"
+                    Margin="0 0 0 10"
+                    HorizontalAlignment="Center"
+                    Visibility="{Binding CurrentProfileVisibility}">
+            <TextBlock Text="Current profile: " FontSize="12" Foreground="#484D54"/>
+            <TextBlock Text="{Binding CurrentProfile}" FontSize="12" Foreground="#484D54"/>
+        </StackPanel>
+        <StackPanel Grid.Row="4"
+                    Grid.ColumnSpan="2"
+                    Orientation="Horizontal"
                     Margin="0 0 10 10"
                     HorizontalAlignment="Right">
             <TextBlock Text="{Binding SelectedModsCount}"

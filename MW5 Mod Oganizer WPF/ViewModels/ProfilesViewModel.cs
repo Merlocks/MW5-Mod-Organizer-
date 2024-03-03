@@ -60,8 +60,26 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     // Wait on completion of task.
                     task.Wait();
 
-                    // Add new profile to both list.
-                    this.Profiles.Add(new ProfileViewModel(profile));
+                    // Deselect selected profile
+                    foreach (var item in this.Profiles.Where(p => !p.IsSelected)) item.IsSelected = false;
+
+                    // Add and select new profile to list
+                    ProfileViewModel? p = this.Profiles.Where(p => p.Name == this.TextBoxContent).SingleOrDefault();
+
+                    if (p != null)
+                    {
+                        this.Profiles.Remove(p);
+                        p = null;
+                    }
+
+                    ProfileViewModel addedProfileVM = new ProfileViewModel(profile);
+                    this.Profiles.Add(addedProfileVM);
+
+                    // Select added profile
+                    addedProfileVM.IsSelected = true;
+
+                    // Set current profile to newly created profile
+                    this.mainViewModel.CurrentProfile = this.TextBoxContent;
 
                     // Clear textBoxContent.
                     this.TextBoxContent = string.Empty;
@@ -89,6 +107,12 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 if (selectedProfile != null)
                 {
                     Profiles.Remove(selectedProfile);
+                }
+
+                if (selectedProfile != null && this.mainViewModel.CurrentProfile.Equals(selectedProfile.Name))
+                {
+                    this.mainViewModel.CurrentProfile = string.Empty;
+                    this.mainViewModel.PreviousProfile = string.Empty;
                 }
 
             } catch (Exception e)
@@ -130,6 +154,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         .ThenBy(m => m.LoadOrder)
                         .ThenBy(m => m.FolderName));
                     this.mainViewModel.DeploymentNecessary = true;
+                    this.mainViewModel.CurrentProfile = selectedProfile.Name;
                     this.mainViewModel.RaiseCheckForAllConflict();
 
                     // Close window

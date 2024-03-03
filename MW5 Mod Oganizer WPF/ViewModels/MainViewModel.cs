@@ -43,6 +43,13 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         public string SelectedModsCount => ModVMCollection.Where(m => m.IsSelected).Count().ToString();
 
         /// <summary>
+        /// Properties
+        /// </summary>
+        public bool IsModListLoaded { get; set; } = false;
+
+        public string? PreviousProfile { get; set; }
+
+        /// <summary>
         /// Observable properties used for data binding within the View
         /// </summary>
         [ObservableProperty]
@@ -134,6 +141,32 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [ObservableProperty]
         private Visibility conflictNotificationState = Visibility.Visible;
 
+        [ObservableProperty]
+        private string currentProfile;
+
+        partial void OnCurrentProfileChanged(string? oldValue, string newValue)
+        {
+            Properties.Settings.Default.CurrentProfile = newValue;
+            Properties.Settings.Default.Save();
+
+            if (string.IsNullOrEmpty(newValue))
+            {
+                if (oldValue != null)
+                {
+                    this.PreviousProfile = oldValue; 
+                }
+
+                this.CurrentProfileVisibility = Visibility.Hidden;
+            }
+            else
+            {
+                this.CurrentProfileVisibility = Visibility.Visible;
+            }
+        }
+
+        [ObservableProperty]
+        private Visibility currentProfileVisibility;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -148,15 +181,21 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             this.OverwritesCollection = new ObservableCollection<ModViewModel>();
             this.ConflictsCollection = new ObservableCollection<string>();
 
-            GameVersion = Properties.Settings.Default.GameVersion;
-            PrimaryFolderPath = Properties.Settings.Default.Path;
-            SecondaryFolderPath = Properties.Settings.Default.SecondaryPath;
+            this.GameVersion = Properties.Settings.Default.GameVersion;
+            this.PrimaryFolderPath = Properties.Settings.Default.Path;
+            this.SecondaryFolderPath = Properties.Settings.Default.SecondaryPath;
+            this.CurrentProfile = Properties.Settings.Default.CurrentProfile;
 
-            IsZipDropVisible = false;
+            this.IsZipDropVisible = false;
 
             WeakReferenceMessenger.Default.Register<PropertyIsEnabledChangedMessage>(this, (r, m) => 
             {
                 OnPropertyChanged(nameof(this.ModCountActive));
+
+                if (this.IsModListLoaded)
+                {
+                    this.CurrentProfile = string.Empty; 
+                }
             });
         }
 
@@ -279,7 +318,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         public void ArrowDown()
         {
             List<ModViewModel> selectedItems = ModVMCollection.Where(m => m.IsSelected).ToList();
-            bool areChangesMade = false;
 
             if (selectedItems != null && selectedItems.Count > 0)
             {
@@ -298,18 +336,12 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     if (oldIndex != newIndex)
                     {
                         ModVMCollection.Move(oldIndex, newIndex);
-                        areChangesMade = true;
                     }
                 }
 
                 if (selectedItems.Count == 1)
                 {
                     _modService.CheckForConflicts((ModViewModel)selectedItems[0]!);
-                }
-
-                if (areChangesMade)
-                {
-                    DeploymentNecessary = true;
                 }
             }
         }
@@ -318,7 +350,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         public void ArrowUp()
         {
             List<ModViewModel> selectedItems = ModVMCollection.Where(m => m.IsSelected).ToList();
-            bool areChangesMade = false;
 
             if (selectedItems != null && selectedItems.Count > 0)
             {
@@ -338,7 +369,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     if (oldIndex != newIndex)
                     {
                         ModVMCollection.Move(oldIndex, newIndex);
-                        areChangesMade = true;
                     }
 
                     newIndex++;
@@ -347,11 +377,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 if (selectedItems.Count == 1)
                 {
                     _modService.CheckForConflicts((ModViewModel)selectedItems[0]!);
-                }
-
-                if (areChangesMade)
-                {
-                    DeploymentNecessary = true;
                 }
             }
         }
@@ -400,7 +425,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                 JsonConverterFacade.ModListToJson(PrimaryFolderPath, modList);
 
-                DeploymentNecessary = false;
+                this.DeploymentNecessary = false;
+                this.PreviousProfile = string.Empty;
 
                 string message = "Succesfully deployed your load order.";
                 string caption = "Info";
@@ -416,7 +442,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         {
             _modService.GetMods();
 
-            DeploymentNecessary = false;
+            this.DeploymentNecessary = false;
+            if (this.PreviousProfile != null) this.CurrentProfile = this.PreviousProfile;
 
             await _modService.CheckForAllConflictsAsync();
         }
@@ -663,7 +690,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         });
 
                         // End loading
-                        this.DeploymentNecessary = true;
+                        this.PreviousProfile = string.Empty;
                         this.LoadingContext = string.Empty;
                     }
                 }
@@ -692,6 +719,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         {
             // Load all mods into memory when Window is loaded
             _modService.GetMods();
+
+            this.IsModListLoaded = true;
 
             // Create list of tasks and add task so it can start running in the background
             List<Task> tasks = new List<Task> { Task.Run(() => _modService.CheckForAllConflictsAsync()) };
@@ -722,8 +751,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public async Task ToggleCheckBox()
         {
-            //OnPropertyChanged(nameof(this.ModCountActive));
-
             List<ModViewModel> selectedItems = ModVMCollection.Where(m => m.IsSelected).ToList();
 
             if (selectedItems != null && selectedItems.Count == 1)
@@ -731,9 +758,10 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 _modService.CheckForConflicts(selectedItems[0]!);
             }
 
-            await _modService.CheckForAllConflictsAsync();
+            this.DeploymentNecessary = true;
+            this.CurrentProfile = string.Empty;
 
-            DeploymentNecessary = true;
+            await _modService.CheckForAllConflictsAsync();
         }
 
         [RelayCommand]
@@ -876,6 +904,16 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             {
                 item.LoadOrder = ModVMCollection.IndexOf(item);
             }
+
+            if (this.IsModListLoaded)
+            {
+                this.CurrentProfile = string.Empty;
+
+                if (!this.DeploymentNecessary)
+                {
+                    this.DeploymentNecessary = true;
+                }
+            }
         }
 
         /// <summary>
@@ -904,8 +942,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
             DefaultDropHandler defaultDropHandler = new DefaultDropHandler();
             defaultDropHandler.Drop(dropInfo);
-
-            DeploymentNecessary = true;
         }
     }
 }

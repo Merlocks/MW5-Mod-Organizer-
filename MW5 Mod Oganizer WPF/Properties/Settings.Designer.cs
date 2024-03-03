@@ -70,5 +70,17 @@ namespace MW5_Mod_Organizer_WPF.Properties {
                 this["Version"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CurrentProfile {
+            get {
+                return ((string)(this["CurrentProfile"]));
+            }
+            set {
+                this["CurrentProfile"] = value;
+            }
+        }
     }
 }

@@ -143,7 +143,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         item.ModViewModelStatus = ModViewModelConflictStatus.None;
                     }
 
-                    _mainViewModel!.DeploymentNecessary = true;
+                    _mainViewModel!.PreviousProfile = string.Empty;
 
                     await _modService.CheckForAllConflictsAsync();
                 }
