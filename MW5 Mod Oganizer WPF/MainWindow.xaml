@@ -8,7 +8,7 @@
         xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
         mc:Ignorable="d" 
         FontSize="14"
-        Title="MW5 Mod Organizer" 
+        Title="MW5 Mod Organizer v2.3.0beta4" 
         Height="720" 
         Width="1080" 
         Background="#D1C9C9" 
