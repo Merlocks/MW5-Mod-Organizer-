@@ -47,8 +47,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         /// </summary>
         public bool IsModListLoaded { get; set; } = false;
 
-        public string? PreviousProfile { get; set; }
-
         /// <summary>
         /// Observable properties used for data binding within the View
         /// </summary>
@@ -144,23 +142,15 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [ObservableProperty]
         private string currentProfile;
 
-        partial void OnCurrentProfileChanged(string? oldValue, string newValue)
+        partial void OnCurrentProfileChanged(string value)
         {
-            Properties.Settings.Default.CurrentProfile = newValue;
-            Properties.Settings.Default.Save();
-
-            if (string.IsNullOrEmpty(newValue))
+            if (!string.IsNullOrEmpty(value))
             {
-                if (oldValue != null)
-                {
-                    this.PreviousProfile = oldValue; 
-                }
-
-                this.CurrentProfileVisibility = Visibility.Hidden;
+                this.CurrentProfileVisibility = Visibility.Visible;
             }
             else
             {
-                this.CurrentProfileVisibility = Visibility.Visible;
+                this.CurrentProfileVisibility = Visibility.Hidden;
             }
         }
 
@@ -430,7 +420,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 JsonConverterFacade.ModListToJson(PrimaryFolderPath, modList);
 
                 this.DeploymentNecessary = false;
-                this.PreviousProfile = string.Empty;
+                Properties.Settings.Default.CurrentProfile = this.CurrentProfile;
+                Properties.Settings.Default.Save();
 
                 string message = "Succesfully deployed your load order.";
                 string caption = "Info";
@@ -444,12 +435,18 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
         public async Task Undo()
         {
-            _modService.GetMods();
+            if (this.DeploymentNecessary)
+            {
+                this.IsModListLoaded = false;
+                
+                _modService.GetMods();
 
-            this.DeploymentNecessary = false;
-            if (this.PreviousProfile != null) this.CurrentProfile = this.PreviousProfile;
+                this.IsModListLoaded = true;
+                this.DeploymentNecessary = false;
+                this.CurrentProfile = Properties.Settings.Default.CurrentProfile;
 
-            await _modService.CheckForAllConflictsAsync();
+                await _modService.CheckForAllConflictsAsync(); 
+            }
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
@@ -694,8 +691,10 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         });
 
                         // End loading
-                        this.PreviousProfile = string.Empty;
                         this.LoadingContext = string.Empty;
+
+                        Properties.Settings.Default.CurrentProfile = string.Empty;
+                        Properties.Settings.Default.Save();
                     }
                 }
             }
@@ -748,7 +747,10 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 {
                     this.IsUpdateAvailable = true;
                 }
-                else { this.IsUpdateAvailable = false; }
+                else 
+                {
+                    this.IsUpdateAvailable = false;
+                }
             }
 
             // Await all started tasks before ending method
@@ -766,7 +768,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
 
             this.DeploymentNecessary = true;
-            this.CurrentProfile = string.Empty;
 
             await _modService.CheckForAllConflictsAsync();
         }
@@ -904,11 +905,15 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         
         private void ModVMCollection_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
+            Console.WriteLine($"- ModVMCollection_CollectionChanged raised -");
+
             OnPropertyChanged(nameof(this.ModCount));
             OnPropertyChanged(nameof(this.ModCountActive));
 
             if (this.IsModListLoaded)
             {
+                Console.WriteLine($"- ModVMCollection_CollectionChanged while ModList is loaded raised -");
+
                 this.CurrentProfile = string.Empty;
 
                 foreach (var item in ModVMCollection)

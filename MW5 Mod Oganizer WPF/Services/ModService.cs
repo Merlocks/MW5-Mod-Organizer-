@@ -36,31 +36,37 @@ namespace MW5_Mod_Organizer_WPF.Services
             {
                 ObservableCollection<ModViewModel> collection = _mainViewModel!.ModVMCollection;
 
-                //Make space for mods
+                // Make space for mods
                 ClearTempList();
                 collection.Clear();
                 ClearConflictWindow();
 
-                //Primary path only
+                // Primary path only
                 if (!string.IsNullOrEmpty(Properties.Settings.Default.Path) && string.IsNullOrEmpty(Properties.Settings.Default.SecondaryPath))
                 {
                     string[]? primarySubdirectories = FileHandlerService.GetSubDirectories(Properties.Settings.Default.Path);
 
                     if (primarySubdirectories != null)
                     {
-                        //Add primary mods to temporary list
+                        // Add primary mods to temporary list
                         AddToTempList(primarySubdirectories, "Primary Folder");
 
-                        //Sort temporary list
+                        // Sort temporary list
                         List<ModViewModel> sortedModList = tempModVMList.OrderBy(m => m.LoadOrder).ThenBy(m => m.FolderName).ToList();
 
-                        //Add mods to collectionCopy
+                        // Add mods to collectionCopy
                         foreach (var mod in sortedModList)
                         {
                             collection.Add(mod);
                         }
+
+                        // Sort loadorder by index
+                        foreach (var item in collection)
+                        {
+                            item.LoadOrder = collection.IndexOf(item);
+                        }
                     }
-                //Primary and secondary path
+                // Primary and secondary path
                 } else if (!string.IsNullOrEmpty(Properties.Settings.Default.Path) && !string.IsNullOrEmpty(Properties.Settings.Default.SecondaryPath))
                 {
                     string[]? primarySubdirectories = FileHandlerService.GetSubDirectories(Properties.Settings.Default.Path);
@@ -68,19 +74,25 @@ namespace MW5_Mod_Organizer_WPF.Services
 
                     if (primarySubdirectories != null && secondarySubdirectories != null)
                     {
-                        //Add primary mods to temporary list
+                        // Add primary mods to temporary list
                         AddToTempList(primarySubdirectories, "Primary Folder");
 
-                        //Add secondary mods to temporary list
+                        // Add secondary mods to temporary list
                         AddToTempList(secondarySubdirectories, "Secondary Folder");
 
-                        //Sort temporary list
+                        // Sort temporary list
                         List<ModViewModel> sortedModList = tempModVMList.OrderBy(m => m.LoadOrder).ThenBy(m => m.FolderName).ToList();
 
-                        //Add mods to collectionCopy
+                        // Add mods to collectionCopy
                         foreach (var mod in sortedModList)
                         {
                             collection.Add(mod);
+                        }
+
+                        // Sort loadorder by index
+                        foreach (var item in collection)
+                        {
+                            item.LoadOrder = collection.IndexOf(item);
                         }
                     }
                 }

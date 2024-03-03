@@ -39,7 +39,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public void SaveProfile()
         {
-            if (!string.IsNullOrEmpty(this.TextBoxContent))
+            if (!string.IsNullOrEmpty(this.TextBoxContent) && !this.mainViewModel.DeploymentNecessary)
             {
                 // DEBUG TIMER
                 var timer = Stopwatch.StartNew();
@@ -81,6 +81,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     // Set current profile to newly created profile
                     this.mainViewModel.CurrentProfile = this.TextBoxContent;
 
+                    Properties.Settings.Default.CurrentProfile = this.mainViewModel.CurrentProfile;
+                    Properties.Settings.Default.Save();
+
                     // Clear textBoxContent.
                     this.TextBoxContent = string.Empty;
                 }
@@ -95,6 +98,15 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                 Console.WriteLine($"SaveProfile elapsed debug time: {time}ms");
             }
+            else if (this.mainViewModel.DeploymentNecessary)
+            {
+                string message = $"You must deploy your loadorder first before creating a profile.";
+                string caption = "Warning";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                MessageBoxIcon icon = MessageBoxIcon.Warning;
+
+                System.Windows.Forms.MessageBox.Show(message, caption, buttons, icon);
+            }
         }
 
         [RelayCommand]
@@ -106,13 +118,19 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                 if (selectedProfile != null)
                 {
+                    if (this.mainViewModel.CurrentProfile.Equals(selectedProfile.Name))
+                    {
+                        this.mainViewModel.CurrentProfile = string.Empty;
+                        Properties.Settings.Default.CurrentProfile = string.Empty;
+                        Properties.Settings.Default.Save();
+                    }
+                    else if (Properties.Settings.Default.CurrentProfile.Equals(selectedProfile.Name))
+                    {
+                        Properties.Settings.Default.CurrentProfile = string.Empty;
+                        Properties.Settings.Default.Save();
+                    }
+                    
                     Profiles.Remove(selectedProfile);
-                }
-
-                if (selectedProfile != null && this.mainViewModel.CurrentProfile.Equals(selectedProfile.Name))
-                {
-                    this.mainViewModel.CurrentProfile = string.Empty;
-                    this.mainViewModel.PreviousProfile = string.Empty;
                 }
 
             } catch (Exception e)
@@ -132,7 +150,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 List<ModViewModel> modsOutsideProfileScope = new List<ModViewModel>();
                 List<string> modsInsideProfileScope = new List<string>();
 
-                if (selectedProfile != null)
+                if (selectedProfile != null && selectedProfile.Name != this.mainViewModel.CurrentProfile)
                 {
                     foreach (var item in CollectionsMarshal.AsSpan(collection.ToList()))
                     {
