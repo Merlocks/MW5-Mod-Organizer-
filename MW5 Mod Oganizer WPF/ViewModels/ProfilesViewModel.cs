@@ -41,9 +41,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         {
             if (!string.IsNullOrEmpty(this.TextBoxContent) && !this.mainViewModel.DeploymentNecessary)
             {
-                // DEBUG TIMER
-                var timer = Stopwatch.StartNew();
-
                 try
                 {
                     List<ModViewModel> mods = mainViewModel.ModVMCollection.ToList();
@@ -91,12 +88,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 {
                     Console.WriteLine($"-- ProfilesViewModel.SaveProfile -- {e.Message}");
                 }
-
-                // DEBUG TIMER
-                timer.Stop();
-                var time = timer.ElapsedMilliseconds;
-
-                Console.WriteLine($"SaveProfile elapsed debug time: {time}ms");
             }
             else if (this.mainViewModel.DeploymentNecessary)
             {
@@ -136,7 +127,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             } catch (Exception e)
             {
 
-                Console.WriteLine($"-- ProfilesViewModel.SaveProfile -- {e.Message}");
+                Console.WriteLine($"-- ProfilesViewModel.DeleteProfile -- {e.Message}");
             }
         }
 
@@ -211,32 +202,49 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public async Task WindowLoadedAsync(RoutedEventArgs e)
         {
-            ProfileContainer profileContainer =  await this.profilesService.GetProfilesAsync();
-
-            foreach (var item in profileContainer.Profiles)
+            try
             {
-                this.Profiles.Add(new ProfileViewModel(item.Value));
+                ProfileContainer profileContainer = await this.profilesService.GetProfilesAsync();
+
+                foreach (var item in profileContainer.Profiles)
+                {
+                    this.Profiles.Add(new ProfileViewModel(item.Value));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"-- ProfilesViewModel.WindowLoadedAsync -- {ex.Message}");
+            }
+            finally
+            {
+                e.Handled = true;
             }
 
-            e.Handled = true;
         }
 
         [RelayCommand]
         public async Task WindowClosingAsync(CancelEventArgs e)
         {
-            ProfileContainer profileContainer = new ProfileContainer();
-
-            Task task1 = Task.Run(() =>
+            try
             {
-                foreach (var item in this.Profiles)
+                ProfileContainer profileContainer = new ProfileContainer();
+
+                Task task1 = Task.Run(() =>
                 {
-                    profileContainer.Profiles.Add(item._profile.Name, item._profile);
-                }
-            });
+                    foreach (var item in this.Profiles)
+                    {
+                        profileContainer.Profiles.Add(item._profile.Name, item._profile);
+                    }
+                });
 
-            await task1;
+                await task1;
 
-            this.profilesService.SaveProfiles(profileContainer);
+                this.profilesService.SaveProfiles(profileContainer);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"-- ProfilesViewModel.WindowClosingAsync -- {ex.Message}");
+            }
         }
     }
 }

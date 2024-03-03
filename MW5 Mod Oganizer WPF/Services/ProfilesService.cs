@@ -1,6 +1,5 @@
 ﻿using MW5_Mod_Organizer_WPF.Models;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -19,9 +18,6 @@ namespace MW5_Mod_Organizer_WPF.Services
         /// <returns></returns>
         public async Task<ProfileContainer> GetProfilesAsync()
         {
-            // DEBUG TIMER
-            var timer = Stopwatch.StartNew();
-            
             try
             {
                 ProfileContainer? profileContainer = new ProfileContainer();
@@ -54,14 +50,6 @@ namespace MW5_Mod_Organizer_WPF.Services
             {
                 Console.WriteLine($"-- ProfilesService.GetProfilesAsync -- {e.Message}");
                 return new ProfileContainer();
-            }
-            finally
-            {
-                // DEBUG TIMER
-                timer.Stop();
-                var time = timer.ElapsedMilliseconds;
-
-                Console.WriteLine($"GetProfiles elapsed debug time: {time}ms");
             }
         }
 

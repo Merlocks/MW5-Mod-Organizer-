@@ -33,6 +33,13 @@ namespace MW5_Mod_Organizer_WPF
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            Console.WriteLine($"If you see this you are running a beta version of MW5 Mod Organizer.");
+            Console.WriteLine("");
+            Console.WriteLine($"This is the debug console. If any Exceptions appear on the console,");
+            Console.WriteLine($"please report them to @Merlock in the Yet Another MW5 Discord Server");
+            Console.WriteLine($"--------------------------------------------------------------------");
+            Console.WriteLine("");
+
             MainWindow = new MainWindow();
             MainWindow.Show();
 

@@ -389,46 +389,53 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
             else
             {
-                //Save mod(s).taskRequestVersion
-                if (!string.IsNullOrEmpty(GameVersion))
+                try
                 {
-                    foreach (var modVM in ModVMCollection)
+                    //Save mod(s).taskRequestVersion
+                    if (!string.IsNullOrEmpty(GameVersion))
                     {
-                        modVM.GameVersion = GameVersion;
-
-                        if (modVM.Path != null)
+                        foreach (var modVM in ModVMCollection)
                         {
-                            JsonConverterFacade.ModToJson(modVM.Path, modVM._mod);
+                            modVM.GameVersion = GameVersion;
+
+                            if (modVM.Path != null)
+                            {
+                                JsonConverterFacade.ModToJson(modVM.Path, modVM._mod);
+                            }
                         }
                     }
-                }
 
-                //Save modlist.taskRequestVersion
-                ModList modList = new ModList
-                {
-                    ModStatus = new Dictionary<string, Status>()
-                };
-
-                foreach (var modVM in ModVMCollection)
-                {
-                    if (modVM.IsEnabled && modVM.FolderName != null)
+                    //Save modlist.taskRequestVersion
+                    ModList modList = new ModList
                     {
-                        modList.ModStatus.Add(modVM.FolderName, new Status { IsEnabled = modVM.IsEnabled });
+                        ModStatus = new Dictionary<string, Status>()
+                    };
+
+                    foreach (var modVM in ModVMCollection)
+                    {
+                        if (modVM.IsEnabled && modVM.FolderName != null)
+                        {
+                            modList.ModStatus.Add(modVM.FolderName, new Status { IsEnabled = modVM.IsEnabled });
+                        }
                     }
+
+                    JsonConverterFacade.ModListToJson(PrimaryFolderPath, modList);
+
+                    this.DeploymentNecessary = false;
+                    Properties.Settings.Default.CurrentProfile = this.CurrentProfile;
+                    Properties.Settings.Default.Save();
+
+                    string message = "Succesfully deployed your load order.";
+                    string caption = "Info";
+                    MessageBoxButtons buttons = MessageBoxButtons.OK;
+                    MessageBoxIcon icon = MessageBoxIcon.Information;
+
+                    System.Windows.Forms.MessageBox.Show(message, caption, buttons, icon);
                 }
-
-                JsonConverterFacade.ModListToJson(PrimaryFolderPath, modList);
-
-                this.DeploymentNecessary = false;
-                Properties.Settings.Default.CurrentProfile = this.CurrentProfile;
-                Properties.Settings.Default.Save();
-
-                string message = "Succesfully deployed your load order.";
-                string caption = "Info";
-                MessageBoxButtons buttons = MessageBoxButtons.OK;
-                MessageBoxIcon icon = MessageBoxIcon.Information;
-
-                System.Windows.Forms.MessageBox.Show(message, caption, buttons, icon);
+                catch (Exception e)
+                {
+                    Console.WriteLine($"-- MainViewModel.Deploy -- {e.Message}");
+                }
             }
         }
 
@@ -513,9 +520,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     DeploymentNecessary = true;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                Console.WriteLine($"Exception at ResetToDefault()");
+                Console.WriteLine($"-- MainViewModel.ResetToDefault -- {e.Message}");
             }
         }
 
@@ -700,7 +707,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
             catch (Exception e)
             {
-                Console.WriteLine("Unhandled Exception at MainViewModel.AddModAsync\n\n" + e.Message);
+                Console.WriteLine($"-- MainViewModel.AddModasync -- {e.Message}");
 
                 if (Directory.Exists(@"downloads"))
                 {
