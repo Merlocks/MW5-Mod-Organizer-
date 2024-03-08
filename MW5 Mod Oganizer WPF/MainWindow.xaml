@@ -504,7 +504,7 @@
                          HorizontalAlignment="Left"
                          Margin="10, 0, 0, 0"
                          IsReadOnly="True"
-                         Style="{StaticResource TextBoxTheme}"/>
+                         Style="{StaticResource TextBoxPrimaryPathTheme}"/>
                 <Button x:Name="ButtonOpenFolder" 
                         Content="Open primary folder"
                         Height="25"
@@ -531,7 +531,7 @@
                          VerticalContentAlignment="Center"
                          Margin="10, 0, 0, 0"
                          IsReadOnly="True"
-                         Style="{StaticResource TextBoxTheme}"/>
+                         Style="{StaticResource TextBoxSecondaryPathTheme}"/>
                 <Button x:Name="ButtonOpenSecondaryFolder" 
                         Content="Open secondary folder"
                         Height="25"
