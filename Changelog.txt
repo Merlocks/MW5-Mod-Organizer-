@@ -1,1 +1,3 @@
+When adding a mod through the application which already exists the loadorder will now be set to whatever it was before.
+This allows you to easily update your mods without having to remember their previous loadorder.
 Fixed popup message only showing for mods that were set as enabled in profile.

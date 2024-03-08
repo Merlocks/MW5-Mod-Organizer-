@@ -611,6 +611,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     // Check if task completed succesfully.
                     if (extractArchive.IsCompletedSuccessfully && Directory.Exists(@"downloads"))
                     {
+                        List<ModViewModel> removedMods = new List<ModViewModel>();
+                        
                         // Remove existing mod folder if it already exists.
                         // Also remove mod from list.
                         foreach (var path in Directory.GetFileSystemEntries(PrimaryFolderPath!))
@@ -620,10 +622,15 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                             if (folderList.Contains(folder))
                             {
                                 ModViewModel? mod = ModVMCollection.SingleOrDefault(m => m.Path == path);
-                                if (mod != null) ModVMCollection.Remove(mod);
 
                                 try
                                 {
+                                    if (mod != null)
+                                    {
+                                        removedMods.Add(mod);
+                                        ModVMCollection.Remove(mod);
+                                    }
+
                                     Directory.Delete(path, true);
                                 }
                                 // If path file instead of directory, catch exception and delete as file instead.
@@ -681,6 +688,15 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                                     if (mod.LoadOrder == null)
                                     {
                                         mod.LoadOrder = 0;
+                                    }
+
+                                    // If added mod is updated version of removed mod, set loadorder the same as removed mod.
+                                    foreach (var item in CollectionsMarshal.AsSpan(removedMods))
+                                    {
+                                        if (item.Path == PrimaryFolderPath + @"\" + modFolderName)
+                                        {
+                                            mod.LoadOrder = item.LoadOrder;
+                                        }
                                     }
 
                                     mod.LoadOrder = decimal.ToInt32((decimal)mod.LoadOrder);

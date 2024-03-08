@@ -142,19 +142,14 @@ namespace MW5_Mod_Organizer_WPF.Services
         public void AddMod(ModViewModel mod)
         {
             ObservableCollection<ModViewModel> collection = _mainViewModel!.ModVMCollection;
-
-
             int highestIndex = collection.Count;
 
-            if (mod.LoadOrder > highestIndex) mod.LoadOrder = highestIndex;
+            if (mod.LoadOrder > highestIndex) 
+            { 
+                mod.LoadOrder = highestIndex;
+            }
 
-            // Create temporary list with contents of ModVMCollection + added selectedMod
-            // Sort temporary list first by Loadorder, then by DisplayName
-            List<ModViewModel> list = new List<ModViewModel>(collection) { mod };
-            list = list.OrderBy(m => m.LoadOrder).ThenBy(m => m.FolderName).ToList();
-
-            // Insert selectedMod into ModVMCollection by index calculated by temporary list
-            collection.Insert(list.IndexOf(mod), mod);
+            collection.Insert(decimal.ToInt32(mod.LoadOrder), mod);
         }
 
         public void ClearConflictWindow()
