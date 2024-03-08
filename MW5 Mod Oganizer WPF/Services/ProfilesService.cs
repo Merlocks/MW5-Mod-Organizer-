@@ -1,5 +1,6 @@
 ﻿using MW5_Mod_Organizer_WPF.Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -83,14 +84,14 @@ namespace MW5_Mod_Organizer_WPF.Services
             }
         }
 
-        public void ExportProfile(Profile profile)
+        public void ExportProfiles(Dictionary<string, Profile> profiles)
         {
             try
             {
                 var dialog = new SaveFileDialog
                 {
-                    Title = $"Save {profile.Name}.json",
-                    FileName = $"{profile.Name}",
+                    Title = $"Save Profiles",
+                    FileName = $"exported-profiles",
                     Filter = "Json file (*.json)|*.json",
                     FilterIndex = 0,
                     DefaultExt = "exe",
@@ -100,7 +101,7 @@ namespace MW5_Mod_Organizer_WPF.Services
                 if (result == DialogResult.OK)
                 {
                     JsonSerializerOptions options = new JsonSerializerOptions() { WriteIndented = true };
-                    string jsonString = JsonSerializer.Serialize<Profile>(profile, options);
+                    string jsonString = JsonSerializer.Serialize<Dictionary<string, Profile>>(profiles, options);
 
                     File.WriteAllText($"{dialog.FileName}", jsonString);
                 }

@@ -589,9 +589,13 @@
                 <MenuItem Header="File"
                           FontSize="14"
                           Style="{StaticResource MenuItemContextTheme}">
+                    <MenuItem Header="Open">
+                        
+                    </MenuItem>
                     <MenuItem Header="Save"
                               FontSize="12">
                         <MenuItem Header="As loadorder.txt" Command="{Binding ExportLoadorderCommand}"/>
+                        <MenuItem Header="Profiles.." Command="{Binding ExportProfilesCommand}"/>
                     </MenuItem>
                 </MenuItem>
             </Menu>
@@ -601,7 +605,7 @@
                 <MenuItem Header="Profiles"
                           FontSize="14"
                           Style="{StaticResource MenuItemContextTheme}"
-                          Command="{Binding OpenProfilesCommand}">
+                          Command="{Binding OpenProfilesWindowCommand}">
                 </MenuItem>
             </Menu>
             <Menu VerticalAlignment="Center"

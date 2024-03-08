@@ -178,13 +178,13 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
             this.IsZipDropVisible = false;
 
-            WeakReferenceMessenger.Default.Register<PropertyIsEnabledChangedMessage>(this, (r, m) => 
+            WeakReferenceMessenger.Default.Register<PropertyIsEnabledChangedMessage>(this, (r, m) =>
             {
                 OnPropertyChanged(nameof(this.ModCountActive));
 
                 if (this.IsModListLoaded)
                 {
-                    this.CurrentProfile = string.Empty; 
+                    this.CurrentProfile = string.Empty;
                 }
             });
         }
@@ -220,7 +220,16 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         [RelayCommand]
-        public void OpenProfiles()
+        public void ExportProfiles()
+        {
+            ExportProfilesView window = new ExportProfilesView();
+            window.Owner = App.Current.MainWindow;
+
+            window.ShowDialog();
+        }
+
+        [RelayCommand]
+        public void OpenProfilesWindow()
         {
             ProfilesView window = new ProfilesView();
             window.Owner = App.Current.MainWindow;
