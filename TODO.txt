@@ -1,3 +1,5 @@
 Add "All mods.." context action to rows. Features:
     * Select All
     * Enable/Disable All
+Add import profiles functionality
+Polish windows
