@@ -11,30 +11,6 @@ namespace MW5_Mod_Organizer_WPF
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-
-    /// <changelog> 
-    /// Made some changes to the layout. Rows no longer have a border that isn't clickable.
-    /// Adding a mod through the "Add mod" button that already exists will now get rid of all its files before installing.
-    /// Adding a mod through "Add mod" will now also extract extra files outside of the modfolder.
-    /// Added information about total mods, active mods, how many mods you have selected and what profile is active.
-    /// Added the default loadorder set by author next to current loadorder in the list.
-    /// Changed the application icon.
-    /// Fixed infinite loading screen when a Mod Archive is corrupted and can't be extracted.
-    /// Fixed adding a Mod Archive which adds multiple mod folders not adding all mods to the list.
-    /// Fixed columns being too small when starting the application with an empty list and then adding a mod folder.
-    /// Fixed issue visual issue with mods when author uses a decimal in defaultLoadOrder instead of an integer.
-    /// Fixed issue where selected mods wasnt properly updated when dragging and dropping mods.
-    /// </changelog>
-
-    /// <TODO>
-    /// Add profiles
-    /// Add "All mods.." context action to rows. Features:
-    ///     * Select All
-    ///     * Enable/Disable All
-    /// Add logic in Add modd.. so previous loadorder gets saved in memory and reapplied.
-    /// Turn LoadOrder into template? column where you have two textboxes, one for current loadorder, one for default loadorder. default loadorder should have other color?
-    /// Add clearification what folder should be which one.
-    /// </TODO>
     public sealed partial class MainWindow : Window
     {
         private MainViewModel _mainViewModel => (MainViewModel)DataContext;

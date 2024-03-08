@@ -1,1 +1,4 @@
-Profiles: only notify that a mod isnt iny ou list when activating profile when said mod in the profile is enabled.
+Add "All mods.." context action to rows. Features:
+    * Select All
+    * Enable/Disable All
+Add clearification what folder should be which one.
