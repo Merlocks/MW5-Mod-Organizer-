@@ -1,4 +1,3 @@
 Add "All mods.." context action to rows. Features:
     * Select All
     * Enable/Disable All
-Add clearification what folder should be which one.
