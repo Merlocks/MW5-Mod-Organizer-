@@ -138,8 +138,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             {
                 ProfileViewModel? selectedProfile = Profiles.Where(p => p.IsSelected).SingleOrDefault();
                 RaisableObservableCollection<ModViewModel> collection = this.mainViewModel.ModVMCollection;
-                List<ModViewModel> modsOutsideProfileScope = new List<ModViewModel>();
                 List<string> modsInsideProfileScope = new List<string>();
+                List<ModViewModel> modsOutsideProfileScope = new List<ModViewModel>();
 
                 if (selectedProfile != null && selectedProfile.Name != this.mainViewModel.CurrentProfile)
                 {
@@ -175,11 +175,11 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     }
 
                     // Notify user of any mods included in profile but don't exist in mods folder.
-                    if (modsInsideProfileScope.Count < selectedProfile._profile.Entries.Count)
+                    if (modsInsideProfileScope.Count() < selectedProfile._profile.Entries.Where(m => m.Value.IsEnabled).Count())
                     {
                         string info = "";
                         
-                        foreach (var item in selectedProfile._profile.Entries.Where(m => !modsInsideProfileScope.Contains(m.Key)))
+                        foreach (var item in selectedProfile._profile.Entries.Where(m => !modsInsideProfileScope.Contains(m.Key) && m.Value.IsEnabled))
                         {
                             info += $"- {item.Key}\n";
                         }

@@ -1,0 +1,1 @@
+Fixed popup message only showing for mods that were set as enabled in profile.

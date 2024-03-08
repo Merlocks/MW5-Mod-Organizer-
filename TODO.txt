@@ -1,0 +1,1 @@
+Profiles: only notify that a mod isnt iny ou list when activating profile when said mod in the profile is enabled.
