@@ -8,7 +8,7 @@
         xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
         mc:Ignorable="d" 
         FontSize="14"
-        Title="MW5 Mod Organizer v2.3.0beta4" 
+        Title="MW5 Mod Organizer v2.3.0beta5" 
         Height="720" 
         Width="1080" 
         Background="#D1C9C9" 
@@ -590,13 +590,13 @@
                 <MenuItem Header="File"
                           FontSize="14"
                           Style="{StaticResource MenuItemContextTheme}">
-                    <MenuItem Header="Open">
-                        
+                    <MenuItem Header="Import" FontSize="12">
+                        <MenuItem Header="Profiles" Command="{Binding ImportProfilesCommand}"/>
                     </MenuItem>
                     <MenuItem Header="Save"
                               FontSize="12">
                         <MenuItem Header="As loadorder.txt" Command="{Binding ExportLoadorderCommand}"/>
-                        <MenuItem Header="Profiles.." Command="{Binding ExportProfilesCommand}"/>
+                        <MenuItem Header="Profiles to file.." Command="{Binding ExportProfilesCommand}"/>
                     </MenuItem>
                 </MenuItem>
             </Menu>

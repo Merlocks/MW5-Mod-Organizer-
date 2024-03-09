@@ -108,7 +108,59 @@ namespace MW5_Mod_Organizer_WPF.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine($"-- ProfilesService.ExportProfile -- {e.Message}");
+                Console.WriteLine($"-- ProfilesService.ExportProfiles -- {e.Message}");
+            }
+        }
+
+        public Dictionary<string, Profile>? ImportProfiles()
+        {
+            try
+            {
+                OpenFileDialog dialog = new OpenFileDialog()
+                {
+                    CheckPathExists = true,
+                    Filter = "json files (*.json)|*.json",
+                    RestoreDirectory = true,
+                    Title = "Import Profiles"
+                };
+
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    string jsonString = File.ReadAllText(dialog.FileName);
+
+                    Dictionary<string, Profile>? profiles = JsonSerializer.Deserialize<Dictionary<string, Profile>>(jsonString);
+
+                    if (profiles != null)
+                    {
+                        ProfileContainer profileContainer = new ProfileContainer();
+
+                        Task getProfiles = Task.Run(() => 
+                        {
+                            profileContainer = this.GetProfilesAsync().Result;
+                        });
+
+                        getProfiles.Wait();
+
+                        foreach (var item in profiles)
+                        {
+                            if (!profileContainer.Profiles.ContainsKey(item.Key))
+                            {
+                                profileContainer.Profiles.Add(item.Key, item.Value); 
+                            }
+                        }
+
+                        this.SaveProfiles(profileContainer);
+
+                        return profiles;
+                    }
+                }
+
+                return null;
+            } 
+            catch (Exception e)
+            {
+                Console.WriteLine($"-- ProfilesService.ImportProfiles -- {e.Message}");
+                return null;
             }
         }
     }

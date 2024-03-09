@@ -53,7 +53,8 @@
                                             Width="auto"
                                             CanUserSort="True"
                                             CanUserReorder="False"
-                                            CanUserResize="False"/>
+                                            CanUserResize="False"
+                                            IsReadOnly="True"/>
                     </DataGrid.Columns>
 
                 </DataGrid>

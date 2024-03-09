@@ -34,6 +34,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         /// </summary>
         private readonly IModService _modService;
         private readonly HttpRequestService _httpRequestService;
+        private readonly ProfilesService profilesService;
 
         /// <summary>
         /// Read-only properties
@@ -160,11 +161,12 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         /// <summary>
         /// Constructor
         /// </summary>
-        public MainViewModel(IModService modService, HttpRequestService httpRequestService)
+        public MainViewModel(IModService modService, HttpRequestService httpRequestService, ProfilesService profilesService)
         {
             _modService = modService;
             _modService.SetMainViewModel(this);
             _httpRequestService = httpRequestService;
+            this.profilesService = profilesService;
 
             this.ModVMCollection = new RaisableObservableCollection<ModViewModel>();
             this.OverwrittenByCollection = new ObservableCollection<ModViewModel>();
@@ -226,6 +228,12 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             window.Owner = App.Current.MainWindow;
 
             window.ShowDialog();
+        }
+
+        [RelayCommand]
+        public void ImportProfiles()
+        {
+            this.profilesService.ImportProfiles();
         }
 
         [RelayCommand]
