@@ -39,6 +39,7 @@ namespace MW5_Mod_Organizer_WPF.Views
         private void ResizeProfilesColumnToFill()
         {
             ProfilesColumn.Width = ProfilesDataGrid.ActualWidth;
+            ProfilesColumn.SortDirection = System.ComponentModel.ListSortDirection.Ascending;
         }
     }
 }
