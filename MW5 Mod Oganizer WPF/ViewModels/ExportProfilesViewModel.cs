@@ -65,7 +65,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             {
                 ProfileContainer profileContainer = await this.profilesService.GetProfilesAsync();
 
-                foreach (var item in profileContainer.Profiles)
+                foreach (var item in profileContainer.Profiles.OrderBy(p => p.Key).ToArray())
                 {
                     this.Profiles.Add(new ProfileViewModel(item.Value));
                 }

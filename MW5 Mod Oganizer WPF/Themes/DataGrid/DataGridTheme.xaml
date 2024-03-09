@@ -18,7 +18,6 @@
         <Setter Property="CanUserResizeRows" Value="False"/>
         <Setter Property="CanUserResizeColumns" Value="False"/>
         <Setter Property="CanUserReorderColumns" Value="False"/>
-        <Setter Property="CanUserSortColumns" Value="False"/>
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="GridLinesVisibility" Value="None"/>
         <Setter Property="AlternationCount" Value="2"/>

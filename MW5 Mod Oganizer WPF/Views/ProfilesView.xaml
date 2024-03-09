@@ -54,8 +54,7 @@
                           VerticalScrollBarVisibility="Auto"
                           SizeChanged="ProfilesDataGrid_SizeChanged"
                           SelectionMode="Single"
-                          SelectionUnit="FullRow"
-                          IsReadOnly="True">
+                          SelectionUnit="FullRow">
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="ProfilesColumn"
                                             Binding="{Binding Name}"

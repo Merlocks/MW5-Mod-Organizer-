@@ -9,7 +9,7 @@
         <Setter Property="Validation.ErrorTemplate" Value="{x:Null}"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="IsSelected" Value="{Binding Path=IsSelected}"/>
-        <Setter Property="Height" Value="20"/>
+        <Setter Property="Height" Value="25"/>
         <Setter Property="ValidationErrorTemplate">
             <Setter.Value>
                 <ControlTemplate>

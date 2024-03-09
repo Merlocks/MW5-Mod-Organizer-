@@ -127,7 +127,8 @@
                       dd:DragDrop.DropHandler="{Binding}" 
                       dd:DragDrop.DropTargetAdornerBrush="#484D54"
                       VirtualizingPanel.VirtualizationMode="Recycling"
-                      IsReadOnly="True">
+                      IsReadOnly="True"
+                      CanUserSortColumns="False">
                 <behaviors:Interaction.Triggers>
                     <behaviors:EventTrigger EventName="SelectionChanged">
                         <behaviors:InvokeCommandAction Command="{Binding ModsOverviewSelectionChangedCommand}" PassEventArgsToCommand="True"/>
