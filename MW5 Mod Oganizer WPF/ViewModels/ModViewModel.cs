@@ -211,6 +211,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         public async Task EnableAllAsync()
         {
             List<ModViewModel> disabledItems = _mainViewModel.ModVMCollection.Where(m => !m.IsEnabled).ToList();
+            List<ModViewModel> selectedItems = _mainViewModel.ModVMCollection.Where(m => m.IsSelected).ToList();
 
             if (disabledItems.Count() > 0)
             {
@@ -220,7 +221,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 });
 
                 if (!_mainViewModel!.DeploymentNecessary) _mainViewModel!.DeploymentNecessary = true;
-                await _modService.CheckForAllConflictsAsync(); 
+                await _modService.CheckForAllConflictsAsync();
+
+                if (selectedItems != null && selectedItems.Count == 1) { _modService.CheckForConflicts(selectedItems[0]); }
             }
         }
 
@@ -231,9 +234,12 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
             if (enabledItems.Count() > 0)
             {
+                _modService.ClearConflictWindow();
+
                 Parallel.ForEach(enabledItems, (item) =>
                 {
                     item.IsEnabled = false;
+                    item.ModViewModelStatus = ModViewModelConflictStatus.None;
                 });
 
                 if (!_mainViewModel!.DeploymentNecessary) _mainViewModel!.DeploymentNecessary = true;
