@@ -8,7 +8,7 @@
         xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
         mc:Ignorable="d" 
         FontSize="14"
-        Title="MW5 Mod Organizer v2.3.0beta5" 
+        Title="MW5 Mod Organizer" 
         Height="720" 
         Width="1080" 
         Background="#D1C9C9" 
@@ -206,11 +206,11 @@
                     </DataGridTemplateColumn>
                     <DataGridTextColumn x:Name="DataGridColumnAuthor"
                                         Header="Author" 
-                                        MinWidth="150" 
+                                        MinWidth="200" 
                                         Binding="{Binding Author}"/>
                     <DataGridTextColumn x:Name="DataGridColumnVersion"
                                         Header="Version" 
-                                        MinWidth="100"
+                                        MinWidth="150"
                                         Binding="{Binding Version}"/>
                     <DataGridTextColumn x:Name="DataGridColumnSource"
                                         Header="Source"
