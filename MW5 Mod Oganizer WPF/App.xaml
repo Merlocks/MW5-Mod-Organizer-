@@ -6,7 +6,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Themes/Button/ButtonMenuTheme.xaml"/>
                 <ResourceDictionary Source="Themes/Button/ButtonStandaloneTheme.xaml"/>
-                <ResourceDictionary Source="Themes/TextBox/TextBoxTheme.xaml"/>
+                <ResourceDictionary Source="Themes/TextBox/TextBoxPrimaryPathTheme.xaml"/>
+                <ResourceDictionary Source="Themes/TextBox/TextBoxSecondaryPathTheme.xaml"/>
                 <ResourceDictionary Source="Themes/TextBox/TextBoxGameVersionTheme.xaml"/>
                 <ResourceDictionary Source="Themes/Button/ButtonToolbarTheme.xaml"/>
                 <ResourceDictionary Source="Themes/DataGrid/DataGridRowTheme.xaml"/>
@@ -21,6 +22,8 @@
                 <ResourceDictionary Source="Themes/Button/ButtonUpdateAvailableTheme.xaml"/>
                 <ResourceDictionary Source="Themes/Button/ButtonArrowUp.xaml"/>
                 <ResourceDictionary Source="Themes/Button/ButtonArrowDown.xaml"/>
+                <ResourceDictionary Source="Themes/DataGrid/ProfilesDataGridColumnHeaderTheme.xaml"/>
+                <ResourceDictionary Source="Themes/DataGrid/ProfilesDataGridRowTheme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

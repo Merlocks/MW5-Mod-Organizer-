@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MW5_Mod_Organizer_WPF.Services
 {
-    public class HttpRequestService
+    public sealed class HttpRequestService
     {
         static readonly HttpClient client = new HttpClient();
 

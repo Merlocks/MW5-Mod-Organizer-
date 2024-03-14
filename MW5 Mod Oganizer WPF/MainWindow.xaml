@@ -14,7 +14,6 @@
         Background="#D1C9C9" 
         WindowStartupLocation="CenterOwner"
         UseLayoutRounding="True"
-        Icon="/favicon.ico"
         SizeChanged="Window_SizeChanged">
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Loaded">
@@ -33,6 +32,7 @@
             <RowDefinition Height="100"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
@@ -112,24 +112,23 @@
                 Grid.Row="3" 
                 Background="#f7f5f2" 
                 BorderThickness="0" 
-                Margin="10">
+                Margin="10 10 10 5">
             <DataGrid x:Name="ModList" 
-                      ItemsSource="{Binding Mods}"
+                      ItemsSource="{Binding ModVMCollection}"
                       Style="{DynamicResource DataGridStyle1}" 
                       CellStyle="{DynamicResource DataGridCellStyle1}" 
                       ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
                       RowStyle="{DynamicResource DataGridRowStyle1}"
                       RowDetailsTemplate="{DynamicResource DataGridRowDetailsTemplate1}"
                       Margin="10"
-                      BorderBrush="Transparent"
-                      BorderThickness="1"
                       dd:DragDrop.IsDragSource="True" 
                       dd:DragDrop.IsDropTarget="True" 
                       dd:DragDrop.SelectDroppedItems="True" 
                       dd:DragDrop.DropHandler="{Binding}" 
                       dd:DragDrop.DropTargetAdornerBrush="#484D54"
                       VirtualizingPanel.VirtualizationMode="Recycling"
-                      SizeChanged="ModList_SizeChanged">
+                      IsReadOnly="True"
+                      CanUserSortColumns="False">
                 <behaviors:Interaction.Triggers>
                     <behaviors:EventTrigger EventName="SelectionChanged">
                         <behaviors:InvokeCommandAction Command="{Binding ModsOverviewSelectionChangedCommand}" PassEventArgsToCommand="True"/>
@@ -137,32 +136,57 @@
                 </behaviors:Interaction.Triggers>
                 <DataGrid.Columns>
                     <DataGridTemplateColumn x:Name="DataGridColumnEnabled"
-                                            Width="Auto">
+                                            Header="Enabled"
+                                            MinWidth="75"
+                                            MaxWidth="75"
+                                            CanUserResize="False">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <CheckBox x:Name="CheckBoxIsEnabled"
                                           IsChecked="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged}"
-                                          Command="{Binding DataContext.ToggleCheckBoxCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                          Command="{Binding DataContext.ToggleCheckBoxCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                          Margin="10 0 0 0"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn x:Name="DataGridColumnLoadorder"
-                                        Header="Loadorder" 
-                                        IsReadOnly="True" 
-                                        Width="Auto" 
-                                        Binding="{Binding LoadOrder, UpdateSourceTrigger=PropertyChanged}" 
-                                        CanUserSort="False"/>
+                    <DataGridTemplateColumn x:Name="DataGridColumnLoadorder"
+                                            Header="Loadorder"
+                                            MinWidth="75"
+                                            MaxWidth="75"
+                                            CanUserResize="False">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="5"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding LoadOrder}"
+                                               VerticalAlignment="Bottom"
+                                               Grid.Column="0"/>
+                                    <StackPanel Orientation="Horizontal"
+                                                Grid.Column="2">
+                                        <TextBlock Text="(" Foreground="#69717d" FontSize="11" FontWeight="SemiBold" TextOptions.TextFormattingMode="Display" 
+                                                   VerticalAlignment="Center"/>
+                                        <TextBlock Text="{Binding DefaultLoadOrder}" Foreground="Green" FontSize="11" TextOptions.TextFormattingMode="Display" VerticalAlignment="Center"/>
+                                        <TextBlock Text=")" Foreground="#69717d" FontSize="11" FontWeight="SemiBold" TextOptions.TextFormattingMode="Display" 
+                                                   VerticalAlignment="Center"/>
+
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn x:Name="DataGridColumnMod"
-                                        Header="Mod" 
-                                        IsReadOnly="True"
-                                        Width="Auto"
-                                        Binding="{Binding DisplayName}" 
-                                        CanUserSort="False"
-                                        VirtualizingPanel.VirtualizationMode="Standard"/>
+                                        Header="Mod"
+                                        MinWidth="200"
+                                        Binding="{Binding DisplayName}"/>
                     <DataGridTemplateColumn x:Name="DataGridColumnNotification"
-                                            IsReadOnly="True"
-                                            Width="Auto"
-                                            CanUserSort="False">
+                                            MinWidth="32"
+                                            MaxWidth="32"
+                                            CanUserResize="False">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Image Source="/WarningIcon.png"
@@ -171,7 +195,8 @@
                                        HorizontalAlignment="Stretch"
                                        VerticalAlignment="Stretch"
                                        Cursor="Help"
-                                       Visibility="{Binding HasConflicts}">
+                                       Visibility="{Binding HasConflicts}"
+                                       ToolTipService.InitialShowDelay="0">
                                     <ToolTipService.ToolTip>
                                         <ToolTip Content="Mod(s) detected altering the same asset(s). &#x0a;This may be intentional, please check before committing loadorder."/>
                                     </ToolTipService.ToolTip>
@@ -181,26 +206,78 @@
                     </DataGridTemplateColumn>
                     <DataGridTextColumn x:Name="DataGridColumnAuthor"
                                         Header="Author" 
-                                        IsReadOnly="True" 
-                                        Width="Auto" 
-                                        Binding="{Binding Author}" 
-                                        CanUserSort="False"/>
+                                        MinWidth="200" 
+                                        Binding="{Binding Author}"/>
                     <DataGridTextColumn x:Name="DataGridColumnVersion"
                                         Header="Version" 
-                                        IsReadOnly="True" 
-                                        Width="Auto"
-                                        Binding="{Binding Version}" 
-                                        CanUserSort="False"/>
+                                        MinWidth="150"
+                                        Binding="{Binding Version}"/>
                     <DataGridTextColumn x:Name="DataGridColumnSource"
                                         Header="Source"
-                                        IsReadOnly="True"
                                         Width="*"
                                         MinWidth="200"
-                                        Binding="{Binding Source}"
-                                        CanUserSort="False"/>
+                                        CanUserResize="False"
+                                        Binding="{Binding Source}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>
+
+        <StackPanel Grid.Row="4"
+                    Grid.ColumnSpan="2"
+                    Orientation="Horizontal"
+                    Margin="10 0 0 10"
+                    HorizontalAlignment="Left">
+            <TextBlock Text="Total Mods:"
+                       FontSize="12"
+                       Foreground="#484D54"/>
+            <TextBlock Text="{Binding ModCount}"
+                       FontSize="12"
+                       Foreground="#484D54"
+                       Margin="5 0 0 0"/>
+
+            <Border Background="#484D54"
+                    Width="1"
+                    Margin="10 0"/>
+
+            <TextBlock Text="Active Mod(s):"
+                       FontSize="12"
+                       Foreground="#484D54"/>
+            <TextBlock Text="{Binding ModCountActive}"
+                       FontSize="12"
+                       Foreground="#484D54"
+                       Margin="5 0 0 0"/>
+        </StackPanel>
+        <StackPanel Grid.Row="4"
+                    Grid.ColumnSpan="2"
+                    Orientation="Horizontal"
+                    Margin="0 0 0 10"
+                    HorizontalAlignment="Center"
+                    Visibility="{Binding CurrentProfileVisibility}">
+            <TextBlock Text="Current profile: " FontSize="12" Foreground="#484D54"/>
+            <TextBlock Text="{Binding CurrentProfile}" FontSize="12" Foreground="#484D54"/>
+        </StackPanel>
+        <StackPanel Grid.Row="4"
+                    Grid.ColumnSpan="2"
+                    Orientation="Horizontal"
+                    Margin="0 0 10 10"
+                    HorizontalAlignment="Right">
+            <TextBlock Text="{Binding SelectedModsCount}"
+                       FontSize="12"
+                       Foreground="#484D54"
+                       Margin="0 0 5 0"/>
+            <TextBlock Text="Selected Mod(s)"
+                       FontSize="12"
+                       Foreground="#484D54"/>
+            <StackPanel.Style>
+                <Style TargetType="{x:Type StackPanel}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SelectedModsCount}" Value="0">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Style>
+        </StackPanel>
 
         <!--Header-->
         <Border Grid.Column="0"
@@ -217,7 +294,7 @@
         <StackPanel Orientation="Horizontal"
                     Grid.Column="2"
                     Grid.Row="2"
-                    Grid.RowSpan="3">
+                    Grid.RowSpan="4">
             <ToggleButton x:Name="ToggleButtonConflictWindow"
                           Click="ToggleButtonConflictWindow_Click"
                           Style="{StaticResource ButtonConflictWindowSlider}">
@@ -267,7 +344,7 @@
                             Background="#f7f5f2"
                             Margin="0 0 10 0">
                         <DataGrid x:Name="DataGridOverwrites"
-                                  ItemsSource="{Binding Overwrites}"
+                                  ItemsSource="{Binding OverwritesCollection}"
                                   Style="{DynamicResource DataGridStyle1}" 
                                   CellStyle="{DynamicResource DataGridCellStyle1}" 
                                   ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
@@ -275,7 +352,9 @@
                                   Margin="10" 
                                   Background="Transparent"
                                   BorderBrush="Transparent"
-                                  SelectionMode="Single">
+                                  SelectionMode="Single"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Hidden">
                             <behaviors:Interaction.Triggers>
                                 <behaviors:EventTrigger EventName="SelectionChanged">
                                     <behaviors:InvokeCommandAction Command="{Binding OverwritesSelectionChangedCommand}" PassEventArgsToCommand="True"/>
@@ -299,7 +378,7 @@
                             Background="#f7f5f2"
                             Margin="0 0 10 0">
                         <DataGrid x:Name="DataGridOverwrittenBy"
-                                  ItemsSource="{Binding OverwrittenBy}"
+                                  ItemsSource="{Binding OverwrittenByCollection}"
                                   Style="{DynamicResource DataGridStyle1}" 
                                   CellStyle="{DynamicResource DataGridCellStyle1}" 
                                   ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
@@ -307,7 +386,9 @@
                                   Margin="10" 
                                   Background="Transparent"
                                   BorderBrush="Transparent"
-                                  SelectionMode="Single">
+                                  SelectionMode="Single"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Hidden">
                             <behaviors:Interaction.Triggers>
                                 <behaviors:EventTrigger EventName="SelectionChanged">
                                     <behaviors:InvokeCommandAction Command="{Binding OverwrittenBySelectionChangedCommand}" PassEventArgsToCommand="True"/>
@@ -330,14 +411,16 @@
                             Grid.Column="0"
                             Background="#f7f5f2"
                             Margin="0 0 10 0">
-                        <DataGrid ItemsSource="{Binding Conflicts}" 
+                        <DataGrid ItemsSource="{Binding ConflictsCollection}" 
                                   Style="{DynamicResource DataGridStyle1}" 
                                   CellStyle="{DynamicResource DataGridCellStyle1}" 
                                   ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
                                   RowStyle="{DynamicResource DataGridConflictRowStyle1}" 
                                   Margin="10" 
                                   Background="Transparent"
-                                  BorderBrush="Transparent">
+                                  BorderBrush="Transparent"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Auto">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Conflicts"
                                                     Width="auto"
@@ -350,19 +433,24 @@
                             </ToolTipService.ToolTip>
                         </DataGrid>
                     </Border>
-                    <TextBlock Text="Select a conflicting mod from above to view manifests"
-                               TextWrapping="Wrap"
-                               FontSize="12"
-                               Opacity="0.4"
-                               IsHitTestVisible="False"
-                               Grid.Row="6"
-                               Grid.Column="0"
-                               Margin="20 0 30 0"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Visibility="{Binding ConflictNotificationState}">
+                    <Border Grid.Row="6"
+                            Grid.Column="0"
+                            Margin=" 0 40">
+                        <TextBlock Text="Select a conflicting mod from above to view manifests"
+                                   TextWrapping="WrapWithOverflow"
+                                   FontSize="12"
+                                   Opacity="0.4"
+                                   IsHitTestVisible="False"
+                                   Grid.Row="6"
+                                   Grid.Column="0"
+                                   Margin="20 0 30 0"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Visibility="{Binding ConflictNotificationState}">
 
-                    </TextBlock>
+                        </TextBlock>
+                    </Border>
+                    
 
                     <Thumb x:Name="leftThumb"
                            Grid.Row="0"
@@ -417,7 +505,7 @@
                          HorizontalAlignment="Left"
                          Margin="10, 0, 0, 0"
                          IsReadOnly="True"
-                         Style="{StaticResource TextBoxTheme}"/>
+                         Style="{StaticResource TextBoxPrimaryPathTheme}"/>
                 <Button x:Name="ButtonOpenFolder" 
                         Content="Open primary folder"
                         Height="25"
@@ -444,7 +532,7 @@
                          VerticalContentAlignment="Center"
                          Margin="10, 0, 0, 0"
                          IsReadOnly="True"
-                         Style="{StaticResource TextBoxTheme}"/>
+                         Style="{StaticResource TextBoxSecondaryPathTheme}"/>
                 <Button x:Name="ButtonOpenSecondaryFolder" 
                         Content="Open secondary folder"
                         Height="25"
@@ -465,7 +553,7 @@
         <!--Add mod-->
         <ContentControl Grid.Column="0"
                         Grid.ColumnSpan="2"
-                        Grid.Row="4">
+                        Grid.Row="5">
             <ContentControl.Style>
                 <Style TargetType="{x:Type ContentControl}">
                     <Style.Triggers>
@@ -474,7 +562,9 @@
                                 <Setter.Value>
                                     <Button Content="Add Mod.."
                                             Style="{StaticResource ButtonAddModTheme}"
-                                            Command="{Binding AddModButtonCommand, IsAsync=True}">
+                                            Height="30"
+                                            Margin="5 0"
+                                            Command="{Binding AddModCommand}">
                                         <ToolTipService.ToolTip>
                                             <ToolTip Content="Adds mod to your mod folder and application. Accepts *.zip, *.rar and *.7z"/>
                                         </ToolTipService.ToolTip>
@@ -500,10 +590,23 @@
                 <MenuItem Header="File"
                           FontSize="14"
                           Style="{StaticResource MenuItemContextTheme}">
+                    <MenuItem Header="Import" FontSize="12">
+                        <MenuItem Header="Profiles" Command="{Binding ImportProfilesCommand}"/>
+                    </MenuItem>
                     <MenuItem Header="Save"
                               FontSize="12">
                         <MenuItem Header="As loadorder.txt" Command="{Binding ExportLoadorderCommand}"/>
+                        <MenuItem Header="Profiles to file.." Command="{Binding ExportProfilesCommand}"/>
                     </MenuItem>
+                </MenuItem>
+            </Menu>
+            <Menu VerticalAlignment="Center"
+                  Padding="0 5"
+                  Background="Transparent">
+                <MenuItem Header="Profiles"
+                          FontSize="14"
+                          Style="{StaticResource MenuItemContextTheme}"
+                          Command="{Binding OpenProfilesWindowCommand}">
                 </MenuItem>
             </Menu>
             <Menu VerticalAlignment="Center"
@@ -533,57 +636,79 @@
                 <ToolTip Content="Opens the Nexus Mod page."/>
             </ToolTipService.ToolTip>
         </Button>
-        
-        <!--Loading screen-->
-        <Grid   Grid.Column="0" 
-                Grid.ColumnSpan="99"
-                Grid.Row="0"
-                Grid.RowSpan="99"
-                Visibility="{Binding IsLoading}">
-            <Border Background="Black"
-                    Opacity="0.2"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch">
-            </Border>
-            <Border Background="#8e8e8e"
-                    BorderThickness="0 0 5 8"
-                    BorderBrush="#777777"
-                    CornerRadius="2"
-                    Height="200"
-                    Width="500"
-                    Padding="20 10"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center">
-                <Grid>
-                    <TextBlock Text="{Binding LoadingContext}"
-                               TextWrapping="Wrap"
-                               Foreground="#E2E0DD"
-                               FontSize="16"
-                               FontWeight="Bold"
-                               TextOptions.TextFormattingMode="Display"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Center"
-                               IsHitTestVisible="False">
-                        <TextBlock.Effect>
-                            <DropShadowEffect BlurRadius="0" ShadowDepth="3" RenderingBias="Quality" Color="#B8B7B5"/>
-                        </TextBlock.Effect>
-                    </TextBlock>
-                    <Image gif:AnimationBehavior.SourceUri="/gear-gif.gif"
-                           RenderOptions.BitmapScalingMode="Fant"
-                           Height="32"
-                           Width="32"
-                           HorizontalAlignment="Right"
-                           VerticalAlignment="Bottom">
-                        <Image.Effect>
-                            <DropShadowEffect BlurRadius="0" ShadowDepth="3" RenderingBias="Quality" Color="#B8B7B5"/>
-                        </Image.Effect>
-                    </Image>
-                </Grid>
-                <Border.Effect>
-                    <DropShadowEffect BlurRadius="10" Color="Black" ShadowDepth="5" Direction="270" Opacity="0.1"/>
-                </Border.Effect>
-            </Border>
-        </Grid>
+
+        <ContentControl Grid.Column="0" 
+                        Grid.ColumnSpan="99"
+                        Grid.Row="0"
+                        Grid.RowSpan="99">
+            <ContentControl.Style>
+                <Style TargetType="{x:Type ContentControl}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <Grid>
+                                        <Border Background="Black"
+                                                Opacity="0.2"
+                                                HorizontalAlignment="Stretch"
+                                                VerticalAlignment="Stretch">
+                                        </Border>
+                                        <Border Background="#8e8e8e"
+                                                BorderThickness="0 0 5 8"
+                                                BorderBrush="#777777"
+                                                CornerRadius="2"
+                                                Height="200"
+                                                Width="500"
+                                                Padding="20 10"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center">
+                                            <Grid>
+                                                <TextBlock Text="{Binding LoadingContext}"
+                                                           TextWrapping="Wrap"
+                                                           Foreground="#E2E0DD"
+                                                           FontSize="16"
+                                                           FontWeight="Bold"
+                                                           TextOptions.TextFormattingMode="Display"
+                                                           VerticalAlignment="Center"
+                                                           HorizontalAlignment="Center"
+                                                           IsHitTestVisible="False">
+                                                    <TextBlock.Effect>
+                                                        <DropShadowEffect BlurRadius="0" 
+                                                                          ShadowDepth="3" 
+                                                                          RenderingBias="Quality" 
+                                                                          Color="#B8B7B5"/>
+                                                    </TextBlock.Effect>
+                                                </TextBlock>
+                                                <Image gif:AnimationBehavior.SourceUri="/gear-gif.gif"
+                                                       RenderOptions.BitmapScalingMode="Fant"
+                                                       Height="32"
+                                                       Width="32"
+                                                       HorizontalAlignment="Right"
+                                                       VerticalAlignment="Bottom">
+                                                    <Image.Effect>
+                                                        <DropShadowEffect BlurRadius="0" 
+                                                                          ShadowDepth="3" 
+                                                                          RenderingBias="Quality" 
+                                                                          Color="#B8B7B5"/>
+                                                    </Image.Effect>
+                                                </Image>
+                                            </Grid>
+                                            <Border.Effect>
+                                                <DropShadowEffect BlurRadius="10" 
+                                                                  Color="Black" 
+                                                                  ShadowDepth="5" 
+                                                                  Direction="270" 
+                                                                  Opacity="0.1"/>
+                                            </Border.Effect>
+                                        </Border>
+                                    </Grid>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
     </Grid>
 </Window>
     

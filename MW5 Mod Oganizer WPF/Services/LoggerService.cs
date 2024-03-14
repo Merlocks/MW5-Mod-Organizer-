@@ -3,7 +3,7 @@ using System;
 
 namespace MW5_Mod_Organizer_WPF.Services
 {
-    public class LoggerService
+    public sealed class LoggerService
     {
         public static void AddLog(string name, string description)
         {

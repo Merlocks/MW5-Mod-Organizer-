@@ -4,12 +4,13 @@
     <Style x:Key="DataGridConflictRowStyle1" TargetType="{x:Type DataGridRow}">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="#141414"/>
-        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="SnapsToDevicePixels" Value="true"/>
         <Setter Property="Validation.ErrorTemplate" Value="{x:Null}"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
         <Setter Property="IsSelected" Value="{Binding Path=IsSelectedConflict}"/>
+        <Setter Property="Height" Value="25"/>
         <Setter Property="ValidationErrorTemplate">
             <Setter.Value>
                 <ControlTemplate>
@@ -54,9 +55,7 @@
                 <Setter Property="Background" Value="#FFFFDABB"/>
             </DataTrigger>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="#FFE0E0E0"/>
-                <Setter Property="Foreground" Value="#141414"/>
-                <Setter Property="BorderBrush" Value="#FF323538"/>
+                <Setter Property="Background" Value="#B6DFF2"/>
             </Trigger>
         </Style.Triggers>
     </Style>

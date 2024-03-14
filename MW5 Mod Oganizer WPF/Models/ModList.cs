@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MW5_Mod_Organizer_WPF.Models
 {
-    public class ModList
+    public sealed class ModList
     {
         [JsonPropertyName("gameVersion")]
         [JsonPropertyOrder(0)]

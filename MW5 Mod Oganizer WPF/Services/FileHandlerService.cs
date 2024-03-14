@@ -3,7 +3,7 @@ using System.IO;
 
 namespace MW5_Mod_Organizer_WPF.Services
 {
-    public class FileHandlerService
+    public sealed class FileHandlerService
     {
         public static void WriteFile(string path, string fileName, string content)
         {
@@ -32,7 +32,7 @@ namespace MW5_Mod_Organizer_WPF.Services
                 }
                 else
                 {
-                    LoggerService.AddLog("ReadFileFunction", "The given path does not exist.");
+                    LoggerService.AddLog("ReadFileFunction", $"The given path \"{path + fileName}\"does not exist.");
                     return null;
                 }
             }

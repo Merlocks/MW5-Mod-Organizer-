@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 
 namespace MW5_Mod_Organizer_WPF.Facades
 {
-    public class JsonConverterFacade
+    public sealed class JsonConverterFacade
     {
         public static Mod? JsonToMod(string path)
         {

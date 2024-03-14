@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MW5_Mod_Organizer_WPF.Models
 {
-    public class Status
+    public sealed class Status
     {
         [JsonPropertyName("bEnabled")]
         public bool IsEnabled { get; set; }

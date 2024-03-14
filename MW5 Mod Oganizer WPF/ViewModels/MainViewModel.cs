@@ -1,53 +1,77 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using GongSolutions.Wpf.DragDrop;
-using Microsoft.Extensions.DependencyInjection;
 using MW5_Mod_Organizer_WPF.Facades;
+using MW5_Mod_Organizer_WPF.Messages;
 using MW5_Mod_Organizer_WPF.Models;
 using MW5_Mod_Organizer_WPF.Services;
+using MW5_Mod_Organizer_WPF.Subclasses;
+using MW5_Mod_Organizer_WPF.Views;
 using SharpCompress.Archives;
 using SharpCompress.Common;
 using System;
 using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Forms;
-using System.Windows.Input;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+using System.Windows.Shapes;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
 {
-    public partial class MainViewModel : ObservableObject, GongSolutions.Wpf.DragDrop.IDropTarget
+    public sealed partial class MainViewModel : ObservableObject, GongSolutions.Wpf.DragDrop.IDropTarget
     {
+        /// <summary>
+        /// Dependency objects
+        /// </summary>
+        private readonly IModService _modService;
+        private readonly HttpRequestService _httpRequestService;
+        private readonly ProfilesService profilesService;
+
         /// <summary>
         /// Read-only properties
         /// </summary>
-        public IEnumerable<ModViewModel> Mods => ModService.GetInstance().ModVMCollection;
+        public string ModCount => ModVMCollection.Count().ToString();
+        public string ModCountActive => ModVMCollection.Where(m => m.IsEnabled).Count().ToString();
+        public string SelectedModsCount => ModVMCollection.Where(m => m.IsSelected).Count().ToString();
 
-        public IEnumerable<ModViewModel> Overwrites => ModService.GetInstance().Overwrites;
-
-        public IEnumerable<ModViewModel> OverwrittenBy => ModService.GetInstance().OverwrittenBy;
-
-        public IEnumerable<string> Conflicts => ModService.GetInstance().Conflicts;
+        /// <summary>
+        /// Properties
+        /// </summary>
+        public bool IsModListLoaded { get; set; } = false;
 
         /// <summary>
         /// Observable properties used for data binding within the View
         /// </summary>
+        [ObservableProperty]
+        private RaisableObservableCollection<ModViewModel> modVMCollection;
+
+        partial void OnModVMCollectionChanged(RaisableObservableCollection<ModViewModel> value)
+        {
+            value.CollectionChanged += ModVMCollection_CollectionChanged;
+            value.RaiseCollectionChanged();
+        }
+
+        [ObservableProperty]
+        private ObservableCollection<ModViewModel> overwritesCollection;
+
+        [ObservableProperty]
+        private ObservableCollection<ModViewModel> overwrittenByCollection;
+
+        [ObservableProperty]
+        private ObservableCollection<string> conflictsCollection;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(
-            nameof(AddModButtonCommand), 
+            nameof(AddModCommand),
             nameof(OpenSecondaryFolderPathCommand),
             nameof(ArrowDownCommand),
             nameof(ArrowUpCommand),
@@ -93,7 +117,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         private bool isZipDropVisible;
 
         [ObservableProperty]
-        private Visibility isLoading = Visibility.Hidden;
+        private bool isLoading = false;
 
         [ObservableProperty]
         private string? loadingContext;
@@ -102,10 +126,11 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         {
             if (value == string.Empty)
             {
-                this.IsLoading = Visibility.Hidden;
-            } else
+                this.IsLoading = false;
+            }
+            else
             {
-                this.IsLoading = Visibility.Visible;
+                this.IsLoading = true;
             }
         }
 
@@ -115,15 +140,55 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [ObservableProperty]
         private Visibility conflictNotificationState = Visibility.Visible;
 
+        [ObservableProperty]
+        private string currentProfile;
+
+        partial void OnCurrentProfileChanged(string value)
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                this.CurrentProfileVisibility = Visibility.Visible;
+            }
+            else
+            {
+                this.CurrentProfileVisibility = Visibility.Hidden;
+            }
+        }
+
+        [ObservableProperty]
+        private Visibility currentProfileVisibility;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public MainViewModel()
+        public MainViewModel(IModService modService, HttpRequestService httpRequestService, ProfilesService profilesService)
         {
-            GameVersion = Properties.Settings.Default.GameVersion;
-            PrimaryFolderPath = Properties.Settings.Default.Path;
-            SecondaryFolderPath = Properties.Settings.Default.SecondaryPath;
-            IsZipDropVisible = false;
+            _modService = modService;
+            _modService.SetMainViewModel(this);
+            _httpRequestService = httpRequestService;
+            this.profilesService = profilesService;
+
+            this.ModVMCollection = new RaisableObservableCollection<ModViewModel>();
+            this.OverwrittenByCollection = new ObservableCollection<ModViewModel>();
+            this.OverwritesCollection = new ObservableCollection<ModViewModel>();
+            this.ConflictsCollection = new ObservableCollection<string>();
+
+            this.GameVersion = Properties.Settings.Default.GameVersion;
+            this.PrimaryFolderPath = Properties.Settings.Default.Path;
+            this.SecondaryFolderPath = Properties.Settings.Default.SecondaryPath;
+            this.CurrentProfile = Properties.Settings.Default.CurrentProfile;
+
+            this.IsZipDropVisible = false;
+
+            WeakReferenceMessenger.Default.Register<PropertyIsEnabledChangedMessage>(this, (r, m) =>
+            {
+                OnPropertyChanged(nameof(this.ModCountActive));
+
+                if (this.IsModListLoaded)
+                {
+                    this.CurrentProfile = string.Empty;
+                }
+            });
         }
 
         /// <summary>
@@ -146,14 +211,40 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             {
                 string content = "";
 
-                foreach (var mod in ModService.GetInstance().ModVMCollection)
+                foreach (var mod in ModVMCollection)
                 {
-                    content += $"{mod.LoadOrder} - {mod.IsEnabled} - {mod.DisplayName} - {mod.Version} - {mod.Author}\n";
+                    content += $"{mod.LoadOrder} ({mod.DefaultLoadOrder}) - {mod.IsEnabled} - {mod.DisplayName} - {mod.Version} - {mod.Author}\n";
                 }
 
                 File.WriteAllText(dialog.FileName, $"~ This loadorder is generated by MW5 Mod Organizer. ~\n\n" +
                     $"{content}\n~ End of loadorder. ~");
             }
+        }
+
+        [RelayCommand]
+        public void ExportProfiles()
+        {
+            ExportProfilesView window = new ExportProfilesView();
+            window.Owner = App.Current.MainWindow;
+
+            window.ShowDialog();
+        }
+
+        [RelayCommand]
+        public void ImportProfiles()
+        {
+            this.profilesService.ImportProfiles();
+        }
+
+        [RelayCommand]
+        public void OpenProfilesWindow()
+        {
+            ProfilesView window = new ProfilesView();
+            window.Owner = App.Current.MainWindow;
+
+            foreach (var item in CollectionsMarshal.AsSpan(ModVMCollection.Where(m => m.IsSelected).ToList())) item.IsSelected = false;
+            
+            window.ShowDialog();
         }
 
         [RelayCommand]
@@ -174,12 +265,11 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     PrimaryFolderPath = dialog.SelectedPath;
 
                     //Retrieve mods
-                    ModService.GetInstance().GetMods(false);
+                    _modService.GetMods();
 
-                    //Generate loadorder by targetIndex
-                    foreach (var mod in ModService.GetInstance().ModVMCollection) mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);
+                    this.IsModListLoaded = true;
 
-                    await ModService.GetInstance().CheckForAllConflictsAsync();
+                    await _modService.CheckForAllConflictsAsync();
                 }
                 else if (dialog.SelectedPath == SecondaryFolderPath)
                 {
@@ -207,12 +297,11 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         SecondaryFolderPath = dialog.SelectedPath;
 
                         //Retrieve mods
-                        ModService.GetInstance().GetMods(false);
+                        _modService.GetMods();
 
-                        //Generate loadorder by targetIndex
-                        foreach (var mod in ModService.GetInstance().ModVMCollection) mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);
+                        this.IsModListLoaded = true;
 
-                        await ModService.GetInstance().CheckForAllConflictsAsync();
+                        await _modService.CheckForAllConflictsAsync();
                     }
                     else if (dialog.SelectedPath == PrimaryFolderPath)
                     {
@@ -239,9 +328,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
         public void ArrowDown()
         {
-            List<ModViewModel> selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
-            bool areChangesMade = false;
-            
+            List<ModViewModel> selectedItems = ModVMCollection.Where(m => m.IsSelected).ToList();
+
             if (selectedItems != null && selectedItems.Count > 0)
             {
                 var items = new List<ModViewModel>();
@@ -253,27 +341,18 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                 foreach (var item in items.OrderBy(m => m.LoadOrder))
                 {
-                    int oldIndex = ModService.GetInstance().ModVMCollection.IndexOf(item);
-                    int newIndex = ModService.GetInstance().ModVMCollection.Count - 1;
-                    
+                    int oldIndex = ModVMCollection.IndexOf(item);
+                    int newIndex = ModVMCollection.Count - 1;
+
                     if (oldIndex != newIndex)
                     {
-                        ModService.GetInstance().ModVMCollection.Move(oldIndex, newIndex);
-                        areChangesMade = true;
+                        ModVMCollection.Move(oldIndex, newIndex);
                     }
                 }
 
-                // Recalculate loadorder by index positions
-                foreach (var item in ModService.GetInstance().ModVMCollection) item.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(item);
-
                 if (selectedItems.Count == 1)
                 {
-                    ModService.GetInstance().CheckForConflicts((ModViewModel)selectedItems[0]!);
-                }
-
-                if (areChangesMade)
-                {
-                    DeploymentNecessary = true;
+                    _modService.CheckForConflicts((ModViewModel)selectedItems[0]!);
                 }
             }
         }
@@ -281,8 +360,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
         public void ArrowUp()
         {
-            List<ModViewModel> selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
-            bool areChangesMade = false;
+            List<ModViewModel> selectedItems = ModVMCollection.Where(m => m.IsSelected).ToList();
 
             if (selectedItems != null && selectedItems.Count > 0)
             {
@@ -297,28 +375,19 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                 foreach (var item in items.OrderBy(m => m.LoadOrder))
                 {
-                    int oldIndex = ModService.GetInstance().ModVMCollection.IndexOf(item);
+                    int oldIndex = ModVMCollection.IndexOf(item);
 
                     if (oldIndex != newIndex)
                     {
-                        ModService.GetInstance().ModVMCollection.Move(oldIndex, newIndex);
-                        areChangesMade = true;
+                        ModVMCollection.Move(oldIndex, newIndex);
                     }
 
                     newIndex++;
                 }
 
-                // Recalculate loadorder by index positions
-                foreach (var item in ModService.GetInstance().ModVMCollection) item.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(item);
-
                 if (selectedItems.Count == 1)
                 {
-                    ModService.GetInstance().CheckForConflicts((ModViewModel)selectedItems[0]!);
-                }
-
-                if (areChangesMade)
-                {
-                    DeploymentNecessary = true;
+                    _modService.CheckForConflicts((ModViewModel)selectedItems[0]!);
                 }
             }
         }
@@ -337,57 +406,71 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
             else
             {
-                //Save mod(s).taskRequestVersion
-                if (!string.IsNullOrEmpty(GameVersion))
+                try
                 {
-                    foreach (var modVM in ModService.GetInstance().ModVMCollection)
+                    //Save mod(s).taskRequestVersion
+                    if (!string.IsNullOrEmpty(GameVersion))
                     {
-                        modVM.GameVersion = GameVersion;
-
-                        if (modVM.Path != null)
+                        foreach (var modVM in ModVMCollection)
                         {
-                            JsonConverterFacade.ModToJson(modVM.Path, modVM._mod);
+                            modVM.GameVersion = GameVersion;
+
+                            if (modVM.Path != null)
+                            {
+                                JsonConverterFacade.ModToJson(modVM.Path, modVM._mod);
+                            }
                         }
                     }
-                }
 
-                //Save modlist.taskRequestVersion
-                ModList modList = new ModList
-                {
-                    ModStatus = new Dictionary<string, Status>()
-                };
-
-                foreach (var modVM in ModService.GetInstance().ModVMCollection)
-                {
-                    if (modVM.IsEnabled && modVM.FolderName != null)
+                    //Save modlist.taskRequestVersion
+                    ModList modList = new ModList
                     {
-                        modList.ModStatus.Add(modVM.FolderName, new Status { IsEnabled = modVM.IsEnabled });
+                        ModStatus = new Dictionary<string, Status>()
+                    };
+
+                    foreach (var modVM in ModVMCollection)
+                    {
+                        if (modVM.IsEnabled && modVM.FolderName != null)
+                        {
+                            modList.ModStatus.Add(modVM.FolderName, new Status { IsEnabled = modVM.IsEnabled });
+                        }
                     }
+
+                    JsonConverterFacade.ModListToJson(PrimaryFolderPath, modList);
+
+                    this.DeploymentNecessary = false;
+                    Properties.Settings.Default.CurrentProfile = this.CurrentProfile;
+                    Properties.Settings.Default.Save();
+
+                    string message = "Succesfully deployed your load order.";
+                    string caption = "Info";
+                    MessageBoxButtons buttons = MessageBoxButtons.OK;
+                    MessageBoxIcon icon = MessageBoxIcon.Information;
+
+                    System.Windows.Forms.MessageBox.Show(message, caption, buttons, icon);
                 }
-
-                JsonConverterFacade.ModListToJson(PrimaryFolderPath, modList);
-
-                DeploymentNecessary = false;
-
-                string message = "Succesfully deployed your load order.";
-                string caption = "Info";
-                MessageBoxButtons buttons = MessageBoxButtons.OK;
-                MessageBoxIcon icon = MessageBoxIcon.Information;
-
-                System.Windows.Forms.MessageBox.Show(message, caption, buttons, icon);
+                catch (Exception e)
+                {
+                    Console.WriteLine($"-- MainViewModel.Deploy -- {e.Message}");
+                }
             }
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
         public async Task Undo()
         {
-            ModService.GetInstance().GetMods(false);
+            if (this.DeploymentNecessary)
+            {
+                this.IsModListLoaded = false;
+                
+                _modService.GetMods();
 
-            foreach (var mod in ModService.GetInstance().ModVMCollection) mod.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(mod);
+                this.IsModListLoaded = true;
+                this.DeploymentNecessary = false;
+                this.CurrentProfile = Properties.Settings.Default.CurrentProfile;
 
-            DeploymentNecessary = false;
-
-            await ModService.GetInstance().CheckForAllConflictsAsync();
+                await _modService.CheckForAllConflictsAsync(); 
+            }
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
@@ -396,9 +479,9 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             PrimaryFolderPath = string.Empty;
             SecondaryFolderPath = string.Empty;
 
-            ModService.GetInstance().ClearTemporaryModList();
-            ModService.GetInstance().ClearModCollection();
-            ModService.GetInstance().ClearConflictWindow();
+            _modService.ClearTempList();
+            this.ModVMCollection.Clear();
+            _modService.ClearConflictWindow();
 
             DeploymentNecessary = false;
         }
@@ -408,8 +491,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         {
             try
             {
-                var selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
-                
+                var selectedItems = ModVMCollection.Where(m => m.IsSelected).ToList();
+
                 if (selectedItems != null && selectedItems.Count != 0)
                 {
                     selectedItems = selectedItems.OrderBy(m => m.LoadOrder).ThenBy(m => m.FolderName).ToList();
@@ -419,7 +502,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                         if (item != null)
                         {
                             ModViewModel mod = item;
-                            ModViewModel? backup = new ModViewModel(JsonConverterFacade.ReadBackup(item.Path!)!);
+                            ModViewModel? backup = new ModViewModel(JsonConverterFacade.ReadBackup(item.Path!)!, this, _modService);
 
                             // First assign backup values to ObservableProperties 
                             // Otherwise ObservableProperty will not detect change and View won't update
@@ -431,43 +514,37 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     }
 
                     // Reorder the index positions of ModVMCollection by LoadOrder and FolderName
-                    List<ModViewModel> sortedModVMCollection = ModService.GetInstance().ModVMCollection.OrderBy(m => m.LoadOrder).ThenBy(m => m.FolderName).ToList();
-                    ModService.GetInstance().ModVMCollection.Clear();
+                    List<ModViewModel> sortedModVMCollection = ModVMCollection.OrderBy(m => m.LoadOrder).ThenBy(m => m.FolderName).ToList();
+                    ModVMCollection.Clear();
 
-                    foreach (var item in sortedModVMCollection) ModService.GetInstance().ModVMCollection.Add(item);
+                    foreach (var item in sortedModVMCollection) ModVMCollection.Add(item);
 
-                    // Recalculate loadorder by index positions & Reselect all mods
-                    foreach (var item in ModService.GetInstance().ModVMCollection)
+                    // Reselect all mods
+                    foreach (var item in ModVMCollection)
                     {
-                        item.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(item);
-
                         if (selectedItems.Contains(item))
                         {
                             item.IsSelected = true;
                         }
                     }
 
-                    Console.WriteLine("");
-                    Console.WriteLine("- - - - - - - - -");
-                    Console.WriteLine("");
-
                     // If only one mod is selected, check for conflicts
                     if (selectedItems.Count == 1)
                     {
-                        ModService.GetInstance().CheckForConflicts(selectedItems[0]!);
+                        _modService.CheckForConflicts(selectedItems[0]!);
                     }
 
                     DeploymentNecessary = true;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                Console.WriteLine($"Exception at ResetToDefault()");
+                Console.WriteLine($"-- MainViewModel.ResetToDefault -- {e.Message}");
             }
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
-        public async Task AddModButtonAsync()
+        public async Task AddModAsync()
         {
             try
             {
@@ -486,20 +563,26 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 if (dialogResult == DialogResult.OK)
                 {
                     // Begin loading
-                    string targetFolder = PrimaryFolderPath!;
                     string sourceCompressedFile = dialog.FileName;
-                    string modFolderPath = "Default";
+                    List<string> folderList = new List<string>();
 
                     this.LoadingContext = "Extracting Mod Archive. Please wait... ";
 
                     await Task.Delay(500);
-                    
-                    await Task.Run(() =>
+
+                    Task extractArchive = Task.Run(() =>
                     {
-                        // SharpCompress library to extract and copy contents compressed files to PrimaryModFolder
+                        // SharpCompress library to extract and copy contents compressed files to PrimaryModFolder.
                         // GitHub at: https://github.com/adamhathcock/sharpcompress
                         // Supports *.zip, *.rar and *.7z
                         var archive = ArchiveFactory.Open(sourceCompressedFile);
+
+                        // Create temporary downloads folder.
+                        // Will be used to extract Mod Archive to check if successful. 
+                        if (!Directory.Exists(@"downloads"))
+                        {
+                            Directory.CreateDirectory(@"downloads");
+                        }
 
                         foreach (var entry in archive.Entries)
                         {
@@ -510,154 +593,162 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                             if (!entry.IsDirectory)
                             {
-                                if (entry.Key.EndsWith(@"\mod.json"))
+                                string? folder = entry.Key.Replace("/", "\\").Split('\\').First();
+
+                                if (folder != null && !folderList.Contains(folder))
                                 {
-                                    modFolderPath = entry.Key.Substring(0, entry.Key.IndexOf(@"\mod.json"));
-                                }
-                                else if (entry.Key.EndsWith(@"/mod.json"))
-                                {
-                                    modFolderPath = entry.Key.Substring(0, entry.Key.IndexOf(@"/mod.json"));
+                                    folderList.Add(folder);
                                 }
 
-                                entry.WriteToDirectory(targetFolder, new ExtractionOptions { ExtractFullPath = true, Overwrite = true });
+                                entry.WriteToDirectory(@"downloads", new ExtractionOptions { ExtractFullPath = true, Overwrite = true });
                             }
                         }
                     });
 
-                    await System.Windows.Application.Current.Dispatcher.InvokeAsync(() => 
+                    // Await extractArchive until it's finished.
+                    try
                     {
-                        Mod? mod = JsonConverterFacade.JsonToMod(PrimaryFolderPath + @"\" + modFolderPath);
+                        await extractArchive;
+                    }
+                    // Catch exception when thrown during task.
+                    // Remove temporary downloads folder.
+                    catch (Exception)
+                    {
+                        this.LoadingContext = "Could not extract Mod Archive. File(s) may be corrupted.\n Removing leftover files..";
+                        await Task.Delay(2000);
 
-                        if (mod != null)
+                        if (Directory.Exists(@"downloads"))
                         {
-                            ModViewModel modVM = new ModViewModel(mod);
-                            modVM.Path = PrimaryFolderPath + @"\" + modFolderPath;
-                            modVM.Source = "Primary Folder";
-
-                            if (!File.Exists(PrimaryFolderPath + @"\" + modFolderPath + @"\backup.json"))
-                            {
-                                JsonConverterFacade.Createbackup(PrimaryFolderPath + @"\" + modFolderPath);
-                            }
-
-                            var list = ModService.GetInstance().ModVMCollection.Where(m => m.Path == modVM.Path).ToList();
-
-                            if (list == null || list.Count == 0)
-                            {
-                                ModService.GetInstance().AddMod(modVM);
-                            }
-                            else if (list != null && list.Count > 0)
-                            {
-                                ModService.GetInstance().ModVMCollection.Remove(list[0]);
-                                ModService.GetInstance().AddMod(modVM);
-                            }
-
-                            foreach (var item in ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected)) item.IsSelected = false;
-                            modVM.IsSelected = true;
-
-                            this.DeploymentNecessary = true;
+                            Directory.Delete(@"downloads", true);
                         }
-                    });
-                    
-                    // End loading
-                    this.LoadingContext = string.Empty;
+
+                        this.LoadingContext = string.Empty;
+                    }
+
+                    // Check if task completed succesfully.
+                    if (extractArchive.IsCompletedSuccessfully && Directory.Exists(@"downloads"))
+                    {
+                        List<ModViewModel> removedMods = new List<ModViewModel>();
+                        
+                        // Remove existing mod folder if it already exists.
+                        // Also remove mod from list.
+                        foreach (var path in Directory.GetFileSystemEntries(PrimaryFolderPath!))
+                        {
+                            string? folder = System.IO.Path.GetFileName(path);
+
+                            if (folderList.Contains(folder))
+                            {
+                                ModViewModel? mod = ModVMCollection.SingleOrDefault(m => m.Path == path);
+
+                                try
+                                {
+                                    if (mod != null)
+                                    {
+                                        removedMods.Add(mod);
+                                        ModVMCollection.Remove(mod);
+                                    }
+
+                                    Directory.Delete(path, true);
+                                }
+                                // If path file instead of directory, catch exception and delete as file instead.
+                                catch (IOException)
+                                {
+                                    File.Delete(path);
+                                }
+                                catch (Exception)
+                                {
+                                    throw;
+                                }
+                            }
+                        }
+
+                        // Move mod folders from download folder to main mod folder.
+                        this.LoadingContext = "Moving folders..";
+
+                        foreach (var folder in Directory.GetFileSystemEntries(@"downloads"))
+                        {
+                            Directory.Move(folder, PrimaryFolderPath! + @"\" + System.IO.Path.GetFileName(folder));
+                        }
+
+                        Directory.Delete(@"downloads", true);
+
+                        this.LoadingContext = "Adding mod to list..";
+
+                        // Read added mods and turn them into Mod objects.
+                        // Then add them into the list.
+                        await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
+                        {
+                            if (folderList.Count > 0)
+                            {
+                                foreach (var item in ModVMCollection.Where(m => m.IsSelected)) item.IsSelected = false;
+                            }
+
+                            foreach (var modFolderName in folderList)
+                            {
+                                Mod? mod = JsonConverterFacade.JsonToMod(PrimaryFolderPath + @"\" + modFolderName);
+
+                                if (mod != null)
+                                {
+                                    if (!File.Exists(PrimaryFolderPath + @"\" + modFolderName + @"\backup.json"))
+                                    {
+                                        JsonConverterFacade.Createbackup(PrimaryFolderPath + @"\" + modFolderName);
+                                    }
+
+                                    Mod? backup = JsonConverterFacade.ReadBackup(PrimaryFolderPath + @"\" + modFolderName);
+                                    int defaultLoadOrder = default;
+
+                                    if (backup != null && backup.LoadOrder != null)
+                                    {
+                                        defaultLoadOrder = (int)backup.LoadOrder;
+                                    }
+
+                                    if (mod.LoadOrder == null)
+                                    {
+                                        mod.LoadOrder = 0;
+                                    }
+
+                                    // If added mod is updated version of removed mod, set loadorder the same as removed mod.
+                                    foreach (var item in CollectionsMarshal.AsSpan(removedMods))
+                                    {
+                                        if (item.Path == PrimaryFolderPath + @"\" + modFolderName)
+                                        {
+                                            mod.LoadOrder = item.LoadOrder;
+                                        }
+                                    }
+
+                                    mod.LoadOrder = decimal.ToInt32((decimal)mod.LoadOrder);
+
+                                    ModViewModel modVM = new ModViewModel(mod, this, _modService);
+                                    modVM.Path = PrimaryFolderPath + @"\" + modFolderName;
+                                    modVM.Source = "Primary Folder";
+                                    modVM.DefaultLoadOrder = defaultLoadOrder;
+
+                                    _modService.AddMod(modVM);
+
+                                    modVM.IsSelected = true;
+                                }
+                            }
+                        });
+
+                        // End loading
+                        this.LoadingContext = string.Empty;
+
+                        Properties.Settings.Default.CurrentProfile = string.Empty;
+                        Properties.Settings.Default.Save();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"-- MainViewModel.AddModasync -- {e.Message}");
+
+                if (Directory.Exists(@"downloads"))
+                {
+                    Directory.Delete(@"downloads", true);
                 }
 
-
-            } catch (Exception)
-            {
-
+                this.LoadingContext = string.Empty;
             }
-        }
-
-        [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
-        public async Task AddModButtonOriginalAsync()
-        {
-            var dialog = new OpenFileDialog
-            {
-                Title = "Open Mod Archive",
-                Filter = "Mod Archive (*.zip *.rar *.7z)|*.zip;*.rar;*.7z",
-                FilterIndex = 0,
-                Multiselect = false,
-                CheckFileExists = true,
-                CheckPathExists = true
-            };
-
-            DialogResult dialogResult = dialog.ShowDialog();
-
-            if (dialogResult == DialogResult.OK)
-            {
-                string targetFolder = PrimaryFolderPath!;
-                string sourceCompressedFile = dialog.FileName;
-                string modFolderPath = "Default";
-
-                this.LoadingContext = "Adding Mod Archive..";
-
-                await Task.Run(() =>
-                {
-                    // SharpCompress library to extract and copy contents compressed files to PrimaryModFolder
-                    // GitHub at: https://github.com/adamhathcock/sharpcompress
-                    // Supports *.zip, *.rar and *.7z
-                    var archive = ArchiveFactory.Open(sourceCompressedFile);
-                    foreach (var entry in archive.Entries)
-                    {
-                        this.LoadingContext = $"Extracting {entry.Key}";
-
-                        if (!entry.IsDirectory)
-                        {
-                            if (entry.Key.EndsWith(@"\mod.json"))
-                            {
-                                modFolderPath = entry.Key.Substring(0, entry.Key.IndexOf(@"\mod.json"));
-                                Console.WriteLine(modFolderPath);
-                            }
-                            else if (entry.Key.EndsWith(@"/mod.json"))
-                            {
-                                modFolderPath = entry.Key.Substring(0, entry.Key.IndexOf(@"/mod.json"));
-                                Console.WriteLine(modFolderPath);
-                            }
-
-                            entry.WriteToDirectory(targetFolder, new ExtractionOptions { ExtractFullPath = true, Overwrite = true });
-                        }
-                    }
-                }).ContinueWith(_ =>
-                {
-                    // This code will run on the main thread after the AddModButtonAsync function is completed
-                    // Inserts mod into list
-                    Mod? mod = JsonConverterFacade.JsonToMod(PrimaryFolderPath + @"\" + modFolderPath);
-
-                    if (mod != null)
-                    {
-                        ModViewModel modVM = new ModViewModel(mod);
-                        modVM.Path = PrimaryFolderPath + @"\" + modFolderPath;
-                        modVM.Source = "Primary Folder";
-
-                        if (!File.Exists(PrimaryFolderPath + @"\" + modFolderPath + @"\backup.json"))
-                        {
-                            JsonConverterFacade.Createbackup(PrimaryFolderPath + @"\" + modFolderPath);
-                        }
-
-                        var list = ModService.GetInstance().ModVMCollection.Where(m => m.Path == modVM.Path).ToList();
-
-                        if (list == null || list.Count == 0)
-                        {
-                            ModService.GetInstance().AddMod(modVM);
-                        }
-                        else if (list != null && list.Count > 0)
-                        {
-                            ModService.GetInstance().ModVMCollection.Remove(list[0]);
-                            ModService.GetInstance().AddMod(modVM);
-                        }
-
-                        foreach (var item in ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected)) item.IsSelected = false;
-                        modVM.IsSelected = true;
-
-                        this.DeploymentNecessary = true;
-                    }
-
-                    this.LoadingContext = string.Empty;
-                }, TaskScheduler.FromCurrentSynchronizationContext());
-
-                await ModService.GetInstance().CheckForAllConflictsAsync();
-            } 
         }
 
         private bool CanExecuteCommands()
@@ -669,12 +760,22 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public async Task LoadedAsync()
         {
-            HttpRequestService requestService = new HttpRequestService();
-            List<Task> tasks = new List<Task> { Task.Run(() => ModService.GetInstance().CheckForAllConflictsAsync()) };
+            // Load all mods into memory when Window is loaded
+            _modService.GetMods();
 
-            Task<string> taskRequestVersion = requestService.Main();
+            if (this.ModVMCollection.Count != 0)
+            {
+                this.IsModListLoaded = true; 
+            }
+
+            // Create list of tasks and add task so it can start running in the background
+            List<Task> tasks = new List<Task> { Task.Run(() => _modService.CheckForAllConflictsAsync()) };
+
+            // Create task and add task to list of tasks so it can start running in the background
+            Task<string> taskRequestVersion = _httpRequestService.Main();
             tasks.Add(taskRequestVersion);
 
+            // Await task before following code runs
             await taskRequestVersion;
 
             if (taskRequestVersion.Result != string.Empty)
@@ -686,25 +787,29 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 {
                     this.IsUpdateAvailable = true;
                 }
-                else { this.IsUpdateAvailable = false; }
+                else 
+                {
+                    this.IsUpdateAvailable = false;
+                }
             }
 
+            // Await all started tasks before ending method
             await Task.WhenAll(tasks);
         }
 
         [RelayCommand]
         public async Task ToggleCheckBox()
         {
-            List<ModViewModel> selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
+            List<ModViewModel> selectedItems = ModVMCollection.Where(m => m.IsSelected).ToList();
 
             if (selectedItems != null && selectedItems.Count == 1)
             {
-                ModService.GetInstance().CheckForConflicts(selectedItems[0]!);
+                _modService.CheckForConflicts(selectedItems[0]!);
             }
 
-            await ModService.GetInstance().CheckForAllConflictsAsync();
+            this.DeploymentNecessary = true;
 
-            DeploymentNecessary = true;
+            await _modService.CheckForAllConflictsAsync();
         }
 
         [RelayCommand]
@@ -718,7 +823,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     mod.IsSelected = true;
                 }
             }
-               
+
             foreach (var item in e.RemovedItems)
             {
                 ModViewModel? mod = item as ModViewModel;
@@ -727,8 +832,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     mod.IsSelected = false;
                 }
             }
-                
-            List<ModViewModel> selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
+
+            List<ModViewModel> selectedItems = ModVMCollection.Where(m => m.IsSelected).ToList();
 
             if (selectedItems?.Count == 1)
             {
@@ -736,21 +841,23 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                 if (mod != null)
                 {
-                    ModService.GetInstance().CheckForConflicts(mod);
+                    _modService.CheckForConflicts(mod);
                 }
             }
             else if (selectedItems?.Count > 1 || selectedItems?.Count < 1)
             {
-                ModService.GetInstance().ClearConflictWindow();
+                _modService.ClearConflictWindow();
 
-                foreach (var item in Mods)
+                foreach (var item in ModVMCollection)
                 {
                     if (item != null)
                     {
                         item.ModViewModelStatus = ModViewModelConflictStatus.None;
                     }
                 }
-            } 
+            }
+
+            OnPropertyChanged(nameof(SelectedModsCount));
         }
 
         [RelayCommand]
@@ -762,28 +869,29 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 if (mod != null)
                 {
                     mod.IsSelectedConflict = false;
-                    ModService.GetInstance().Conflicts.Clear();
+                    this.ConflictsCollection.Clear();
                 }
             }
 
             foreach (var item in e.AddedItems)
             {
-                foreach (var i in ModService.GetInstance().ModVMCollection.Where(m => m.IsSelectedConflict && m != item)) i.IsSelectedConflict = false;
+                foreach (var i in ModVMCollection.Where(m => m.IsSelectedConflict && m != item)) i.IsSelectedConflict = false;
 
                 ModViewModel? mod = item as ModViewModel;
                 if (mod != null)
                 {
                     mod.IsSelectedConflict = true;
-                    ModService.GetInstance().GenerateManifest(mod);
+                    _modService.GenerateManifest(mod);
                 }
             }
 
-            List<ModViewModel> selectedConflicts = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelectedConflict).ToList();
+            List<ModViewModel> selectedConflicts = ModVMCollection.Where(m => m.IsSelectedConflict).ToList();
 
             if (selectedConflicts.Count == 0)
             {
                 ConflictNotificationState = Visibility.Visible;
-            } else
+            }
+            else
             {
                 ConflictNotificationState = Visibility.Hidden;
             }
@@ -799,23 +907,23 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 if (mod != null)
                 {
                     mod.IsSelectedConflict = false;
-                    ModService.GetInstance().Conflicts.Clear();
+                    this.ConflictsCollection.Clear();
                 }
             }
 
             foreach (var item in e.AddedItems)
             {
-                foreach (var i in ModService.GetInstance().ModVMCollection.Where(m => m.IsSelectedConflict && m != item)) i.IsSelectedConflict = false;
+                foreach (var i in ModVMCollection.Where(m => m.IsSelectedConflict && m != item)) i.IsSelectedConflict = false;
 
                 ModViewModel? mod = item as ModViewModel;
                 if (mod != null)
                 {
                     mod.IsSelectedConflict = true;
-                    ModService.GetInstance().GenerateManifest(mod);
+                    _modService.GenerateManifest(mod);
                 }
             }
 
-            List<ModViewModel> selectedConflicts = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelectedConflict).ToList();
+            List<ModViewModel> selectedConflicts = ModVMCollection.Where(m => m.IsSelectedConflict).ToList();
 
             if (selectedConflicts.Count == 0)
             {
@@ -825,6 +933,35 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             {
                 ConflictNotificationState = Visibility.Hidden;
             }
+        }
+
+        /// <summary>
+        /// Methods and events
+        /// </summary>
+        public void RaiseCheckForAllConflict()
+        {
+            _modService.CheckForAllConflictsAsync();
+        }
+        
+        private void ModVMCollection_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (this.IsModListLoaded)
+            {
+                this.CurrentProfile = string.Empty;
+
+                foreach (var item in ModVMCollection)
+                {
+                    item.LoadOrder = ModVMCollection.IndexOf(item);
+                }
+
+                if (!this.DeploymentNecessary)
+                {
+                    this.DeploymentNecessary = true;
+                }
+            }
+
+            OnPropertyChanged(nameof(this.ModCount));
+            OnPropertyChanged(nameof(this.ModCountActive));
         }
 
         /// <summary>
@@ -839,25 +976,12 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
         public void Drop(IDropInfo dropInfo)
         {
-            List<ModViewModel> selectedMods = new List<ModViewModel>();
+            List<ModViewModel> selectedMods = this.ModVMCollection.Where(m => m.IsSelected).ToList();
 
-            if (dropInfo.Data is IEnumerable)
-            {
-                foreach (var item in (ICollection)dropInfo.Data)
-                {
-                    selectedMods.Add((ModViewModel)item);
-                }
+            dropInfo.Data = selectedMods.OrderBy(m => m.LoadOrder);
 
-                dropInfo.Data = selectedMods.OrderBy(m => m.LoadOrder);
-            }
-            
             DefaultDropHandler defaultDropHandler = new DefaultDropHandler();
             defaultDropHandler.Drop(dropInfo);
-
-            // Recalculate loadorder by index positions
-            foreach (var item in ModService.GetInstance().ModVMCollection) item.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(item);
-
-            DeploymentNecessary = true;
         }
     }
 }

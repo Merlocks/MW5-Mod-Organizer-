@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MW5_Mod_Organizer_WPF.Models
 {
-    public class VersionDto
+    public sealed class VersionDto
     {
         [JsonPropertyName("version")]
         public string? Version { get; set; }

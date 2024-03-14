@@ -4,7 +4,7 @@ using MW5_Mod_Organizer_WPF.Models;
 
 namespace MW5_Mod_Organizer_WPF.Services
 {
-    public class JsonHandlerService
+    public sealed class JsonHandlerService
     {
         public static Mod? JsonStringToMod(string jsonString)
         {

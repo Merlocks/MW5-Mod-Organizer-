@@ -1,23 +1,27 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.DependencyInjection;
+using MW5_Mod_Organizer_WPF.Messages;
+using MW5_Mod_Organizer_WPF.Models;
+using MW5_Mod_Organizer_WPF.Services;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using Microsoft.Extensions.DependencyInjection;
-using MW5_Mod_Organizer_WPF.Models;
-using MW5_Mod_Organizer_WPF.Services;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
 {
-    public partial class ModViewModel : ObservableObject
+    public sealed partial class ModViewModel : ObservableObject
     {
         public Mod _mod;
-        private MainViewModel? _mainViewModel;
+        private readonly MainViewModel _mainViewModel;
+        private readonly IModService _modService;
 
         /// <summary>
         /// Read-only properties used as Data within the View
@@ -38,9 +42,10 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [ObservableProperty]
         private bool isEnabled;
 
-        partial void OnIsEnabledChanging(bool value)
+        partial void OnIsEnabledChanged(bool value)
         {
             _mod.IsEnabled = value;
+            WeakReferenceMessenger.Default.Send(new PropertyIsEnabledChangedMessage(value));
         }
 
         [ObservableProperty]
@@ -61,10 +66,13 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [ObservableProperty]
         private decimal loadOrder;
 
-        partial void OnLoadOrderChanging(decimal value)
+        partial void OnLoadOrderChanged(decimal value)
         {
             _mod.LoadOrder = value;
         }
+
+        [ObservableProperty]
+        private decimal? defaultLoadOrder;
 
         [ObservableProperty]
         private ModViewModelConflictStatus modViewModelStatus;
@@ -81,10 +89,11 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         /// <summary>
         /// Constructor
         /// </summary>
-        public ModViewModel(Mod mod)
+        public ModViewModel(Mod mod, MainViewModel mainViewModel, IModService modService)
         {
             _mod = mod;
-            _mainViewModel = App.Current.Services.GetService<MainViewModel>();
+            _mainViewModel = mainViewModel;
+            _modService = modService;
 
             ModViewModelStatus = ModViewModelConflictStatus.None;
             IsEnabled = _mod.IsEnabled;
@@ -125,19 +134,20 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 if (Directory.Exists(this.Path))
                 {
                     Directory.Delete(this.Path, true);
-                    ModService.GetInstance().ModVMCollection.Remove(this);
-                    ModService.GetInstance().ClearConflictWindow();
+                    _mainViewModel.ModVMCollection.Remove(this);
+                    _modService.ClearConflictWindow();
 
                     // Recalculate loadorder by index positions
-                    foreach (var item in ModService.GetInstance().ModVMCollection)
+                    foreach (var item in _mainViewModel.ModVMCollection)
                     {
-                        item.LoadOrder = ModService.GetInstance().ModVMCollection.IndexOf(item);
+                        item.LoadOrder = _mainViewModel.ModVMCollection.IndexOf(item);
                         item.ModViewModelStatus = ModViewModelConflictStatus.None;
                     }
 
-                    _mainViewModel!.DeploymentNecessary = true;
+                    Properties.Settings.Default.CurrentProfile = string.Empty;
+                    Properties.Settings.Default.Save();
 
-                    await ModService.GetInstance().CheckForAllConflictsAsync();
+                    await _modService.CheckForAllConflictsAsync();
                 }
                 else
                 {
@@ -152,10 +162,10 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         [RelayCommand]
-        public async Task EnableSelectedMods()
+        public async Task EnableSelectedModsAsync()
         {
             bool isChanged = false;
-            List<ModViewModel> selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
+            List<ModViewModel> selectedItems = _mainViewModel.ModVMCollection.Where(m => m.IsSelected).ToList();
 
             foreach (var item in selectedItems) 
             { 
@@ -166,16 +176,16 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 }
             }
 
-            if (selectedItems != null && selectedItems.Count == 1 && isChanged) { ModService.GetInstance().CheckForConflicts(selectedItems[0]); }
+            if (selectedItems != null && selectedItems.Count == 1 && isChanged) { _modService.CheckForConflicts(selectedItems[0]); }
             if (!_mainViewModel!.DeploymentNecessary && isChanged) _mainViewModel!.DeploymentNecessary = true;
-            if (isChanged) { await ModService.GetInstance().CheckForAllConflictsAsync(); }
+            if (isChanged) { await _modService.CheckForAllConflictsAsync(); }
         }
 
         [RelayCommand]
-        public async Task DisableSelectedMods()
+        public async Task DisableSelectedModsAsync()
         {
             bool isChanged = false;
-            List<ModViewModel> selectedItems = ModService.GetInstance().ModVMCollection.Where(m => m.IsSelected).ToList();
+            List<ModViewModel> selectedItems = _mainViewModel.ModVMCollection.Where(m => m.IsSelected).ToList();
 
             foreach (var item in selectedItems) 
             {
@@ -188,13 +198,53 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
             if (selectedItems != null && selectedItems.Count == 1 && isChanged) 
             {
-                ModService.GetInstance().ClearConflictWindow();
+                _modService.ClearConflictWindow();
 
-                foreach (var item in ModService.GetInstance().ModVMCollection) { item.ModViewModelStatus = ModViewModelConflictStatus.None; }
+                foreach (var item in _mainViewModel.ModVMCollection) { item.ModViewModelStatus = ModViewModelConflictStatus.None; }
             }
 
             if (!_mainViewModel!.DeploymentNecessary && isChanged) _mainViewModel!.DeploymentNecessary = true;
-            if (isChanged) { await ModService.GetInstance().CheckForAllConflictsAsync(); }
+            if (isChanged) { await _modService.CheckForAllConflictsAsync(); }
+        }
+
+        [RelayCommand] 
+        public async Task EnableAllAsync()
+        {
+            List<ModViewModel> disabledItems = _mainViewModel.ModVMCollection.Where(m => !m.IsEnabled).ToList();
+            List<ModViewModel> selectedItems = _mainViewModel.ModVMCollection.Where(m => m.IsSelected).ToList();
+
+            if (disabledItems.Count() > 0)
+            {
+                Parallel.ForEach(disabledItems, (item) =>
+                {
+                    item.IsEnabled = true;
+                });
+
+                if (!_mainViewModel!.DeploymentNecessary) _mainViewModel!.DeploymentNecessary = true;
+                await _modService.CheckForAllConflictsAsync();
+
+                if (selectedItems != null && selectedItems.Count == 1) { _modService.CheckForConflicts(selectedItems[0]); }
+            }
+        }
+
+        [RelayCommand]
+        public async Task DisableAllAsync()
+        {
+            List<ModViewModel> enabledItems = _mainViewModel.ModVMCollection.Where(m => m.IsEnabled).ToList();
+
+            if (enabledItems.Count() > 0)
+            {
+                _modService.ClearConflictWindow();
+
+                Parallel.ForEach(enabledItems, (item) =>
+                {
+                    item.IsEnabled = false;
+                    item.ModViewModelStatus = ModViewModelConflictStatus.None;
+                });
+
+                if (!_mainViewModel!.DeploymentNecessary) _mainViewModel!.DeploymentNecessary = true;
+                await _modService.CheckForAllConflictsAsync();
+            }
         }
     }
 }
