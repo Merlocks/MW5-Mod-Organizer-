@@ -15,6 +15,7 @@ using System.Runtime.InteropServices;
 using System.ComponentModel;
 using MW5_Mod_Organizer_WPF.Subclasses;
 using System.Windows.Forms;
+using System.Windows.Controls;
 
 namespace MW5_Mod_Organizer_WPF.ViewModels
 {
@@ -76,7 +77,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     addedProfileVM.IsSelected = true;
 
                     // Set current profile to newly created profile
-                    this.mainViewModel.CurrentProfile = this.TextBoxContent;
+                    this.mainViewModel.CurrentProfile = addedProfileVM.Name;
 
                     Properties.Settings.Default.CurrentProfile = this.mainViewModel.CurrentProfile;
                     Properties.Settings.Default.Save();
@@ -184,7 +185,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                             info += $"- {item.Key}\n";
                         }
 
-                        string message = $"Certain mod(s) could not be activated because they don't exist:\n\n{info}";
+                        string message = $"Certain profile(s) could not be activated because they don't exist:\n\n{info}";
                         string caption = "Warning";
                         MessageBoxButtons buttons = MessageBoxButtons.OK;
                         MessageBoxIcon icon = MessageBoxIcon.Warning;
@@ -244,6 +245,30 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             catch (Exception ex)
             {
                 Console.WriteLine($"-- ProfilesViewModel.WindowClosingAsync -- {ex.Message}");
+            }
+        }
+
+        [RelayCommand]
+        public void SelectionChanged(SelectionChangedEventArgs e)
+        {
+            foreach (var item in e.RemovedItems)
+            {
+                ProfileViewModel? profile = item as ProfileViewModel;
+                if (profile != null)
+                {
+                    profile.IsSelected = false;
+                    this.TextBoxContent = string.Empty;
+                }
+            }
+
+            foreach (var item in e.AddedItems)
+            {
+                ProfileViewModel? profile = item as ProfileViewModel;
+                if (profile != null)
+                {
+                    profile.IsSelected = true;
+                    this.TextBoxContent = profile.Name;
+                }
             }
         }
     }

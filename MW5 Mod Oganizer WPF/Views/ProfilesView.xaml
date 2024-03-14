@@ -55,6 +55,11 @@
                           SizeChanged="ProfilesDataGrid_SizeChanged"
                           SelectionMode="Single"
                           SelectionUnit="FullRow">
+                    <behaviors:Interaction.Triggers>
+                        <behaviors:EventTrigger EventName="SelectionChanged">
+                            <behaviors:InvokeCommandAction Command="{Binding SelectionChangedCommand}" PassEventArgsToCommand="True"/>
+                        </behaviors:EventTrigger>
+                    </behaviors:Interaction.Triggers>
                     <DataGrid.Columns>
                         <DataGridTextColumn x:Name="ProfilesColumn"
                                             Binding="{Binding Name}"
