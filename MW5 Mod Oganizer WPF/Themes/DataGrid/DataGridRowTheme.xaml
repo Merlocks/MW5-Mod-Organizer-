@@ -48,6 +48,11 @@
                             </SelectiveScrollingGrid>
                             <Border.ContextMenu>
                                 <ContextMenu>
+                                    <MenuItem Header="All mods..">
+                                        <MenuItem Header="Enable all" Command="{Binding EnableAllCommand}"/>
+                                        <MenuItem Header="Disable all" Command="{Binding DisableAllCommand}"/>
+                                    </MenuItem>
+                                    <Separator/>
                                     <MenuItem Header="Enable selected" Command="{Binding EnableSelectedModsCommand}"/>
                                     <MenuItem Header="Disable selected" Command="{Binding DisableSelectedModsCommand}"/>
                                     <Separator/>

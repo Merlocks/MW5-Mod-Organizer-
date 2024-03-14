@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
@@ -161,7 +162,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         [RelayCommand]
-        public async Task EnableSelectedMods()
+        public async Task EnableSelectedModsAsync()
         {
             bool isChanged = false;
             List<ModViewModel> selectedItems = _mainViewModel.ModVMCollection.Where(m => m.IsSelected).ToList();
@@ -181,7 +182,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         [RelayCommand]
-        public async Task DisableSelectedMods()
+        public async Task DisableSelectedModsAsync()
         {
             bool isChanged = false;
             List<ModViewModel> selectedItems = _mainViewModel.ModVMCollection.Where(m => m.IsSelected).ToList();
@@ -204,6 +205,40 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
             if (!_mainViewModel!.DeploymentNecessary && isChanged) _mainViewModel!.DeploymentNecessary = true;
             if (isChanged) { await _modService.CheckForAllConflictsAsync(); }
+        }
+
+        [RelayCommand] 
+        public async Task EnableAllAsync()
+        {
+            List<ModViewModel> disabledItems = _mainViewModel.ModVMCollection.Where(m => !m.IsEnabled).ToList();
+
+            if (disabledItems.Count() > 0)
+            {
+                Parallel.ForEach(disabledItems, (item) =>
+                {
+                    item.IsEnabled = true;
+                });
+
+                if (!_mainViewModel!.DeploymentNecessary) _mainViewModel!.DeploymentNecessary = true;
+                await _modService.CheckForAllConflictsAsync(); 
+            }
+        }
+
+        [RelayCommand]
+        public async Task DisableAllAsync()
+        {
+            List<ModViewModel> enabledItems = _mainViewModel.ModVMCollection.Where(m => m.IsEnabled).ToList();
+
+            if (enabledItems.Count() > 0)
+            {
+                Parallel.ForEach(enabledItems, (item) =>
+                {
+                    item.IsEnabled = false;
+                });
+
+                if (!_mainViewModel!.DeploymentNecessary) _mainViewModel!.DeploymentNecessary = true;
+                await _modService.CheckForAllConflictsAsync();
+            }
         }
     }
 }
