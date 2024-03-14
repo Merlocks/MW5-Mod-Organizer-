@@ -29,11 +29,9 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="50" MinHeight="50"/>
             </Grid.RowDefinitions>
-            <TextBlock Text="Select profile(s) to export"
-                       Foreground="#484D54"
-                       FontSize="16"
-                       Margin="0 0 0 5"
-                       Grid.Row="0"/>
+            <Border Grid.Row="0" Background="#FFC1C1C1" BorderBrush="#FFADADAD" BorderThickness="0 0 3 4">
+                <TextBlock Text="Select profile(s) to export" TextOptions.TextFormattingMode="Display" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#484D54" Margin="0 5 0 0"/>
+            </Border>
             <Grid Grid.Row="1" Background="#f7f5f2">
                 <DataGrid x:Name="ProfilesDataGrid"
                           ItemsSource="{Binding Profiles}"
