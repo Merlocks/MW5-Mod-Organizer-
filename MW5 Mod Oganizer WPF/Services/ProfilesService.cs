@@ -24,17 +24,17 @@ namespace MW5_Mod_Organizer_WPF.Services
             {
                 ProfileContainer? profileContainer = new ProfileContainer();
 
-                if (!Directory.Exists(@"Userdata"))
+                if (!Directory.Exists(Environment.GetEnvironmentVariable("LocalAppData") + @"\MW5Mercs\Saved\MW5MO"))
                 {
-                    Directory.CreateDirectory(@"Userdata");
+                    Directory.CreateDirectory(Environment.GetEnvironmentVariable("LocalAppData") + @"\MW5Mercs\Saved\MW5MO");
                 }
 
-                if (!File.Exists(@"Userdata\profiles.json"))
+                if (!File.Exists(Environment.GetEnvironmentVariable("LocalAppData") + @"\MW5Mercs\Saved\MW5MO\profiles.json"))
                 {
-                    await File.WriteAllTextAsync(@"Userdata\profiles.json", "");
+                    await File.WriteAllTextAsync(Environment.GetEnvironmentVariable("LocalAppData") + @"\MW5Mercs\Saved\MW5MO\profiles.json", "");
                 }
 
-                string? jsonString = await File.ReadAllTextAsync(@"Userdata\profiles.json");
+                string? jsonString = await File.ReadAllTextAsync(Environment.GetEnvironmentVariable("LocalAppData") + @"\MW5Mercs\Saved\MW5MO\profiles.json");
                 profileContainer = JsonSerializer.Deserialize<ProfileContainer>(jsonString);
 
                 if (profileContainer != null && profileContainer.Profiles.Count != 0)
@@ -63,20 +63,20 @@ namespace MW5_Mod_Organizer_WPF.Services
         {
             try
             {
-                if (!Directory.Exists(@"Userdata"))
+                if (!Directory.Exists(Environment.GetEnvironmentVariable("LocalAppData") + @"\MW5Mercs\Saved\MW5MO"))
                 {
-                    Directory.CreateDirectory(@"Userdata");
+                    Directory.CreateDirectory(Environment.GetEnvironmentVariable("LocalAppData") + @"\MW5Mercs\Saved\MW5MO");
                 }
 
-                if (!File.Exists(@"Userdata\profiles.json"))
+                if (!File.Exists(Environment.GetEnvironmentVariable("LocalAppData") + @"\MW5Mercs\Saved\MW5MO\profiles.json"))
                 {
-                    File.WriteAllText(@"Userdata\profiles.json", "");
+                    File.WriteAllText(Environment.GetEnvironmentVariable("LocalAppData") + @"\MW5Mercs\Saved\MW5MO\profiles.json", "");
                 }
 
                 var options = new JsonSerializerOptions() { WriteIndented = true };
                 string jsonString = JsonSerializer.Serialize(profileContainer, options);
 
-                File.WriteAllText(@"Userdata\profiles.json", jsonString);
+                File.WriteAllText(Environment.GetEnvironmentVariable("LocalAppData") + @"\MW5Mercs\Saved\MW5MO\profiles.json", jsonString);
             }
             catch (Exception e)
             {
