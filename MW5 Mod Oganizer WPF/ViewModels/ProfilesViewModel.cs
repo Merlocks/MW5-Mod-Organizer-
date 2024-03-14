@@ -39,7 +39,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public void SaveProfile()
         {
-            if (!string.IsNullOrEmpty(this.TextBoxContent) && !this.mainViewModel.DeploymentNecessary)
+            if (!string.IsNullOrEmpty(this.TextBoxContent) && !(this.TextBoxContent.Length > 45) && !this.mainViewModel.DeploymentNecessary)
             {
                 try
                 {
