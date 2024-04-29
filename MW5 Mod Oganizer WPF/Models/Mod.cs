@@ -52,8 +52,7 @@ namespace MW5_Mod_Organizer_WPF.Models
         [JsonPropertyOrder(11)]
         public string? SteamModVisibility { get; set; }
 
-        [JsonPropertyName("bEnabled")]
-        [JsonPropertyOrder(12)]
+        [JsonIgnore]
         public bool IsEnabled { get; set; }
     }
 }
