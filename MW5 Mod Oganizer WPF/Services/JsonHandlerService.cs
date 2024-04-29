@@ -35,6 +35,20 @@ namespace MW5_Mod_Organizer_WPF.Services
             }
         }
 
+        public static ModList? JsonStringToModList(string jsonString)
+        {
+            try
+            {
+                ModList? modList = JsonSerializer.Deserialize<ModList>(jsonString);
+                return modList;
+            }
+            catch (Exception ex)
+            {
+                LoggerService.AddLog("JsonStringToModListException", ex.Message);
+                return null;
+            }
+        }
+
         public static string? ModListToJsonString(ModList modList)
         {
             try

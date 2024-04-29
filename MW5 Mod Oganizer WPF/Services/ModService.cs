@@ -104,6 +104,22 @@ namespace MW5_Mod_Organizer_WPF.Services
 
         private void AddToTempList(string[] directory, string source)
         {
+            // Read modlist.json
+
+            ModList? modList = default;
+
+            if (File.Exists(Properties.Settings.Default.Path + "/modlist.json")) {
+                Console.WriteLine("modlist.json found");
+
+                modList = JsonConverterFacade.JsonToModList(Properties.Settings.Default.Path);
+            } 
+            else
+            {
+                Console.WriteLine("modlist.json not found");
+            }
+
+            //
+            
             foreach (var path in directory)
             {
                 Mod? mod = JsonConverterFacade.JsonToMod(path);
@@ -130,10 +146,25 @@ namespace MW5_Mod_Organizer_WPF.Services
 
                     mod.LoadOrder = decimal.ToInt32((decimal)mod.LoadOrder);
 
+
                     ModViewModel modVM = new ModViewModel(mod, _mainViewModel!, this);
                     modVM.Path = path;
                     modVM.Source = source;
                     modVM.DefaultLoadOrder = defaultLoadOrder;
+
+                    // Get enabled state from modlist.json
+
+                    if (modList != null && modList.ModStatus != null && modVM.FolderName != null && modList.ModStatus.ContainsKey(modVM.FolderName))
+                    {
+                        modVM.IsEnabled = modList.ModStatus[modVM.FolderName].IsEnabled;
+                    } 
+                    else
+                    {
+                        modVM.IsEnabled = false;
+                    }
+
+                    //
+
                     tempModVMList.Add(modVM);
                 } 
             }

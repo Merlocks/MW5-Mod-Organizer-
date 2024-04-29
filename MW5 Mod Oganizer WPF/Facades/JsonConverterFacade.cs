@@ -90,6 +90,29 @@ namespace MW5_Mod_Organizer_WPF.Facades
             }
         }
 
+        public static ModList? JsonToModList(string path)
+        {
+            try
+            {
+                string? jsonString = FileHandlerService.ReadFile(path, @"\modlist.json");
+                if (jsonString != null)
+                {
+                    ModList? modList = JsonHandlerService.JsonStringToModList(jsonString);
+
+                    return modList;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggerService.AddLog("JsonToModListException", ex.Message);
+                throw;
+            }
+        }
+
         public static void ModListToJson(string path, ModList modList)
         {
             try
