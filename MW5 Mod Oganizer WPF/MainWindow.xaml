@@ -598,6 +598,9 @@
                         <MenuItem Header="As loadorder.txt" Command="{Binding ExportLoadorderCommand}"/>
                         <MenuItem Header="Profiles to file.." Command="{Binding ExportProfilesCommand}"/>
                     </MenuItem>
+                    <MenuItem Header="Add mod.." FontSize="12" Command="{Binding AddModCommand}">
+                        
+                    </MenuItem>
                 </MenuItem>
             </Menu>
             <Menu VerticalAlignment="Center"
