@@ -30,6 +30,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
         public string? Version => _mod.Version;
 
+        public int? BuildNumber => _mod.BuildNumber;
+
         public string? Author => _mod.Author;
 
         public string[]? Manifest => _mod.Manifest;
