@@ -208,10 +208,6 @@
                                         Header="Author" 
                                         MinWidth="200" 
                                         Binding="{Binding Author}"/>
-                    <!--<DataGridTextColumn x:Name="DataGridColumnVersion"
-                                        Header="Version" 
-                                        MinWidth="150"
-                                        Binding="{Binding Version}"/>-->
                     <DataGridTemplateColumn x:Name="DataGridColumnVersion" Header="Version" Width="auto" MinWidth="100"  CanUserResize="False">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
