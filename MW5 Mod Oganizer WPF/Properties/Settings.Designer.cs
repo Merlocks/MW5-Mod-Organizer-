@@ -37,7 +37,7 @@ namespace MW5_Mod_Organizer_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1.1.355")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.1.361")]
         public string GameVersion {
             get {
                 return ((string)(this["GameVersion"]));
