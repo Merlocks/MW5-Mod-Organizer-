@@ -158,6 +158,10 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [ObservableProperty]
         private Visibility currentProfileVisibility;
 
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(ResetToDefaultCommand))]
+        private bool isAnySelected;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -486,7 +490,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             DeploymentNecessary = false;
         }
 
-        [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
+        [RelayCommand(CanExecute = nameof(CanResetExecute))]
         public void ResetToDefault()
         {
             try
@@ -757,6 +761,25 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             return result;
         }
 
+        private bool CanResetExecute()
+        {
+            //bool result = string.IsNullOrEmpty(PrimaryFolderPath) ? false : true;
+            //return result;
+
+            if (ModVMCollection.Where(m => m.IsSelected).Count() == 0)
+            {
+                return false;
+            }
+            else if (string.IsNullOrEmpty(PrimaryFolderPath))
+            {
+                return false;
+            }
+            else 
+            {
+                return true; 
+            }
+        }
+
         [RelayCommand]
         public async Task LoadedAsync()
         {
@@ -842,6 +865,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 if (mod != null)
                 {
                     _modService.CheckForConflicts(mod);
+                    this.IsAnySelected = true;
                 }
             }
             else if (selectedItems?.Count > 1 || selectedItems?.Count < 1)
@@ -854,6 +878,11 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                     {
                         item.ModViewModelStatus = ModViewModelConflictStatus.None;
                     }
+                }
+
+                if (selectedItems?.Count == 0)
+                {
+                    this.IsAnySelected = false;
                 }
             }
 
