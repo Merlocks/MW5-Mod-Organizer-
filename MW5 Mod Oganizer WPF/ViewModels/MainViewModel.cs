@@ -490,7 +490,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             DeploymentNecessary = false;
         }
 
-        [RelayCommand(CanExecute = nameof(CanResetExecute))]
+        [RelayCommand(CanExecute = nameof(CanExecuteReset))]
         public void ResetToDefault()
         {
             try
@@ -761,7 +761,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             return result;
         }
 
-        private bool CanResetExecute()
+        private bool CanExecuteReset()
         {
             //bool result = string.IsNullOrEmpty(PrimaryFolderPath) ? false : true;
             //return result;
