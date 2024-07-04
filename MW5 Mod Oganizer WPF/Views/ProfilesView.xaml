@@ -94,7 +94,7 @@
                            FontSize="11"
                            Grid.Row="2"
                            VerticalAlignment="Bottom"/>
-                <Button Content="Save profile"
+                <Button Content="Create new profile"
                         Style="{StaticResource ButtonAddModTheme}"
                         Height="30"
                         Margin="0 5"
