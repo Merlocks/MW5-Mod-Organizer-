@@ -763,21 +763,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
         private bool CanExecuteReset()
         {
-            //bool result = string.IsNullOrEmpty(PrimaryFolderPath) ? false : true;
-            //return result;
-
-            if (ModVMCollection.Where(m => m.IsSelected).Count() == 0)
-            {
-                return false;
-            }
-            else if (string.IsNullOrEmpty(PrimaryFolderPath))
-            {
-                return false;
-            }
-            else 
-            {
-                return true; 
-            }
+            return IsAnySelected;
         }
 
         [RelayCommand]
