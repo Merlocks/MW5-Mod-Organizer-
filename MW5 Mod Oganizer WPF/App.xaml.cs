@@ -67,6 +67,7 @@ namespace MW5_Mod_Organizer_WPF
             services.AddTransient<ProfilesService>();
             services.AddSingleton<IModService, ModService>();
             services.AddSingleton<HttpRequestService>();
+            services.AddSingleton<ConfigurationService>();
 
             // Facades
             services.AddTransient<JsonConverterFacade>();
