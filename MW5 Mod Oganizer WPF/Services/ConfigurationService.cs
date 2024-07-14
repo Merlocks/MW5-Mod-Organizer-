@@ -7,6 +7,8 @@ namespace MW5_Mod_Organizer_WPF.Services
     {
         public IConfiguration config { get; private set; }
 
+        public string AppTitle => GetAppTitle();
+
         public ConfigurationService() 
         {
             var builder = new ConfigurationBuilder()

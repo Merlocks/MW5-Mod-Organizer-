@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using GongSolutions.Wpf.DragDrop;
+using Microsoft.Extensions.DependencyInjection;
 using MW5_Mod_Organizer_WPF.Facades;
 using MW5_Mod_Organizer_WPF.Messages;
 using MW5_Mod_Organizer_WPF.Models;
@@ -34,11 +35,13 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         /// </summary>
         private readonly IModService _modService;
         private readonly HttpRequestService _httpRequestService;
-        private readonly ProfilesService profilesService;
+        private readonly ProfilesService _profilesService;
+        private readonly ConfigurationService _configurationService;
 
         /// <summary>
         /// Read-only properties
         /// </summary>
+        public string Title => _configurationService.AppTitle;
         public string ModCount => ModVMCollection.Count().ToString();
         public string ModCountActive => ModVMCollection.Where(m => m.IsEnabled).Count().ToString();
         public string SelectedModsCount => ModVMCollection.Where(m => m.IsSelected).Count().ToString();
@@ -170,7 +173,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             _modService = modService;
             _modService.SetMainViewModel(this);
             _httpRequestService = httpRequestService;
-            this.profilesService = profilesService;
+            _configurationService = App.Current.Services.GetService<ConfigurationService>()!;
+            _profilesService = profilesService;
 
             this.ModVMCollection = new RaisableObservableCollection<ModViewModel>();
             this.OverwrittenByCollection = new ObservableCollection<ModViewModel>();
@@ -237,7 +241,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public void ImportProfiles()
         {
-            this.profilesService.ImportProfiles();
+            this._profilesService.ImportProfiles();
         }
 
         [RelayCommand]

@@ -1,12 +1,9 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using MW5_Mod_Organizer_WPF.Services;
 using MW5_Mod_Organizer_WPF.ViewModels;
-using MW5_Mod_Organizer_WPF.Messages;
 using System;
 using System.Windows;
 using System.Windows.Controls.Primitives;
-using MW5_Mod_Organizer_WPF.Services;
-using Microsoft.Extensions.Configuration;
 
 namespace MW5_Mod_Organizer_WPF
 {
@@ -16,16 +13,11 @@ namespace MW5_Mod_Organizer_WPF
     public sealed partial class MainWindow : Window
     {
         private MainViewModel _mainViewModel => (MainViewModel)DataContext;
-        private readonly ConfigurationService _configurationService;
 
         public MainWindow()
         {
             this.InitializeComponent();
             this.DataContext = App.Current.Services.GetService<MainViewModel>()!;
-
-            _configurationService = App.Current.Services.GetService<ConfigurationService>()!;
-
-            Title = _configurationService.GetAppTitle();
         }
 
         private void ResizeConflictWindow(object sender, DragDeltaEventArgs e) 
