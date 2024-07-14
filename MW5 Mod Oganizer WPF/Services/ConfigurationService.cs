@@ -25,9 +25,9 @@ namespace MW5_Mod_Organizer_WPF.Services
 
         public string GetAppTitle()
         {
-            if (this.config.GetValue<string>("debugmode") == "ON")
+            if (this.config.GetValue<string>("environment") == "dev")
             {
-                return "MW5 Mod Organizer DEBUG VERSION";
+                return "MW5 Mod Organizer DEV BUILD";
             } 
             else
             {
