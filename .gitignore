@@ -363,5 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Custom
-Changelog.txt
-TODO.txt
+appsettings.json
