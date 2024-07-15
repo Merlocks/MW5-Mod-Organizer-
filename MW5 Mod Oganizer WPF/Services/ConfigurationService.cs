@@ -18,12 +18,13 @@ namespace MW5_Mod_Organizer_WPF.Services
             try
             {
                 var host = Assembly.GetEntryAssembly();
+
                 if (host == null)
                     return;
 
                 string resourceName = host.GetManifestResourceNames().Single(str => str.EndsWith("appsettings.json"));
 
-                var input = host.GetManifestResourceStream(resourceName);
+                using var input = host.GetManifestResourceStream(resourceName);
                 if (input != null)
                 {
                     var builder = new ConfigurationBuilder()
