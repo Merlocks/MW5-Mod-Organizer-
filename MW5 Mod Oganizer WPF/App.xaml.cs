@@ -77,6 +77,7 @@ namespace MW5_Mod_Organizer_WPF
             services.AddTransient<ModViewModel>();
             services.AddTransient<ProfilesViewModel>();
             services.AddTransient<ExportProfilesViewModel>();
+            services.AddTransient<AboutViewModel>();
 
             return services.BuildServiceProvider();
         }

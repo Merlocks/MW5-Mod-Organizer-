@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using MW5_Mod_Organizer_WPF.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,10 +19,14 @@ namespace MW5_Mod_Organizer_WPF.Views
     /// <summary>
     /// Interaction logic for AboutView.xaml
     /// </summary>
-    public partial class AboutView : Window
+    public sealed partial class AboutView : Window
     {
+        private AboutViewModel _aboutViewModel => (AboutViewModel)DataContext;
+
         public AboutView()
         {
+            this.DataContext = App.Current.Services.GetService<AboutViewModel>();
+
             InitializeComponent();
         }
     }
