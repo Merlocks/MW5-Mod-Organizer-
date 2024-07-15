@@ -21,6 +21,7 @@
 		<PublishSingleFile>true</PublishSingleFile>
 		<AnalysisLevel>latest</AnalysisLevel>
 		<ApplicationIcon>Images\icon-ico.ico</ApplicationIcon>
+		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -40,6 +41,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="appsettings.json" />
 	  <None Remove="favicon.ico" />
 	  <None Remove="gear-gif.gif" />
 	  <None Remove="Images\favicon.ico" />
@@ -52,6 +54,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <EmbeddedResource Include="appsettings.json">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </EmbeddedResource>
 	  <EmbeddedResource Include="Images\gear-gif.gif" />
 	  <EmbeddedResource Include="Images\logo2.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
@@ -68,9 +73,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

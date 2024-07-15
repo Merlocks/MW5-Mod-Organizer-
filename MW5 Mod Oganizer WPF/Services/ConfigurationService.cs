@@ -1,34 +1,66 @@
 ﻿using Microsoft.Extensions.Configuration;
+using System;
+using System.Configuration;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace MW5_Mod_Organizer_WPF.Services
 {
     public sealed class ConfigurationService
     {
-        public IConfiguration config { get; private set; }
+        public IConfiguration? Config { get; private set; }
 
         public string AppTitle => GetAppTitle();
 
         public ConfigurationService() 
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true); 
+            try
+            {
+                var host = Assembly.GetEntryAssembly();
+                if (host == null)
+                    return;
 
-            this.config = builder.Build();
+                string resourceName = host.GetManifestResourceNames().Single(str => str.EndsWith("appsettings.json"));
+
+                var input = host.GetManifestResourceStream(resourceName);
+                if (input != null)
+                {
+                    var builder = new ConfigurationBuilder()
+                    .AddJsonStream(input);
+
+                    this.Config = builder.Build();
+                }
+                else
+                {
+                    Console.WriteLine(resourceName);
+                }
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine("Exception in ConfigurationService constructor." + e.Message);
+            }
+
+
+            //var builder = new ConfigurationBuilder()
+            //    .SetBasePath(Directory.GetCurrentDirectory())
+            //    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            //this.Config = builder.Build();
 
             // How to use:
             /*
-             * config.GetValue<string>("debugmode")
+             * Config.GetValue<string>("debugmode")
              */
         }
 
         public string GetAppTitle()
         {
-            if (this.config.GetValue<string>("environment") == "dev")
+            if (this.Config != null && this.Config.GetValue<string>("environment") == "dev")
             {
                 return "MW5 Mod Organizer DEV BUILD";
-            } 
+            }
             else
             {
                 return "MW5 Mod Organizer";
