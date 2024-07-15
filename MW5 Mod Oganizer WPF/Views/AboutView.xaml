@@ -21,12 +21,28 @@
         <TabControl Grid.Row="1" Grid.Column="1">
             <TabItem Header="About">
                 <Grid>
-                    <StackPanel Orientation="Vertical">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="90"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Vertical" Grid.Row="0">
                         <TextBlock Text="{Binding Title}"/>
                         <TextBlock Text="{Binding Version}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Grid.Row="1">
                         <TextBlock Text="{Binding Distribution}" TextWrapping="Wrap"/>
+                        <TextBlock>
+                            <LineBreak/>
+                        </TextBlock>
+                        <TextBlock Text="{Binding Source}" TextWrapping="Wrap"/>
                     </StackPanel>
                 </Grid>
+            </TabItem>
+            <TabItem Header="License">
+                
+            </TabItem>
+            <TabItem Header="Credits">
+
             </TabItem>
         </TabControl>
     </Grid>

@@ -18,6 +18,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         public string Title => _configurationService.AppTitle;
         public string Version => "Version " + _configurationService.config.GetValue<string>("Version");
         public string Distribution => "This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.";
+        public string Source => "The source is not yet available.";
 
         public AboutViewModel(ConfigurationService configurationService) 
         { 
