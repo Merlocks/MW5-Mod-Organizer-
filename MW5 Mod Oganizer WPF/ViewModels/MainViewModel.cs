@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using GongSolutions.Wpf.DragDrop;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MW5_Mod_Organizer_WPF.Facades;
 using MW5_Mod_Organizer_WPF.Messages;
@@ -812,7 +813,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             if (taskRequestVersion.Result != string.Empty)
             {
                 VersionDto? response = JsonSerializer.Deserialize<VersionDto>(taskRequestVersion.Result);
-                string localVersion = Properties.Settings.Default.Properties["Version"].DefaultValue.ToString()!;
+                string localVersion = _configurationService.Config!.GetValue<string>("version")!;
 
                 if (response != null && response.Version != localVersion)
                 {
