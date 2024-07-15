@@ -571,7 +571,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
-        public async Task AddModAsync()
+        public async Task AddModAsync(object datagrid)
         {
             try
             {
@@ -753,6 +753,10 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                                     _modService.AddMod(modVM);
 
                                     modVM.IsSelected = true;
+
+                                    DataGrid dg = datagrid as DataGrid;
+
+                                    dg.ScrollIntoView(modVM);
                                 }
                             }
                         });

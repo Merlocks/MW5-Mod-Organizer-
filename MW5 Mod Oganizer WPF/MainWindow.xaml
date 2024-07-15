@@ -579,7 +579,8 @@
                                             Style="{StaticResource ButtonAddModTheme}"
                                             Height="30"
                                             Margin="5 0"
-                                            Command="{Binding AddModCommand}">
+                                            Command="{Binding AddModCommand}"
+                                            CommandParameter="{x:Reference Name=ModList}">
                                         <ToolTipService.ToolTip>
                                             <ToolTip Content="Adds mod to your mod folder and application. Accepts *.zip, *.rar and *.7z"/>
                                         </ToolTipService.ToolTip>
