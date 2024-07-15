@@ -606,27 +606,24 @@
                           FontSize="14"
                           Style="{StaticResource MenuItemContextTheme}">
                     <MenuItem Header="Import" FontSize="12">
-                        <MenuItem Header="Profiles" Command="{Binding ImportProfilesCommand}"/>
+                        <MenuItem Header="Profiles" Cursor="Hand" Command="{Binding ImportProfilesCommand}"/>
                     </MenuItem>
                     <MenuItem Header="Save"
                               FontSize="12">
-                        <MenuItem Header="As loadorder.txt" Command="{Binding ExportLoadorderCommand}"/>
-                        <MenuItem Header="Profiles to file.." Command="{Binding ExportProfilesCommand}"/>
+                        <MenuItem Header="As loadorder.txt" Cursor="Hand" Command="{Binding ExportLoadorderCommand}"/>
+                        <MenuItem Header="Profiles to file.." Cursor="Hand" Command="{Binding ExportProfilesCommand}"/>
                     </MenuItem>
-                    <MenuItem Header="Add mod.." FontSize="12" Command="{Binding AddModCommand}">
+                    <MenuItem Header="Add mod.." FontSize="12" Cursor="Hand" Command="{Binding AddModCommand}">
                         
                     </MenuItem>
                     <Separator/>
-                    <MenuItem Header="Settings" FontSize="12" Command="{Binding OpenSettingsCommand}"/>
+                    <MenuItem Header="Settings" FontSize="12" Cursor="Hand" Command="{Binding OpenSettingsCommand}"/>
                 </MenuItem>
             </Menu>
             <Menu VerticalAlignment="Center"
                   Padding="0 5"
                   Background="Transparent">
-                <MenuItem Header="Profiles"
-                          FontSize="14"
-                          Style="{StaticResource MenuItemContextTheme}"
-                          Command="{Binding OpenProfilesWindowCommand}">
+                <MenuItem Header="Profiles" FontSize="14" Cursor="Hand" Style="{StaticResource MenuItemContextTheme}" Command="{Binding OpenProfilesWindowCommand}">
                 </MenuItem>
             </Menu>
             <Menu VerticalAlignment="Center"
@@ -635,11 +632,8 @@
                 <MenuItem Header="Help"
                           FontSize="14"
                           Style="{StaticResource MenuItemContextTheme}">
-                    <MenuItem Header="Visit on Nexus"
-                              FontSize="12"
-                              Command="{Binding VisitOnNexusCommand}"/>
-                    <MenuItem Header="About MW5 Mod Organizer"
-                              FontSize="12"/>
+                    <MenuItem Header="Visit on Nexus" FontSize="12" Cursor="Hand" Command="{Binding VisitOnNexusCommand}"/>
+                    <MenuItem Header="About MW5 Mod Organizer" FontSize="12" Cursor="Hand" Command="{Binding OpenAboutCommand}"/>
                 </MenuItem>
             </Menu>
         </StackPanel>

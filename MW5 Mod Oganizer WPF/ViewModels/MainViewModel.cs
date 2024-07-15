@@ -271,6 +271,15 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         [RelayCommand]
+        public void OpenAbout()
+        {
+            AboutView window = new AboutView();
+            window.Owner = App.Current.MainWindow;
+
+            window.ShowDialog();
+        }
+
+        [RelayCommand]
         public async Task OpenPrimaryFolderPath()
         {
             var dialog = new FolderBrowserDialog();
