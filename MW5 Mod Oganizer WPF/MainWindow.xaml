@@ -616,6 +616,8 @@
                     <MenuItem Header="Add mod.." FontSize="12" Command="{Binding AddModCommand}">
                         
                     </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="Settings" FontSize="12" Command="{Binding OpenSettingsCommand}"/>
                 </MenuItem>
             </Menu>
             <Menu VerticalAlignment="Center"

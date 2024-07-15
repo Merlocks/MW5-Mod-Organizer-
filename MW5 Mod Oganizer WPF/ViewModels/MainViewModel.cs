@@ -245,6 +245,15 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         [RelayCommand]
+        public void OpenSettings()
+        {
+            SettingsView window = new SettingsView();
+            window.Owner = App.Current.MainWindow;
+
+            window.ShowDialog();
+        }
+
+        [RelayCommand]
         public void OpenProfilesWindow()
         {
             ProfilesView window = new ProfilesView();
