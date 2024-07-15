@@ -43,14 +43,6 @@ namespace MW5_Mod_Organizer_WPF
             MainWindow = new MainWindow();
             MainWindow.Show();
 
-            // Resets all user scoped application settings when user saved version string doesn't match the default
-            // Allows for checking if application has been run before on a different version
-            if (Settings.Default.Version != Settings.Default.Properties["Version"].DefaultValue.ToString())
-            {
-                Settings.Default.Reset();
-                Settings.Default.Save();
-            }
-
             base.OnStartup(e);
         }
 
