@@ -752,11 +752,13 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
                                     _modService.AddMod(modVM);
 
+                                    // Select added mod and auto scroll into view
                                     modVM.IsSelected = true;
 
-                                    DataGrid dg = datagrid as DataGrid;
+                                    DataGrid? dg = datagrid as DataGrid;
 
-                                    dg.ScrollIntoView(modVM);
+                                    if (dg != null)
+                                        dg.ScrollIntoView(modVM);
                                 }
                             }
                         });
