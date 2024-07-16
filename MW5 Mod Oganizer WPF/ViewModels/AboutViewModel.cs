@@ -4,6 +4,7 @@ using Microsoft.Xaml.Behaviors.Media;
 using MW5_Mod_Organizer_WPF.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Linq;
 using System.Text;
@@ -22,9 +23,34 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         public string Source => "The source is not yet available.";
         public string License => "MW5 Mod Organizer does not have an Open Source License and falls under the default copyright laws. Therefor, it is not allowed to alter, sell or distribute this software without the permission of the author.";
 
+        [ObservableProperty]
+        public List<string>? developers;
+
+        [ObservableProperty]
+        public List<string>? supporters;
+
+        [ObservableProperty]
+        public List<string>? donators;
+
+        [ObservableProperty]
+        public List<string>? other;
+
         public AboutViewModel(ConfigurationService configurationService)
         { 
             _configurationService = configurationService;
+
+            Developers = new List<string>();
+            Supporters = new List<string>();
+            Donators = new List<string>();
+            PopulateLists();
         } 
+
+        private void PopulateLists()
+        {
+            Developers = _configurationService.Credits!.GetSection("developers").Get<List<string>>();
+            Supporters = _configurationService.Credits!.GetSection("supporters").Get<List<string>>();
+            Donators = _configurationService.Credits!.GetSection("donators").Get<List<string>>();
+            Other = _configurationService.Credits!.GetSection("other").Get<List<string>>();
+        }
     }
 }
