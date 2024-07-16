@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MW5_Mod_Organizer_WPF.Views"
         mc:Ignorable="d"
-        Title="About" Height="450" Width="800" Background="#D1C9C9">
+        Title="About" Height="450" Width="800" Background="#D1C9C9" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"/>
@@ -18,30 +18,31 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
 
-        <TabControl Grid.Row="1" Grid.Column="1">
-            <TabItem Header="About">
-                <Grid>
+        <TabControl Grid.Row="1" Grid.Column="1" Style="{DynamicResource TabControlStyle1}">
+            <TabItem Header="About" Style="{DynamicResource TabItemStyle}">
+                <Grid Margin="5 0 0 0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="3*"/>
-                        <RowDefinition Height="90"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="120"/>
                     </Grid.RowDefinitions>
-                    <StackPanel Orientation="Vertical" Grid.Row="0">
-                        <TextBlock Text="{Binding Title}"/>
-                        <TextBlock Text="{Binding Version}"/>
+                    
+                    <StackPanel Orientation="Vertical" Grid.Row="0" VerticalAlignment="Stretch">
+                        <TextBlock Text="{Binding Title}" FontSize="15" FontWeight="Bold" Margin="0 5 0 0"/>
+                        <TextBlock Text="{Binding Version}" VerticalAlignment="Bottom"/>
                     </StackPanel>
+                    
                     <StackPanel Orientation="Vertical" Grid.Row="1">
+                        <TextBlock Text="Copyright © Maxim Agemans" Margin="0 0 0 20"/>
                         <TextBlock Text="{Binding Distribution}" TextWrapping="Wrap"/>
-                        <TextBlock>
-                            <LineBreak/>
-                        </TextBlock>
-                        <TextBlock Text="{Binding Source}" TextWrapping="Wrap"/>
                     </StackPanel>
+                    
+                    <TextBlock Text="{Binding Source}" TextWrapping="Wrap" Margin="0 0 0 5" VerticalAlignment="Bottom" Grid.Row="1"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="License">
+            <TabItem Header="License" Style="{DynamicResource TabItemStyle}">
                 
             </TabItem>
-            <TabItem Header="Credits">
+            <TabItem Header="Credits" Style="{DynamicResource TabItemStyle}">
 
             </TabItem>
         </TabControl>
