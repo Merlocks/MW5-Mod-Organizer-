@@ -47,6 +47,7 @@
 	  <None Remove="gear-gif.gif" />
 	  <None Remove="Images\favicon.ico" />
 	  <None Remove="Images\gear-gif.gif" />
+	  <None Remove="Images\icon-ico.ico" />
 	  <None Remove="Images\logo.png" />
 	  <None Remove="Images\logo2.png" />
 	  <None Remove="Images\WarningIcon.png" />
@@ -60,6 +61,9 @@
 	  </EmbeddedResource>
 	  <EmbeddedResource Include="credits.json" />
 	  <EmbeddedResource Include="Images\gear-gif.gif" />
+	  <Resource Include="Images\icon-ico.ico">
+	    <CopyToOutputDirectory></CopyToOutputDirectory>
+	  </Resource>
 	  <EmbeddedResource Include="Images\logo2.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </EmbeddedResource>
