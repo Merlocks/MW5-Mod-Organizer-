@@ -47,45 +47,44 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Credits" Style="{DynamicResource TabItemStyle}">
-                <Grid Margin="5 5 0 0">
-                    <StackPanel Orientation="Horizontal">
-                        <Grid Margin="0 0 10 5">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <Label Content="Developers and Maintainers" Grid.Row="0" HorizontalAlignment="Center"/>
-                            <ListView x:Name="DevelopersListView" ItemsSource="{Binding Developers}" Grid.Row="1" Width="175"/>
-                        </Grid>
+                
+                <UniformGrid Margin="5" Rows="0" Columns="4">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Developers and Maintainers" Grid.Row="0" HorizontalAlignment="Center"/>
+                        <ListView x:Name="DevelopersListView" ItemsSource="{Binding Developers}" Grid.Row="1" Width="160"/>
+                    </Grid>
 
-                        <Grid Margin="0 0 10 5">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <Label Content="Supporters" Grid.Row="0" HorizontalAlignment="Center"/>
-                            <ListView x:Name="SupportListView" ItemsSource="{Binding Supporters}" Grid.Row="1" Width="150"/>
-                        </Grid>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Supporters" Grid.Row="0" HorizontalAlignment="Center"/>
+                        <ListView x:Name="SupportListView" ItemsSource="{Binding Supporters}" Grid.Row="1" Width="160"/>
+                    </Grid>
 
-                        <Grid Margin="0 0 10 5">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <Label Content="Donators" Grid.Row="0" HorizontalAlignment="Center"/>
-                            <ListView x:Name="DonatorListView" ItemsSource="{Binding Donators}" Grid.Row="1" Width="150"/>
-                        </Grid>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Donators" Grid.Row="0" HorizontalAlignment="Center"/>
+                        <ListView x:Name="DonatorListView" ItemsSource="{Binding Donators}" Grid.Row="1" Width="160"/>
+                    </Grid>
 
-                        <Grid Margin="0 0 10 5">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <Label Content="Other" Grid.Row="0" HorizontalAlignment="Center"/>
-                            <ListView x:Name="OtherListView" ItemsSource="{Binding Other}" Grid.Row="1" Width="150"/>
-                        </Grid>
-                    </StackPanel>
-                </Grid>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Other" Grid.Row="0" HorizontalAlignment="Center"/>
+                        <ListView x:Name="OtherListView" ItemsSource="{Binding Other}" Grid.Row="1" Width="160"/>
+                    </Grid>
+                </UniformGrid>
             </TabItem>
         </TabControl>
     </Grid>
