@@ -42,10 +42,10 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             Developers = new List<string>();
             Supporters = new List<string>();
             Donators = new List<string>();
-            PopulateLists();
+            PopulateCreditsLists();
         } 
 
-        private void PopulateLists()
+        private void PopulateCreditsLists()
         {
             Developers = _configurationService.Credits!.GetSection("developers").Get<List<string>>();
             Supporters = _configurationService.Credits!.GetSection("supporters").Get<List<string>>();
