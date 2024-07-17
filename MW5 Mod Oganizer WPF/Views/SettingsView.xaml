@@ -7,6 +7,21 @@
         mc:Ignorable="d"
         Title="Settings" Height="450" Width="800" FontSize="14" Background="#D1C9C9" WindowStartupLocation="CenterOwner">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="90"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Border Background="#E0D7D7" Grid.Column="0">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" Color="Black" ShadowDepth="5" Direction="270" Opacity="0.1"/>
+            </Border.Effect>
+        </Border>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+        </Grid>
     </Grid>
 </Window>
