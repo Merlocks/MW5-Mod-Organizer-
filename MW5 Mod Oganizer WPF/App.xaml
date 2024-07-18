@@ -26,6 +26,9 @@
                 <ResourceDictionary Source="Themes/DataGrid/ProfilesDataGridRowTheme.xaml"/>
                 <ResourceDictionary Source="Themes/TabControl/TabControlTheme.xaml"/>
                 <ResourceDictionary Source="Themes/TabControl/TabItemTheme.xaml"/>
+                <ResourceDictionary Source="Themes/RadioButton/SettingsRadioButton.xaml"/>
+                
+                <ResourceDictionary Source="Images/Icons/earth-americas-solid.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
