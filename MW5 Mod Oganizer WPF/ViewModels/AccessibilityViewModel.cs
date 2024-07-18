@@ -9,5 +9,17 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 {
     public sealed partial class AccessibilityViewModel : ObservableObject
     {
+        [ObservableProperty]
+        private bool bReceiveUpdate;
+
+        partial void OnBReceiveUpdateChanged(bool value)
+        {
+            Properties.Settings.Default.ReceiveUpdate = value;
+        }
+
+        public AccessibilityViewModel()
+        {
+            BReceiveUpdate = Properties.Settings.Default.ReceiveUpdate;
+        }
     }
 }
