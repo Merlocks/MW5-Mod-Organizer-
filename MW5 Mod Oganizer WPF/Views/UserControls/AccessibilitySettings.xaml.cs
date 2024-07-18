@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using MW5_Mod_Organizer_WPF.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,8 +22,12 @@ namespace MW5_Mod_Organizer_WPF.Views.UserControls
     /// </summary>
     public partial class AccessibilitySettings : UserControl
     {
+        private AccessibilityViewModel _viewModel => (AccessibilityViewModel)DataContext;
+
         public AccessibilitySettings()
         {
+            this.DataContext = App.Current.Services.GetService<AccessibilityViewModel>();
+            
             InitializeComponent();
         }
     }
