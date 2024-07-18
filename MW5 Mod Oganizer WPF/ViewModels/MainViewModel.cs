@@ -806,33 +806,36 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 this.IsModListLoaded = true; 
             }
 
-            // Create list of tasks and add task so it can start running in the background
-            List<Task> tasks = new List<Task> { Task.Run(() => _modService.CheckForAllConflictsAsync()) };
-
-            // Create task and add task to list of tasks so it can start running in the background
-            Task<string> taskRequestVersion = _httpRequestService.Main();
-            tasks.Add(taskRequestVersion);
-
-            // Await task before following code runs
-            await taskRequestVersion;
-
-            if (taskRequestVersion.Result != string.Empty)
+            if (Properties.Settings.Default.ReceiveUpdate)
             {
-                VersionDto? response = JsonSerializer.Deserialize<VersionDto>(taskRequestVersion.Result);
-                string localVersion = _configurationService.Config!.GetValue<string>("version")!;
+                // Create list of tasks and add task so it can start running in the background
+                List<Task> tasks = new List<Task> { Task.Run(() => _modService.CheckForAllConflictsAsync()) };
 
-                if (response != null && response.Version != localVersion)
+                // Create task and add task to list of tasks so it can start running in the background
+                Task<string> taskRequestVersion = _httpRequestService.Main();
+                tasks.Add(taskRequestVersion);
+
+                // Await task before following code runs
+                await taskRequestVersion;
+
+                if (taskRequestVersion.Result != string.Empty)
                 {
-                    this.IsUpdateAvailable = true;
+                    VersionDto? response = JsonSerializer.Deserialize<VersionDto>(taskRequestVersion.Result);
+                    string localVersion = _configurationService.Config!.GetValue<string>("version")!;
+
+                    if (response != null && response.Version != localVersion)
+                    {
+                        this.IsUpdateAvailable = true;
+                    }
+                    else
+                    {
+                        this.IsUpdateAvailable = false;
+                    }
                 }
-                else 
-                {
-                    this.IsUpdateAvailable = false;
-                }
+                // Await all started tasks before ending method
+                await Task.WhenAll(tasks);
+
             }
-
-            // Await all started tasks before ending method
-            await Task.WhenAll(tasks);
         }
 
         [RelayCommand]
