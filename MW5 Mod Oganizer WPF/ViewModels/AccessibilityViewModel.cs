@@ -15,6 +15,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         partial void OnBReceiveUpdateChanged(bool value)
         {
             Properties.Settings.Default.ReceiveUpdate = value;
+            Properties.Settings.Default.Save();
         }
 
         public AccessibilityViewModel()
