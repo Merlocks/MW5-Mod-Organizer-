@@ -6,10 +6,11 @@
         xmlns:local="clr-namespace:MW5_Mod_Organizer_WPF.Views"
         xmlns:userControls="clr-namespace:MW5_Mod_Organizer_WPF.Views.UserControls"
         mc:Ignorable="d"
-        Title="Settings" Height="450" Width="800" FontSize="14" Background="#D1C9C9" WindowStartupLocation="CenterOwner">
+        Title="Settings" Height="600
+        " Width="800" FontSize="14" Background="#D1C9C9" WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="90"/>
+            <ColumnDefinition Width="120"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Border Background="#E0D7D7" Grid.Column="0">

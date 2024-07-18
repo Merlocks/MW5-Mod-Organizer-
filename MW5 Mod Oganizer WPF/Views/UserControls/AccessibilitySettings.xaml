@@ -5,8 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MW5_Mod_Organizer_WPF.Views.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <TextBlock Text="AccessibilitySettings" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+             d:DesignHeight="450" d:DesignWidth="800" d:Background="Beige">
+    <Grid Margin="20">
+        <StackPanel>
+            <Label Content="Updates" Foreground="#484D54" FontSize="20" FontWeight="Bold"/>
+            <Separator Margin="0 0 0 10"/>
+            <RadioButton Content="Receive notification if update is available" Foreground="#484D54"/>
+        </StackPanel>
     </Grid>
 </UserControl>
