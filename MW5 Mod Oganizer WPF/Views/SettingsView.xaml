@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MW5_Mod_Organizer_WPF.Views"
+        xmlns:customControls="clr-namespace:MW5_Mod_Organizer_WPF.CustomControls"
         xmlns:userControls="clr-namespace:MW5_Mod_Organizer_WPF.Views.UserControls"
         mc:Ignorable="d"
         Title="Settings" Height="600
@@ -19,13 +20,8 @@
             </Border.Effect>
 
             <UniformGrid Columns="0" Rows="5">
-                <RadioButton x:Name="GeneralButton" Content="General" IsChecked="{Binding BGeneralSettings, UpdateSourceTrigger=PropertyChanged}" GroupName="group1"/>
-                <RadioButton x:Name="AccessibilityButton" Content="Accessibility" IsChecked="{Binding BAccessibilitySettings, UpdateSourceTrigger=PropertyChanged}" GroupName="group1"/>
-                <Image>
-                    <Image.Source>
-                        <DrawingImage Drawing="{StaticResource earth_americas_solid_xaml}"/>
-                    </Image.Source>
-                </Image>
+                <customControls:SettingsButton x:Name="GeneralButton"" Content="General" IsChecked="{Binding BGeneralSettings, UpdateSourceTrigger=PropertyChanged}" GroupName="group1"/>
+                <customControls:SettingsButton x:Name="AccessibilityButton" Content="Accessibility" IsChecked="{Binding BAccessibilitySettings, UpdateSourceTrigger=PropertyChanged}" GroupName="group1"/>
             </UniformGrid>
         </Border>
         
