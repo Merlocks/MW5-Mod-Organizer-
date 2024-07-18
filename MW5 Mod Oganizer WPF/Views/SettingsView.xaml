@@ -20,7 +20,7 @@
             </Border.Effect>
 
             <UniformGrid Columns="0" Rows="5">
-                <customControls:SettingsButton x:Name="GeneralButton"" Content="General" IsChecked="{Binding BGeneralSettings, UpdateSourceTrigger=PropertyChanged}" GroupName="group1"/>
+                <customControls:SettingsButton x:Name="GeneralButton" IsChecked="{Binding BGeneralSettings, UpdateSourceTrigger=PropertyChanged}" GroupName="group1"/>
                 <customControls:SettingsButton x:Name="AccessibilityButton" Content="Accessibility" IsChecked="{Binding BAccessibilitySettings, UpdateSourceTrigger=PropertyChanged}" GroupName="group1"/>
             </UniformGrid>
         </Border>
