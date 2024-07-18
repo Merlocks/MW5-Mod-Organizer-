@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MW5_Mod_Organizer_WPF.Views"
+        xmlns:userControls="clr-namespace:MW5_Mod_Organizer_WPF.Views.UserControls"
         mc:Ignorable="d"
         Title="Settings" Height="450" Width="800" FontSize="14" Background="#D1C9C9" WindowStartupLocation="CenterOwner">
     <Grid>
@@ -15,13 +16,42 @@
             <Border.Effect>
                 <DropShadowEffect BlurRadius="10" Color="Black" ShadowDepth="5" Direction="270" Opacity="0.1"/>
             </Border.Effect>
+
+            <UniformGrid Columns="0" Rows="5">
+                <Button x:Name="GeneralButton" Content="General"/>
+                <Button x:Name="AccessibilityButton" Content="Accessibility"/>
+            </UniformGrid>
         </Border>
+        
         <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="20"/>
-            </Grid.RowDefinitions>
+            <ContentControl>
+                <ContentControl.Content>
+                    <userControls:GeneralSettings/>
+                </ContentControl.Content>
+
+                <ContentControl.Style>
+                    <Style TargetType="ContentControl">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding bGeneralSettings}" Value="true">
+                                <Setter Property="Content">
+                                    <Setter.Value>
+                                        <userControls:GeneralSettings/>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding bAccessibilitySettings}" Value="true">
+                                <Setter Property="Content">
+                                    <Setter.Value>
+                                        <userControls:AccessibilitySettings/>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                        
+                    </Style>
+                    
+                </ContentControl.Style>
+            </ContentControl>
         </Grid>
     </Grid>
 </Window>
