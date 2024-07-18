@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using MW5_Mod_Organizer_WPF.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,10 +19,14 @@ namespace MW5_Mod_Organizer_WPF.Views
     /// <summary>
     /// Interaction logic for SettingsView.xaml
     /// </summary>
-    public partial class SettingsView : Window
+    public sealed partial class SettingsView : Window
     {
+        private SettingsViewModel _viewModel => (SettingsViewModel)DataContext;
+
         public SettingsView()
         {
+            this.DataContext = App.Current.Services.GetService<SettingsViewModel>();
+            
             InitializeComponent();
         }
     }

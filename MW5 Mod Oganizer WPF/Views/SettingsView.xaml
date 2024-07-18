@@ -18,28 +18,24 @@
             </Border.Effect>
 
             <UniformGrid Columns="0" Rows="5">
-                <Button x:Name="GeneralButton" Content="General"/>
-                <Button x:Name="AccessibilityButton" Content="Accessibility"/>
+                <RadioButton x:Name="GeneralButton" Content="General" IsChecked="{Binding BGeneralSettings, UpdateSourceTrigger=PropertyChanged}" GroupName="group1"/>
+                <RadioButton x:Name="AccessibilityButton" Content="Accessibility" IsChecked="{Binding BAccessibilitySettings, UpdateSourceTrigger=PropertyChanged}" GroupName="group1"/>
             </UniformGrid>
         </Border>
         
         <Grid Grid.Column="1">
             <ContentControl>
-                <ContentControl.Content>
-                    <userControls:GeneralSettings/>
-                </ContentControl.Content>
-
                 <ContentControl.Style>
                     <Style TargetType="ContentControl">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding bGeneralSettings}" Value="true">
+                            <DataTrigger Binding="{Binding BGeneralSettings}" Value="true">
                                 <Setter Property="Content">
                                     <Setter.Value>
                                         <userControls:GeneralSettings/>
                                     </Setter.Value>
                                 </Setter>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding bAccessibilitySettings}" Value="true">
+                            <DataTrigger Binding="{Binding BAccessibilitySettings}" Value="true">
                                 <Setter Property="Content">
                                     <Setter.Value>
                                         <userControls:AccessibilitySettings/>
@@ -47,7 +43,6 @@
                                 </Setter>
                             </DataTrigger>
                         </Style.Triggers>
-                        
                     </Style>
                     
                 </ContentControl.Style>
