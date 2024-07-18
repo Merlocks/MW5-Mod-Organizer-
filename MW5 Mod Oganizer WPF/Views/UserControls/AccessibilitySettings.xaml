@@ -10,7 +10,7 @@
         <StackPanel>
             <Label Content="Updates" Foreground="#484D54" FontSize="20" FontWeight="Bold"/>
             <Separator Margin="0 0 0 10"/>
-            <CheckBox Content="Receive notification if update is available" IsChecked="{Binding BReceiveUpdate}" Foreground="#484D54"/>
+            <CheckBox Content="Receive notification on application start if update is available" IsChecked="{Binding BReceiveUpdate}" Foreground="#484D54"/>
         </StackPanel>
     </Grid>
 </UserControl>
