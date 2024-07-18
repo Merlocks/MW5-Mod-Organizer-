@@ -16,7 +16,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
         partial void OnBGeneralSettingsChanged(bool value)
         {
-            Console.WriteLine($"General Settings status: {value}");
+            
         }
 
         [ObservableProperty]
@@ -24,13 +24,13 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
         partial void OnBAccessibilitySettingsChanged(bool value)
         {
-            Console.WriteLine($"Accessibility Settings status: {value}");
+            
         }
 
 
         public SettingsViewModel() 
         {
-            Console.WriteLine("Viewmodel created");
+            BAccessibilitySettings = true;
         }
 
         [RelayCommand]
