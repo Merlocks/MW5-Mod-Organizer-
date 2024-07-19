@@ -49,6 +49,18 @@ namespace MW5_Mod_Organizer_WPF.CustomControls
     {
 
 
+        public Visibility LineVisibility
+        {
+            get { return (Visibility)GetValue(LineVisibilityProperty); }
+            set { SetValue(LineVisibilityProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for LineVisibility.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty LineVisibilityProperty =
+            DependencyProperty.Register("LineVisibility", typeof(Visibility), typeof(SettingsButton), new PropertyMetadata(Visibility.Hidden));
+
+
+
         public PackIconMaterialKind Icon
         {
             get { return (PackIconMaterialKind)GetValue(IconProperty); }
@@ -59,14 +71,9 @@ namespace MW5_Mod_Organizer_WPF.CustomControls
         public static readonly DependencyProperty IconProperty =
             DependencyProperty.Register("Icon", typeof(PackIconMaterialKind), typeof(SettingsButton), new PropertyMetadata(null));
 
-
-
-
         static SettingsButton()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(SettingsButton), new FrameworkPropertyMetadata(typeof(SettingsButton)));
         }
-
-
     }
 }
