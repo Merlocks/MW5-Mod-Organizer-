@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using MW5_Mod_Organizer_WPF.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,8 +22,12 @@ namespace MW5_Mod_Organizer_WPF.Views.UserControls
     /// </summary>
     public partial class GeneralSettings : UserControl
     {
+        private GeneralViewModel _viewModel => (GeneralViewModel)DataContext;
+        
         public GeneralSettings()
         {
+            this.DataContext = App.Current.Services.GetService<GeneralViewModel>();
+            
             InitializeComponent();
         }
     }

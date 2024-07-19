@@ -72,6 +72,7 @@ namespace MW5_Mod_Organizer_WPF
             services.AddTransient<AboutViewModel>();
             services.AddTransient<SettingsViewModel>();
             services.AddTransient<AccessibilityViewModel>();
+            services.AddTransient<GeneralViewModel>();
 
             return services.BuildServiceProvider();
         }

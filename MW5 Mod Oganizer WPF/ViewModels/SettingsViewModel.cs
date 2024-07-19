@@ -30,7 +30,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
         public SettingsViewModel() 
         {
-            BAccessibilitySettings = true;
+            BGeneralSettings = true;
         }
 
         [RelayCommand]

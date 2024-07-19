@@ -6,7 +6,7 @@
         xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:MW5_Mod_Organizer_WPF.Views"
         mc:Ignorable="d"
-        Title="Export Profiles" Height="300" Width="450" FontSize="14" Background="#D1C9C9" WindowStartupLocation="CenterOwner">
+        Title="Export Profiles" Height="300" Width="450" FontSize="14" Background="#D1C9C9" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner">
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Loaded">
             <behaviors:InvokeCommandAction Command="{Binding WindowLoadedCommand}" PassEventArgsToCommand="True"/>

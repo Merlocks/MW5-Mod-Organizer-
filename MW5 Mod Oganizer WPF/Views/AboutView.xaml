@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MW5_Mod_Organizer_WPF.Views"
         mc:Ignorable="d"
-        Title="About" Height="450" Width="800" Background="#D1C9C9" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+        Title="About" Height="450" Width="800" Background="#D1C9C9" ResizeMode="NoResize" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"/>

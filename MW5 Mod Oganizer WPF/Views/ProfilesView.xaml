@@ -12,7 +12,7 @@
         Height="600" 
         Width="450"
         FontSize="14"
-        Background="#D1C9C9">
+        Background="#D1C9C9" WindowStyle="ToolWindow">
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Loaded">
             <behaviors:InvokeCommandAction Command="{Binding WindowLoadedCommand}" PassEventArgsToCommand="True"/>

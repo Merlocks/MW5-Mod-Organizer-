@@ -8,8 +8,8 @@
         xmlns:userControls="clr-namespace:MW5_Mod_Organizer_WPF.Views.UserControls"
         xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
         mc:Ignorable="d"
-        Title="" Height="600
-        " Width="800" FontSize="14" Background="#D1C9C9" WindowStartupLocation="CenterOwner">
+        Title="Options" Height="600
+        " Width="800" FontSize="14" Background="#D1C9C9" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"/>
