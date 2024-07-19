@@ -12,7 +12,7 @@
         " Width="800" FontSize="14" Background="#D1C9C9" WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Border Background="#E0D7D7" Grid.Column="0">
@@ -21,8 +21,8 @@
             </Border.Effect>
 
             <UniformGrid Columns="0" Rows="5">
-                <customControls:SettingsButton x:Name="GeneralButton" Icon="Cogs" Foreground="Green" IsChecked="{Binding BGeneralSettings, UpdateSourceTrigger=PropertyChanged}" GroupName="group1"/>
-                <customControls:SettingsButton x:Name="AccessibilityButton" Icon="CommentMultiple" Foreground="Red" IsChecked="{Binding BAccessibilitySettings, UpdateSourceTrigger=PropertyChanged}" GroupName="group1"/>
+                <customControls:SettingsButton Content="General" Icon="Cogs" IsChecked="{Binding BGeneralSettings, UpdateSourceTrigger=PropertyChanged}" GroupName="group1"/>
+                <customControls:SettingsButton Content="Accessibility" Icon="CommentMultiple" IsChecked="{Binding BAccessibilitySettings, UpdateSourceTrigger=PropertyChanged}" GroupName="group1"/>
             </UniformGrid>
         </Border>
         

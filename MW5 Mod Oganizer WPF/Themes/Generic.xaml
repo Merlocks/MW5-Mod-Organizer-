@@ -3,20 +3,35 @@
                     xmlns:customControls="clr-namespace:MW5_Mod_Organizer_WPF.CustomControls"
                     xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks">
     <Style TargetType="{x:Type customControls:SettingsButton}">
+        <Setter Property="Foreground" Value="#484D54"/>
+        <Setter Property="Content" Value="Sample"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type customControls:SettingsButton}">
-                    <Grid>
-                        <icon:PackIconMaterial Kind="{Binding Icon, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type customControls:SettingsButton}}}" Style="{DynamicResource settingsButtonIcon}"/>
+                    <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="60"/>
+                            <RowDefinition Height="20"/>
+                        </Grid.RowDefinitions>
+                        <Border Background="Transparent" Grid.Row="0">
+                            <icon:PackIconMaterial Kind="{Binding Icon, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type customControls:SettingsButton}}}" Style="{DynamicResource settingsButtonIcon}"/>
+                        </Border>
+                        <TextBlock Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" Grid.Row="1"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="#ED552F"/>
+                <Setter Property="Cursor" Value="Hand"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="settingsButtonIcon" TargetType="icon:PackIconMaterial">
-        <Setter Property="Width" Value="50"/>
-        <Setter Property="Height" Value="50"/>
+        <Setter Property="Width" Value="30"/>
+        <Setter Property="Height" Value="30"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type customControls:SettingsButton}}}"/>
