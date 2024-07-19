@@ -5,11 +5,13 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type customControls:SettingsButton}">
-                    <Image>
-                        <Image.Source>
-                            <DrawingImage Drawing="{DynamicResource earth_americas_solid}"/>
-                        </Image.Source>
-                    </Image>
+                    <Grid>
+                        <Image Width="50">
+                            <Image.Source>
+                                <DrawingImage Drawing="{Binding DrawingGroup, RelativeSource={RelativeSource AncestorType={x:Type customControls:SettingsButton}}}"/>
+                            </Image.Source>
+                        </Image>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

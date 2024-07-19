@@ -47,9 +47,24 @@ namespace MW5_Mod_Organizer_WPF.CustomControls
     public class SettingsButton : RadioButton
     {
 
+
+        public DrawingGroup DrawingGroup
+        {
+            get { return (DrawingGroup)GetValue(DrawingGroupProperty); }
+            set { SetValue(DrawingGroupProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for DrawingGroup.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DrawingGroupProperty =
+            DependencyProperty.Register("DrawingGroup", typeof(DrawingGroup), typeof(SettingsButton), new PropertyMetadata(null));
+
+
+
         static SettingsButton()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(SettingsButton), new FrameworkPropertyMetadata(typeof(SettingsButton)));
         }
+
+
     }
 }
