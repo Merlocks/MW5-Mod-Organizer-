@@ -30,6 +30,7 @@
                 <ResourceDictionary Source="Themes/RadioButton/SettingsRadioButton.xaml"/>
                 
                 <ResourceDictionary Source="Images/Icons/earth-americas-solid.xaml"/>
+                <ResourceDictionary Source="Images/Icons/test.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

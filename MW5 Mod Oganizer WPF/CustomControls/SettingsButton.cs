@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MahApps.Metro.IconPacks;
 
 namespace MW5_Mod_Organizer_WPF.CustomControls
 {
@@ -48,15 +49,16 @@ namespace MW5_Mod_Organizer_WPF.CustomControls
     {
 
 
-        public DrawingGroup DrawingGroup
+        public PackIconMaterialKind Icon
         {
-            get { return (DrawingGroup)GetValue(DrawingGroupProperty); }
-            set { SetValue(DrawingGroupProperty, value); }
+            get { return (PackIconMaterialKind)GetValue(IconProperty); }
+            set { SetValue(IconProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for DrawingGroup.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty DrawingGroupProperty =
-            DependencyProperty.Register("DrawingGroup", typeof(DrawingGroup), typeof(SettingsButton), new PropertyMetadata(null));
+        // Using a DependencyProperty as the backing store for Icon.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IconProperty =
+            DependencyProperty.Register("Icon", typeof(PackIconMaterialKind), typeof(SettingsButton), new PropertyMetadata(null));
+
 
 
 
