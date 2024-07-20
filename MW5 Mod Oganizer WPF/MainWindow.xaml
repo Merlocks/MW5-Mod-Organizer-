@@ -44,17 +44,6 @@
             <ContentControl Style="{StaticResource DeploymentReminder}"/>
             <StackPanel Margin="10, 10, 0, 0"
                         Orientation="Horizontal">
-                <TextBox x:Name="TextBoxGameVersion"
-                         Text="{Binding GameVersion, UpdateSourceTrigger=PropertyChanged}"
-                         Height="25"
-                         VerticalContentAlignment="Center"
-                         HorizontalAlignment="Left"
-                         VerticalAlignment="Center"
-                         Style="{StaticResource TextBoxGameVersionTheme}">
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="Sets the game version of your mods. Should be set as the same version your game is running at."/>
-                    </ToolTipService.ToolTip>
-                </TextBox>
                 <Button Style="{StaticResource ArrowUpTheme}" 
                         Command="{Binding ArrowUpCommand}">
                     <ToolTipService.ToolTip>
