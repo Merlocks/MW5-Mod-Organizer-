@@ -77,7 +77,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(
             nameof(AddModCommand),
-            nameof(OpenSecondaryFolderPathCommand),
             nameof(ArrowDownCommand),
             nameof(ArrowUpCommand),
             nameof(DeployCommand),
@@ -86,34 +85,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             nameof(ResetToDefaultCommand))]
         private string? primaryFolderPath;
 
-        partial void OnPrimaryFolderPathChanging(string? value)
-        {
-            Properties.Settings.Default.Path = value;
-            Properties.Settings.Default.Save();
-        }
-
         [ObservableProperty]
         private string? secondaryFolderPath;
-
-        partial void OnSecondaryFolderPathChanging(string? value)
-        {
-            Properties.Settings.Default.SecondaryPath = value;
-            Properties.Settings.Default.Save();
-        }
-
-        //[ObservableProperty]
-        //private string? gameVersion;
-
-        //partial void OnGameVersionChanging(string? value)
-        //{
-        //    Properties.Settings.Default.GameVersion = value;
-        //    Properties.Settings.Default.Save();
-
-        //    if (!string.IsNullOrEmpty(PrimaryFolderPath))
-        //    {
-        //        DeploymentNecessary = true;
-        //    }
-        //}
 
         [ObservableProperty]
         private bool deploymentNecessary;
@@ -281,78 +254,6 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             window.ShowDialog();
         }
 
-        [RelayCommand]
-        public async Task OpenPrimaryFolderPath()
-        {
-            var dialog = new FolderBrowserDialog();
-            DialogResult result = dialog.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                if (dialog.SelectedPath != SecondaryFolderPath)
-                {
-                    PrimaryFolderPath = dialog.SelectedPath;
-
-                    //Retrieve mods
-                    _modService.GetMods();
-
-                    this.IsModListLoaded = true;
-
-                    await _modService.CheckForAllConflictsAsync();
-                }
-                else if (dialog.SelectedPath == SecondaryFolderPath)
-                {
-                    string message = "Primary folder path can not be the same as secondary folder path.";
-                    string caption = "Reminder";
-                    MessageBoxButtons buttons = MessageBoxButtons.OK;
-                    MessageBoxIcon icon = MessageBoxIcon.Error;
-
-                    System.Windows.Forms.MessageBox.Show(message, caption, buttons, icon);
-                }
-            }
-        }
-
-        [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
-        public async Task OpenSecondaryFolderPath()
-        {
-            if (!string.IsNullOrEmpty(PrimaryFolderPath) && PrimaryFolderPath != SecondaryFolderPath)
-            {
-                var dialog = new FolderBrowserDialog();
-                DialogResult result = dialog.ShowDialog();
-                if (result == DialogResult.OK)
-                {
-                    if (dialog.SelectedPath != PrimaryFolderPath)
-                    {
-                        SecondaryFolderPath = dialog.SelectedPath;
-
-                        //Retrieve mods
-                        _modService.GetMods();
-
-                        this.IsModListLoaded = true;
-
-                        await _modService.CheckForAllConflictsAsync();
-                    }
-                    else if (dialog.SelectedPath == PrimaryFolderPath)
-                    {
-                        string message = "Secondary folder path can not be the same as primary folder path.";
-                        string caption = "Reminder";
-                        MessageBoxButtons buttons = MessageBoxButtons.OK;
-                        MessageBoxIcon icon = MessageBoxIcon.Error;
-
-                        System.Windows.Forms.MessageBox.Show(message, caption, buttons, icon);
-                    }
-                }
-            }
-            else
-            {
-                string message = "You need to open a primary mod folder first.";
-                string caption = "Reminder";
-                MessageBoxButtons buttons = MessageBoxButtons.OK;
-                MessageBoxIcon icon = MessageBoxIcon.Error;
-
-                System.Windows.Forms.MessageBox.Show(message, caption, buttons, icon);
-            }
-        }
-
         [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
         public void ArrowDown()
         {
@@ -504,8 +405,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
         public void Clear()
         {
-            PrimaryFolderPath = string.Empty;
-            SecondaryFolderPath = string.Empty;
+            Properties.Settings.Default.Path = string.Empty;
+            Properties.Settings.Default.SecondaryPath = string.Empty;
 
             _modService.ClearTempList();
             this.ModVMCollection.Clear();

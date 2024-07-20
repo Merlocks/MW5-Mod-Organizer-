@@ -15,6 +15,24 @@
                     <ToolTip Content="Sets the game version of your mods. Should be set as the same version your game is running at."/>
                 </ToolTipService.ToolTip>
             </TextBox>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0 15 0 0">
+                <TextBox x:Name="TextBoxFileExplorer" Text="{Binding PrimaryFolderPath, UpdateSourceTrigger=PropertyChanged}" Width="500" Height="25" VerticalContentAlignment="Center" HorizontalAlignment="Left" IsReadOnly="True" Style="{StaticResource TextBoxPrimaryPathTheme}"/>
+                <Button x:Name="ButtonOpenFolder" Content="Open primary folder" Height="25" VerticalAlignment="Center" Margin="10 0 0 0" FontSize="14" FontWeight="Normal" Style="{StaticResource StandaloneButtonTheme}" Cursor="Hand" Command="{Binding OpenPrimaryFolderPathCommand}">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Opens all your mods from selected folder in the application. This should be your main mod folder."/>
+                    </ToolTipService.ToolTip>
+                </Button>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0 15 0 0">
+                <TextBox x:Name="TextBoxSecondaryFileExplorer" Text="{Binding SecondaryFolderPath, UpdateSourceTrigger=PropertyChanged}" Width="400" Height="25" VerticalContentAlignment="Center" IsReadOnly="True" Style="{StaticResource TextBoxSecondaryPathTheme}"/>
+                <Button x:Name="ButtonOpenSecondaryFolder" Content="Open secondary folder" Height="25" VerticalAlignment="Center" Margin="10, 0, 0, 0" FontSize="14" FontWeight="Normal" Style="{StaticResource StandaloneButtonTheme}" Cursor="Hand" Command="{Binding OpenSecondaryFolderPathCommand}">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Opens all your mods from selected folder in the application. This should be your workshop/epic mod folder."/>
+                    </ToolTipService.ToolTip>
+                </Button>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </UserControl>
