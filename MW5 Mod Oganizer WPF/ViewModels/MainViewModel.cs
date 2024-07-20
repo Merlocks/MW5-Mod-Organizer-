@@ -46,6 +46,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         public string ModCount => ModVMCollection.Count().ToString();
         public string ModCountActive => ModVMCollection.Where(m => m.IsEnabled).Count().ToString();
         public string SelectedModsCount => ModVMCollection.Where(m => m.IsSelected).Count().ToString();
+        public string GameVersion => Properties.Settings.Default.GameVersion;
 
         /// <summary>
         /// Properties
@@ -100,19 +101,19 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             Properties.Settings.Default.Save();
         }
 
-        [ObservableProperty]
-        private string? gameVersion;
+        //[ObservableProperty]
+        //private string? gameVersion;
 
-        partial void OnGameVersionChanging(string? value)
-        {
-            Properties.Settings.Default.GameVersion = value;
-            Properties.Settings.Default.Save();
+        //partial void OnGameVersionChanging(string? value)
+        //{
+        //    Properties.Settings.Default.GameVersion = value;
+        //    Properties.Settings.Default.Save();
 
-            if (!string.IsNullOrEmpty(PrimaryFolderPath))
-            {
-                DeploymentNecessary = true;
-            }
-        }
+        //    if (!string.IsNullOrEmpty(PrimaryFolderPath))
+        //    {
+        //        DeploymentNecessary = true;
+        //    }
+        //}
 
         [ObservableProperty]
         private bool deploymentNecessary;
@@ -182,7 +183,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             this.OverwritesCollection = new ObservableCollection<ModViewModel>();
             this.ConflictsCollection = new ObservableCollection<string>();
 
-            this.GameVersion = Properties.Settings.Default.GameVersion;
+            //this.GameVersion = Properties.Settings.Default.GameVersion;
             this.PrimaryFolderPath = Properties.Settings.Default.Path;
             this.SecondaryFolderPath = Properties.Settings.Default.SecondaryPath;
             this.CurrentProfile = Properties.Settings.Default.CurrentProfile;
