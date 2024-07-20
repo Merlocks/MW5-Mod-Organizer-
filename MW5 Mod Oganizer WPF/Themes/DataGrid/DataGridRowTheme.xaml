@@ -82,6 +82,9 @@
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Background" Value="#B6DFF2"/>
             </Trigger>
+            <DataTrigger Binding="{Binding IsEnabled}" Value="False">
+                <Setter Property="Foreground" Value="#C4C4C4"/>
+            </DataTrigger>
         </Style.Triggers>
     </Style>
 </ResourceDictionary>
