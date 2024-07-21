@@ -47,6 +47,7 @@
 
     <Style TargetType="{x:Type customControls:TextBoxControl}">
         <Setter Property="Height" Value="25"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type customControls:TextBoxControl}">
@@ -54,9 +55,9 @@
                         <Grid>
                             <Rectangle StrokeThickness="1"/>
 
-                            <TextBox x:Name="FilePathBox" Text="{Binding Text, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type customControls:TextBoxControl}}}" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" FontSize="12" Foreground="#FF6F6F6F" Margin="10 0 0 0"/>
+                            <TextBox x:Name="FilePathBox" Text="{Binding Text, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type customControls:TextBoxControl}}}" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" FontSize="{TemplateBinding FontSize}" Foreground="#FF6F6F6F" Margin="10 0 0 0"/>
 
-                            <TextBlock Text="{Binding PlaceholderText, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type customControls:TextBoxControl}}}" IsHitTestVisible="False" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10 0 0 0" FontSize="12" Foreground="#FFA2A2A2">
+                            <TextBlock Text="{Binding PlaceholderText, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type customControls:TextBoxControl}}}" IsHitTestVisible="False" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10 0 0 0" FontSize="{TemplateBinding FontSize}" Foreground="#FFA2A2A2">
 
                                 <TextBlock.Style>
                                     <Style TargetType="{x:Type TextBlock}">

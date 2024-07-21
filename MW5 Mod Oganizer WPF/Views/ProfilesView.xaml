@@ -76,19 +76,15 @@
             </Grid>
             <Grid Grid.Row="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="10"/>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
-                <customControls:TextBoxControl Text="{Binding TextBoxContent, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Give your profile a name" Height="35" Grid.Row="1"/>
+                <customControls:TextBoxControl Text="{Binding TextBoxContent, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Give your profile a name.." FontSize="15" Height="35" Grid.Row="1"/>
 
-                <TextBlock Text="*Maximum 45 characters"
-                           Foreground="#484D54"
-                           FontSize="11"
-                           Grid.Row="2"
-                           VerticalAlignment="Top"/>
+                <TextBlock Text="*Maximum 45 characters" Foreground="#484D54" FontSize="11" Grid.Row="2" VerticalAlignment="Top" Margin="10 0 0 0"/>
                 <Button Content="Create new profile"
                         Style="{StaticResource ButtonAddModTheme}"
                         Height="30"
