@@ -4,35 +4,51 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MW5_Mod_Organizer_WPF.Views.UserControls"
+             xmlns:customControls="clr-namespace:MW5_Mod_Organizer_WPF.CustomControls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" d:Background="Beige">
+             d:DesignHeight="450" d:DesignWidth="600" d:Background="Beige">
     <Grid Margin="20">
         <StackPanel>
             <Label Content="Game info" Foreground="#484D54" FontSize="20" FontWeight="Bold"/>
+
             <Separator Margin="0 0 0 10"/>
-            <TextBox Text="{Binding GameVersion, UpdateSourceTrigger=PropertyChanged}" Height="25" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource TextBoxGameVersionTheme}">
+
+            <customControls:TextBoxControl Text="{Binding GameVersion, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Game version" Width="100" HorizontalAlignment="Left">
+
                 <ToolTipService.ToolTip>
                     <ToolTip Content="Sets the game version of your mods. Should be set as the same version your game is running at."/>
                 </ToolTipService.ToolTip>
-            </TextBox>
+                
+            </customControls:TextBoxControl>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0 15 0 0">
-                <TextBox x:Name="TextBoxFileExplorer" Text="{Binding PrimaryFolderPath, UpdateSourceTrigger=PropertyChanged}" Width="500" Height="25" VerticalContentAlignment="Center" HorizontalAlignment="Left" IsReadOnly="True" Style="{StaticResource TextBoxPrimaryPathTheme}"/>
+                
+                <customControls:TextBoxControl x:Name="TextBoxFileExplorer" Text="{Binding PrimaryFolderPath, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Game mods folder e.g. '..\MW5MERCS\Mods'" IsReadOnly="True" Width="auto" MinWidth="100"/>
+                
                 <Button x:Name="ButtonOpenFolder" Content="Open primary folder" Height="25" VerticalAlignment="Center" Margin="10 0 0 0" FontSize="14" FontWeight="Normal" Style="{StaticResource StandaloneButtonTheme}" Cursor="Hand" Command="{Binding OpenPrimaryFolderPathCommand}">
+                    
                     <ToolTipService.ToolTip>
                         <ToolTip Content="Opens all your mods from selected folder in the application. This should be your main mod folder."/>
                     </ToolTipService.ToolTip>
+                    
                 </Button>
+                
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0 15 0 0">
-                <TextBox x:Name="TextBoxSecondaryFileExplorer" Text="{Binding SecondaryFolderPath, UpdateSourceTrigger=PropertyChanged}" Width="400" Height="25" VerticalContentAlignment="Center" IsReadOnly="True" Style="{StaticResource TextBoxSecondaryPathTheme}"/>
+
+                <customControls:TextBoxControl x:Name="TextBoxSecondaryFileExplorer" Text="{Binding SecondaryFolderPath, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Workshop folder e.g. '..\steamapps\workshop\content\784080'" IsReadOnly="True"/>
+
                 <Button x:Name="ButtonOpenSecondaryFolder" Content="Open secondary folder" Height="25" VerticalAlignment="Center" Margin="10, 0, 0, 0" FontSize="14" FontWeight="Normal" Style="{StaticResource StandaloneButtonTheme}" Cursor="Hand" Command="{Binding OpenSecondaryFolderPathCommand}">
+                    
                     <ToolTipService.ToolTip>
                         <ToolTip Content="Opens all your mods from selected folder in the application. This should be your workshop/epic mod folder."/>
                     </ToolTipService.ToolTip>
+                    
                 </Button>
+                
             </StackPanel>
+            
         </StackPanel>
     </Grid>
 </UserControl>
