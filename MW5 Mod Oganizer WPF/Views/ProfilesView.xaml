@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:MW5_Mod_Organizer_WPF.Views"
+        xmlns:customControls="clr-namespace:MW5_Mod_Organizer_WPF.CustomControls"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
         UseLayoutRounding="True"
@@ -76,24 +77,18 @@
             <Grid Grid.Row="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <Border Grid.Row="0" Background="#FFC1C1C1" BorderBrush="#FFADADAD" BorderThickness="0 0 3 4">
-                    <TextBlock Text="Give your profile a name" TextOptions.TextFormattingMode="Display" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#484D54" Margin="0 5 0 0"/>
-                </Border>
-                <TextBox Text="{Binding TextBoxContent, UpdateSourceTrigger=PropertyChanged}" 
-                         TextWrapping="Wrap"
-                         Grid.Row="1"
-                         VerticalAlignment="Stretch"
-                         VerticalContentAlignment="Center"
-                         Background="#f7f5f2"/>
+
+                <customControls:TextBoxControl Text="{Binding TextBoxContent, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Give your profile a name" Height="35" Grid.Row="1"/>
+
                 <TextBlock Text="*Maximum 45 characters"
                            Foreground="#484D54"
                            FontSize="11"
                            Grid.Row="2"
-                           VerticalAlignment="Bottom"/>
+                           VerticalAlignment="Top"/>
                 <Button Content="Create new profile"
                         Style="{StaticResource ButtonAddModTheme}"
                         Height="30"

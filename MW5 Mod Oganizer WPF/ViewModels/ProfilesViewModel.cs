@@ -30,6 +30,11 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [ObservableProperty]
         private string? textBoxContent;
 
+        partial void OnTextBoxContentChanging(string? value)
+        {
+            
+        }
+
         public ProfilesViewModel(ProfilesService profilesService)
         {
             this.profilesService = profilesService;

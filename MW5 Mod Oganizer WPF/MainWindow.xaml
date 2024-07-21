@@ -547,7 +547,7 @@
                         
                     </MenuItem>
                     <Separator/>
-                    <MenuItem Header="Settings" FontSize="12" Cursor="Hand" Command="{Binding OpenSettingsCommand}"/>
+                    <MenuItem Header="Options" FontSize="12" Cursor="Hand" Command="{Binding OpenSettingsCommand}"/>
                 </MenuItem>
             </Menu>
             <Menu VerticalAlignment="Center"
