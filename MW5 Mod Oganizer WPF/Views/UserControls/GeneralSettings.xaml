@@ -21,11 +21,16 @@
                 
             </customControls:TextBoxControl>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0 15 0 0">
+            <Grid Margin="0 15 0 0">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
                 
-                <customControls:TextBoxControl x:Name="TextBoxFileExplorer" Text="{Binding PrimaryFolderPath, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Game mods folder e.g. '..\MW5MERCS\Mods'" IsReadOnly="True" Width="auto" MinWidth="100"/>
+                <customControls:TextBoxControl x:Name="TextBoxFileExplorer" Text="{Binding PrimaryFolderPath, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Game mods folder e.g. '..\MW5MERCS\Mods'" IsReadOnly="True" Width="auto" MinWidth="100" Grid.Column="0"/>
                 
-                <Button x:Name="ButtonOpenFolder" Content="Open primary folder" Height="25" VerticalAlignment="Center" Margin="10 0 0 0" FontSize="14" FontWeight="Normal" Style="{StaticResource StandaloneButtonTheme}" Cursor="Hand" Command="{Binding OpenPrimaryFolderPathCommand}">
+                <Button x:Name="ButtonOpenFolder" Content="Open primary folder" Height="25" VerticalAlignment="Center" Margin="10 0 0 0" FontSize="14" FontWeight="Normal" Style="{StaticResource StandaloneButtonTheme}" Cursor="Hand" Command="{Binding OpenPrimaryFolderPathCommand}" Grid.Column="1">
                     
                     <ToolTipService.ToolTip>
                         <ToolTip Content="Opens all your mods from selected folder in the application. This should be your main mod folder."/>
@@ -33,13 +38,18 @@
                     
                 </Button>
                 
-            </StackPanel>
+            </Grid>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0 15 0 0">
+            <Grid Margin="0 15 0 0">
 
-                <customControls:TextBoxControl x:Name="TextBoxSecondaryFileExplorer" Text="{Binding SecondaryFolderPath, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Workshop folder e.g. '..\steamapps\workshop\content\784080'" IsReadOnly="True"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
 
-                <Button x:Name="ButtonOpenSecondaryFolder" Content="Open secondary folder" Height="25" VerticalAlignment="Center" Margin="10, 0, 0, 0" FontSize="14" FontWeight="Normal" Style="{StaticResource StandaloneButtonTheme}" Cursor="Hand" Command="{Binding OpenSecondaryFolderPathCommand}">
+                <customControls:TextBoxControl x:Name="TextBoxSecondaryFileExplorer" Text="{Binding SecondaryFolderPath, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Workshop folder e.g. '..\steamapps\workshop\content\784080'" IsReadOnly="True" Grid.Column="0"/>
+
+                <Button x:Name="ButtonOpenSecondaryFolder" Content="Open secondary folder" Height="25" VerticalAlignment="Center" Margin="10, 0, 0, 0" FontSize="14" FontWeight="Normal" Style="{StaticResource StandaloneButtonTheme}" Cursor="Hand" Command="{Binding OpenSecondaryFolderPathCommand}" Grid.Column="1">
                     
                     <ToolTipService.ToolTip>
                         <ToolTip Content="Opens all your mods from selected folder in the application. This should be your workshop/epic mod folder."/>
@@ -47,7 +57,7 @@
                     
                 </Button>
                 
-            </StackPanel>
+            </Grid>
             
         </StackPanel>
     </Grid>
