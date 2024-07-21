@@ -7,9 +7,6 @@
                 <ResourceDictionary Source="Themes/Generic.xaml"/>
                 <ResourceDictionary Source="Themes/Button/ButtonMenuTheme.xaml"/>
                 <ResourceDictionary Source="Themes/Button/ButtonStandaloneTheme.xaml"/>
-                <ResourceDictionary Source="Themes/TextBox/TextBoxPrimaryPathTheme.xaml"/>
-                <ResourceDictionary Source="Themes/TextBox/TextBoxSecondaryPathTheme.xaml"/>
-                <ResourceDictionary Source="Themes/TextBox/TextBoxGameVersionTheme.xaml"/>
                 <ResourceDictionary Source="Themes/Button/ButtonToolbarTheme.xaml"/>
                 <ResourceDictionary Source="Themes/DataGrid/DataGridRowTheme.xaml"/>
                 <ResourceDictionary Source="Themes/DataGrid/DataGridConflictRowTheme.xaml"/>
