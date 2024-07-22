@@ -910,6 +910,12 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
             }
         }
 
+        [RelayCommand]
+        public void ClearSearchBox()
+        {
+            this.SearchBoxContent = string.Empty;
+        }
+
         /// <summary>
         /// Methods and events
         /// </summary>

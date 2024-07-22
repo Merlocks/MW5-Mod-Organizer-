@@ -46,8 +46,6 @@ namespace MW5_Mod_Organizer_WPF.CustomControls
     /// </summary>
     public class TextBoxControl : TextBox
     {
-
-
         public string PlaceholderText
         {
             get { return (string)GetValue(PlaceholderTextProperty); }
@@ -57,8 +55,6 @@ namespace MW5_Mod_Organizer_WPF.CustomControls
         // Using a DependencyProperty as the backing store for PlaceholderText.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty PlaceholderTextProperty =
             DependencyProperty.Register("PlaceholderText", typeof(string), typeof(TextBoxControl), new PropertyMetadata(""));
-
-
 
         static TextBoxControl()
         {

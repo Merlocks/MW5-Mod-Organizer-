@@ -94,7 +94,14 @@
                     </ToolTipService.ToolTip>
                 </Button>
 
-                <customControls:TextBoxControl Text="{Binding SearchBoxContent, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Search" Width="200" Margin="10 0 0 0"/>
+                <customControls:TextBoxControl Text="{Binding SearchBoxContent, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Search" Width="200" Margin="10 0 0 0">
+
+                    <behaviors:Interaction.Triggers>
+                        <behaviors:EventTrigger EventName="PreviewMouseRightButtonDown">
+                            <behaviors:InvokeCommandAction Command="{Binding ClearSearchBoxCommand}"/>
+                        </behaviors:EventTrigger>
+                    </behaviors:Interaction.Triggers>
+                </customControls:TextBoxControl>
             </StackPanel>
         </StackPanel>
 
