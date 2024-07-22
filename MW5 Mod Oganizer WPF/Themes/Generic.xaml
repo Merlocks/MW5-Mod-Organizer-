@@ -55,7 +55,7 @@
                         <Grid>
                             <Rectangle StrokeThickness="1"/>
 
-                            <TextBox x:Name="FilePathBox" Text="{Binding Text, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type customControls:TextBoxControl}}}" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" FontSize="{TemplateBinding FontSize}" Foreground="#FF6F6F6F" Margin="10 0 0 0"/>
+                            <TextBox x:Name="FilePathBox" Text="{Binding Text, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type customControls:TextBoxControl}}, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" FontSize="{TemplateBinding FontSize}" Foreground="#FF6F6F6F" Margin="10 0 0 0"/>
 
                             <TextBlock Text="{Binding PlaceholderText, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type customControls:TextBoxControl}}}" IsHitTestVisible="False" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10 0 0 0" FontSize="{TemplateBinding FontSize}" Foreground="#FFA2A2A2">
 

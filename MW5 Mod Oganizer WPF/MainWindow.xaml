@@ -6,6 +6,7 @@
         xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
         xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
+        xmlns:customControls="clr-namespace:MW5_Mod_Organizer_WPF.CustomControls"
         mc:Ignorable="d" 
         FontSize="14"
         Title="{Binding Title}" 
@@ -17,7 +18,7 @@
         SizeChanged="Window_SizeChanged">
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Loaded">
-            <behaviors:InvokeCommandAction Command="{Binding LoadedCommand}"/>
+            <behaviors:InvokeCommandAction Command="{Binding LoadedCommand}" CommandParameter="{x:Reference ModList}"/>
         </behaviors:EventTrigger>
     </behaviors:Interaction.Triggers>
     <Grid>
@@ -92,6 +93,8 @@
                         <ToolTip Content="Resets the selected mods to their default state."/>
                     </ToolTipService.ToolTip>
                 </Button>
+
+                <customControls:TextBoxControl Text="{Binding SearchBoxContent, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Search" Width="200" Margin="10 0 0 0"/>
             </StackPanel>
         </StackPanel>
 
@@ -508,8 +511,7 @@
                                             Style="{StaticResource ButtonAddModTheme}"
                                             Height="30"
                                             Margin="5 0"
-                                            Command="{Binding AddModCommand}"
-                                            CommandParameter="{x:Reference Name=ModList}">
+                                            Command="{Binding AddModCommand}">
                                         <ToolTipService.ToolTip>
                                             <ToolTip Content="Adds mod to your mod folder and application. Accepts *.zip, *.rar and *.7z"/>
                                         </ToolTipService.ToolTip>

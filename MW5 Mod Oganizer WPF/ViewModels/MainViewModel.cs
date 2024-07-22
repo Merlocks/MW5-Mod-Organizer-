@@ -140,6 +140,30 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [NotifyCanExecuteChangedFor(nameof(ResetToDefaultCommand))]
         private bool isAnySelected;
 
+        [ObservableProperty]
+        private DataGrid? dataGrid;
+
+        [ObservableProperty]
+        private string? searchBoxContent;
+
+        partial void OnSearchBoxContentChanging(string? value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                DeselectMods();
+                return;
+            }
+
+            ModViewModel? mod = this.ModVMCollection.FirstOrDefault(x => x.DisplayName!.IndexOf(value, StringComparison.OrdinalIgnoreCase) >= 0);
+
+            if (mod == null)
+                return;
+
+            this.DataGrid!.ScrollIntoView(mod);
+            SelectSingleMod(mod);
+
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -473,7 +497,7 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteCommands))]
-        public async Task AddModAsync(object datagrid)
+        public async Task AddModAsync()
         {
             try
             {
@@ -655,12 +679,8 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                                     _modService.AddMod(modVM);
 
                                     // Select added mod and auto scroll into view
-                                    modVM.IsSelected = true;
-
-                                    DataGrid? dg = datagrid as DataGrid;
-
-                                    if (dg != null)
-                                        dg.ScrollIntoView(modVM);
+                                    SelectSingleMod(modVM);
+                                    this.DataGrid!.ScrollIntoView(modVM);
                                 }
                             }
                         });
@@ -698,8 +718,14 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         }
 
         [RelayCommand]
-        public async Task LoadedAsync()
+        public async Task LoadedAsync(object datagrid)
         {
+            if (datagrid != null)
+            {
+                DataGrid? dg = datagrid as DataGrid;
+                this.DataGrid = dg;
+            }
+            
             // Load all mods into memory when Window is loaded
             _modService.GetMods();
 
@@ -911,6 +937,33 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
             OnPropertyChanged(nameof(this.ModCount));
             OnPropertyChanged(nameof(this.ModCountActive));
+        }
+
+        private void DeselectMods()
+        {
+            foreach (var item in ModVMCollection)
+            {
+                item.IsSelected = false;
+            }
+        }
+
+        private void SelectSingleMod(ModViewModel? mod)
+        {
+            try
+            {
+                if (mod == null)
+                    return;
+                
+                DeselectMods();
+
+                mod.IsSelected = true;
+
+    }
+            catch (Exception e)
+            {
+
+                Console.WriteLine($"Could not select mod: {e.Message}");
+            }
         }
 
         /// <summary>
