@@ -154,10 +154,15 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
                 return;
             }
 
+            // This is where the logic for finding a match with the input should go
             ModViewModel? mod = this.ModVMCollection.FirstOrDefault(x => x.DisplayName!.IndexOf(value, StringComparison.OrdinalIgnoreCase) >= 0);
 
             if (mod == null)
+            {
+                DeselectMods();
                 return;
+            }
+
 
             this.DataGrid!.ScrollIntoView(mod);
             SelectSingleMod(mod);
