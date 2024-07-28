@@ -124,7 +124,22 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
         [RelayCommand]
         public async Task DeleteModFolder()
         {
-            string message = $"Are you sure you want to delete {this.DisplayName} from your Mods folder?\n\nThis action cannot be undone.";
+            string selectedModsAsString = "";
+            int counter = 0;
+
+            foreach (var mod in _mainViewModel.ModVMCollection.Where(x => x.IsSelected))
+            {
+                counter++;
+
+                selectedModsAsString += mod.DisplayName;
+
+                if (counter != _mainViewModel.ModVMCollection.Where(x => x.IsSelected).Count())
+                {
+                    selectedModsAsString += ", ";
+                }
+            }
+
+            string message = $"Are you sure you want to delete '{selectedModsAsString}' from your Mods folder?\n\nThis action cannot be undone.";
             string caption = "Warning";
             MessageBoxButtons buttons = MessageBoxButtons.YesNo;
             MessageBoxIcon icon = MessageBoxIcon.Warning;
@@ -133,33 +148,41 @@ namespace MW5_Mod_Organizer_WPF.ViewModels
 
             if (result == DialogResult.Yes)
             {
-                if (Directory.Exists(this.Path))
-                {
-                    Directory.Delete(this.Path, true);
-                    _mainViewModel.ModVMCollection.Remove(this);
-                    _modService.ClearConflictWindow();
+                List<ModViewModel> selectedModsAsList = _mainViewModel.ModVMCollection.Where(x => x.IsSelected).ToList();
 
-                    // Recalculate loadorder by index positions
-                    foreach (var item in _mainViewModel.ModVMCollection)
+                foreach (var mod in selectedModsAsList)
+                {
+                    if (Directory.Exists(mod.Path))
                     {
-                        item.LoadOrder = _mainViewModel.ModVMCollection.IndexOf(item);
-                        item.ModViewModelStatus = ModViewModelConflictStatus.None;
+                        Directory.Delete(mod.Path, true);
+                        _mainViewModel.ModVMCollection.Remove(mod);
+                        //_modService.ClearConflictWindow();
+
+                        // Recalculate loadorder by index positions
+                        foreach (var item in _mainViewModel.ModVMCollection)
+                        {
+                            item.LoadOrder = _mainViewModel.ModVMCollection.IndexOf(item);
+                            item.ModViewModelStatus = ModViewModelConflictStatus.None;
+                        }
+
+                        Properties.Settings.Default.CurrentProfile = string.Empty;
+                        Properties.Settings.Default.Save();
+
+                        //await _modService.CheckForAllConflictsAsync();
                     }
+                    else
+                    {
+                        message = "Could not find the path to this Mod folder";
+                        caption = "Error";
+                        buttons = MessageBoxButtons.OK;
+                        icon = MessageBoxIcon.Error;
 
-                    Properties.Settings.Default.CurrentProfile = string.Empty;
-                    Properties.Settings.Default.Save();
-
-                    await _modService.CheckForAllConflictsAsync();
+                        System.Windows.Forms.MessageBox.Show(message, caption, buttons, icon);
+                    } 
                 }
-                else
-                {
-                    message = "Could not find the path to this Mod folder";
-                    caption = "Error";
-                    buttons = MessageBoxButtons.OK;
-                    icon = MessageBoxIcon.Error;
 
-                    System.Windows.Forms.MessageBox.Show(message, caption, buttons, icon);
-                }
+                _modService.ClearConflictWindow();
+                await _modService.CheckForAllConflictsAsync();
             }
         }
 
